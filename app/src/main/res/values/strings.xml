@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ForkIt</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="review">review</string>
+    <string name="restaurant_name">맛집 이름</string>
+    <string name="restaurant_address">맛집 주소</string>
+    <string name="favorite">즐겨 찾기</string>
+    <string name="null_heart">♡</string>
+    <string name="max_heart">♥</string>
 </resources>
