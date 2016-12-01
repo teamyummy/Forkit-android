@@ -6,12 +6,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.yummyteam.fastcampus.forkit.R;
 
 import java.util.ArrayList;
+
+import static android.os.Build.VERSION_CODES.M;
 
 
 /**
@@ -65,5 +69,6 @@ public class EateryListFragment extends Fragment {
         datas.add(data2);
 
     }
+
 
 }
