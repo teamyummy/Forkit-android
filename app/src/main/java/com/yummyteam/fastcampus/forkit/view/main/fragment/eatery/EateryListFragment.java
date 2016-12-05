@@ -27,6 +27,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 import com.yummyteam.fastcampus.forkit.view.map.MapsActivity;
 import com.yummyteam.fastcampus.forkit.model.Restaurant_Info;
 
@@ -51,6 +52,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
     private SliderLayout mDemoSlider;
     private LinearLayout filter_layout,map_layout;
     private LayoutInflater inflater;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -146,6 +148,8 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
     @Override
     public void onSliderClick(BaseSliderView slider) {
         Toast.makeText(getContext(),slider.getBundle().get("extra") + "",Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getContext(), Detail_Restaurant.class);
+        startActivity(intent);
     }
 
     @Override

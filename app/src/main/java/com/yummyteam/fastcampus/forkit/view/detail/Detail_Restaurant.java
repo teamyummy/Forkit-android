@@ -105,7 +105,7 @@ public class Detail_Restaurant extends AppCompatActivity {
         startActivity(intent);
     }
     public void goShowLocation (){
-        Intent intent = new Intent(Detail_Restaurant.this,showLocationActivity.class);
+        Intent intent = new Intent(Detail_Restaurant.this,ShowLocationActivity.class);
         intent.putExtra("Res_lat",37.515364);
         intent.putExtra("Res_lon",127.022796);
         startActivity(intent);

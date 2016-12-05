@@ -1,6 +1,7 @@
 package com.yummyteam.fastcampus.forkit.view.main.fragment.eatery;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Restaurant_Info;
+import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 
 import java.util.ArrayList;
 
@@ -37,7 +39,7 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ELAdapter.ViewHolder holder, int position) {
-        Restaurant_Info data = datas.get(position);
+        final Restaurant_Info data = datas.get(position);
 
         if(data.isLike()){
             holder.tv_isLike.setText(R.string.null_heart);
@@ -65,6 +67,15 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
                     }
                 })
                 .into(holder.iv_restaurant);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity, Detail_Restaurant.class);
+                intent.putExtra("restaurant_id",data.getId());
+                activity.startActivity(intent);
+            }
+        });
 
     }
 

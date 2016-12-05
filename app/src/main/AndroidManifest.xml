@@ -27,18 +27,20 @@
           </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity" />
+
         <activity android:name=".view.map.MapsActivity" />
         <activity android:name=".view.detail.Detail_Restaurant">
         </activity>
-        <activity android:name=".view.map.MapsActivity" />
-
+        <!--
+            dabin : AIzaSyDcJGOqP_ZlnKHWC3JGwRv7SdCmrQcA_Qo
+            dongjin : AIzaSyDzTwhbzlgkkwlt_W8d1dh-kAZjSGrf7h4
+        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDzTwhbzlgkkwlt_W8d1dh-kAZjSGrf7h4" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".view.login.LoginActivity"
             android:label="@string/title_activity_login"></activity>
         <activity android:name="com.darsh.multipleimageselect.activities.AlbumSelectActivity"
             tools:replace="android:theme"
@@ -54,7 +56,7 @@
                 <category android:name="ANDROID.INTENT.CATEGORY.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.detail.showLocationActivity" />
+        <activity android:name=".view.detail.ShowLocationActivity" />
         <activity android:name=".view.detail.Detail_menu" />
         <activity android:name=".view.detail.Detail_Review" />
 
