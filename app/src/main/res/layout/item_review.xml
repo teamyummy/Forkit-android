@@ -37,15 +37,32 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
-        android:text="content"
+
+    <com.ms.square.android.expandabletextview.ExpandableTextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/expand_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvContent"
-        android:layout_below="@+id/tvDate"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="11dp" />
+        expandableTextView:maxCollapsedLines="4"
+        expandableTextView:animDuration="200"
+        android:layout_below="@+id/tvDate">
+        <TextView
+            android:id="@id/expandable_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="16sp"
+            android:textColor="#666666" />
+        <ImageButton
+            android:id="@id/expand_collapse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_gravity="right|bottom"
+            android:background="@android:color/transparent"/>
+    </com.ms.square.android.expandabletextview.ExpandableTextView>
 
     <TextView
         android:text="Like"
@@ -107,7 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvStore"
-        android:layout_above="@+id/tvContent"
+        android:layout_above="@+id/expand_text_view"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -115,7 +132,7 @@
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:id="@+id/recyclerView"
-        android:layout_below="@+id/tvContent"
+        android:layout_below="@+id/expand_text_view"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />

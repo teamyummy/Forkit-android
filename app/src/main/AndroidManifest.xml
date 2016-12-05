@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.yummyteam.fastcampus.forkit">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -8,13 +13,36 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDzTwhbzlgkkwlt_W8d1dh-kAZjSGrf7h4" />
+
+        <activity android:name=".MainActivity" />
+        <activity android:name=".Map.MapsActivity" />
+        <activity android:name=".Map.Detail_Restaurant">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.darsh.multipleimageselect.activities.AlbumSelectActivity"
+            tools:replace="android:theme"
+            android:theme="@style/OverrideMultipleImageSelectTheme">
+            <intent-filter>
+                <category android:name="ANDROID.INTENT.CATEGORY.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.darsh.multipleimageselect.activities.ImageSelectActivity"
+            tools:replace="android:theme"
+            android:theme="@style/OverrideMultipleImageSelectTheme">
+            <intent-filter>
+                <category android:name="ANDROID.INTENT.CATEGORY.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Map.ShowLocationActivity" />
+        <activity android:name=".Map.Detail_menu" />
+        <activity android:name=".Map.Detail_Review" />
     </application>
 
 </manifest>

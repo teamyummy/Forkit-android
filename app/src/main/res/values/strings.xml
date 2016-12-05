@@ -9,4 +9,10 @@
     <string name="favorite">즐겨 찾기</string>
     <string name="null_heart">♡</string>
     <string name="max_heart">♥</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

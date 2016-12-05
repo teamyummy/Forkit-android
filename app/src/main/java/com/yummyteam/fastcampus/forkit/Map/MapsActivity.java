@@ -44,6 +44,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     View marker_root_view;
     ImageView ig_marker;
 
+    ArrayList<Marker> markers;
+    CameraUpdate center;
+
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +62,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         CustomAdapter adapter= new CustomAdapter(getLayoutInflater());
         pager.setAdapter(adapter);
         setCustomMarkerView();
+
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                changeSelectedMarkerWithPager(position);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
 
     }
@@ -76,22 +103,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap = googleMap;
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.515364, 127.022796), 16));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.515364, 127.022796), 18));
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
 
-                CameraUpdate center = CameraUpdateFactory.newLatLng(marker.getPosition());
+                center = CameraUpdateFactory.newLatLng(marker.getPosition());
                 mMap.animateCamera(center);
 
                 changeSelectedMarker(marker);
+                pager.setCurrentItem((int)(marker.getZIndex()),true);
 
                 return true;
             }
         });
 
         setCustomMarkerView();
-        getSampleMarkerItems();
+        try {
+            getMarkerItems();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+    private void changeSelectedMarkerWithPager(int position){
+        if(selectedMarker !=null){
+            addMarker(selectedMarker,false);
+            selectedMarker.remove();
+        }
+
+        Marker marker = markers.get(position);
+        selectedMarker=addMarker(marker,true);
+        center = CameraUpdateFactory.newLatLng(selectedMarker.getPosition());
+        mMap.animateCamera(center);
+
 
     }
     private void changeSelectedMarker(Marker marker) {
@@ -111,22 +156,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    private void getMarkerItems() throws JSONException {
 
+        InputStream inputStream = getResources().openRawResource(R.raw.radar_search);
+        List<Item> items = new ItemReader().read(inputStream);
 
-    private void getSampleMarkerItems() {
-        ArrayList<Item> sampleList = new ArrayList();
+        Marker marker;
+        markers=new ArrayList<>();
 
-
-        sampleList.add(new Item(37.515364, 127.022796));
-        sampleList.add(new Item(37.515301, 127.022399));
-        sampleList.add(new Item(37.515559, 127.022259));
-
-
-        for (Item item : sampleList) {
+        for (Item item : items) {
             addMarker(item, false);
+            marker=addMarker(item, false);
+            markers.add(marker);
         }
 
     }
+
     private void setCustomMarkerView() {
 
         marker_root_view = LayoutInflater.from(this).inflate(R.layout.item_marker, null);
@@ -136,7 +181,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker addMarker(Marker marker, boolean isSelectedMarker) {
         double lat = marker.getPosition().latitude;
         double lon = marker.getPosition().longitude;
-        Item temp = new Item(lat, lon);
+        int order = ((int) marker.getZIndex());
+
+        Item temp = new Item(lat, lon,order);
         return addMarker(temp, isSelectedMarker);
 
     }
@@ -144,8 +191,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         LatLng position = new LatLng(item.getLat(), item.getLon());
-
-
 
         if (isSelectedMarker) {
             ig_marker.setImageResource(R.drawable.marker_like_select);
@@ -157,6 +202,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(position);
+        markerOptions.zIndex(item.getOrder());
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker_root_view)));
 
 
@@ -180,17 +226,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void readItems()throws JSONException{
-        InputStream inputStream = getResources().openRawResource(R.raw.radar_search);
-        List<Item> items =  new ItemReader().read(inputStream);
-
-    }
     public class CustomAdapter extends PagerAdapter {
 
         LayoutInflater inflater;
 
         public CustomAdapter(LayoutInflater inflater) {
             // TODO Auto-generated constructor stub
+
 
             this.inflater = inflater;
         }
@@ -200,6 +242,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // TODO Auto-generated method stub
             return 3;
         }
+
+
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
@@ -217,6 +261,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             imageView.setImageResource(R.drawable.food01+position);
 
             textView3.setText(position+1+".Name");
+
 
 
 
@@ -242,18 +287,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+
+
 }
 class Item
 {
     double lat;
     double lon;
+    int order;
 
 
-    public Item(double lat,double lon){
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public Item(double lat, double lon, int order){
 
 
         this.lat=lat;
         this.lon=lon;
+        this.order=order;
     }
 
 

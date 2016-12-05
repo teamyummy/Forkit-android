@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.yummyteam.fastcampus.forkit.R;
 
 import java.util.ArrayList;
@@ -52,7 +53,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
         holder.tvName.setText("길라임");
         holder.tvDate.setText("2016-12-01 01:27");
-        holder.tvContent.setText("아...망할 디자인......... ");
+        holder.content.setText("아...망할 디자인.........zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz" +
+                "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz" +
+                "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz" +
+                "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz" +
+                "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz" +
+                "z" +
+                "z");
 
 
     }
@@ -67,7 +74,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         RecyclerView recyclerView;
         TextView tvName;
         TextView tvDate;
-        TextView tvContent;
+        ExpandableTextView content;
 
 
         public ViewHolder(View itemView) {
@@ -76,7 +83,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             tvName=(TextView)itemView.findViewById(R.id.tvStoreName_review);
             recyclerView=(RecyclerView) itemView.findViewById(R.id.recyclerView);
             tvDate=(TextView)itemView.findViewById(R.id.tvDate);
-            tvContent=(TextView)itemView.findViewById(R.id.tvContent);
+            content=(ExpandableTextView) itemView.findViewById(R.id.expand_text_view);
 
 
         }
