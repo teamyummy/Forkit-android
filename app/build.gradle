@@ -26,20 +26,37 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    //slide
+    //support
     compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.google.android.gms:play-services:9.8.0'
-    compile 'com.google.android.gms:play-services-maps:9.8.0'
-    compile 'com.google.maps.android:android-maps-utils:0.4.+'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'jp.wasabeef:glide-transformations:2.0.1'
     compile 'com.android.support:design:25.0.1'
     compile 'com.android.support:recyclerview-v7:25.0.1'
     compile 'com.android.support:cardview-v7:25.0.1'
     compile 'com.android.support:support-v4:25.0.1'
+
+    //googleMap
+    compile 'com.google.android.gms:play-services:9.8.0'
+    compile 'com.google.android.gms:play-services-maps:9.8.0'
+    compile 'com.google.maps.android:android-maps-utils:0.4.+'
+
+    //glide
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
+
+    //piccasso
     compile 'com.squareup.picasso:picasso:2.3.2'
+
+    //indicator and viewpager
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
-    compile 'com.android.support:multidex:1.0.+'
+
     testCompile 'junit:junit:4.12'
+
+    //multidex setting
+    compile 'com.android.support:multidex:1.0.+'
+
+    //sticky scrollview
+    compile 'se.emilsjolander:StickyScrollViewItems:1.1.0'
+
+    //expandableTextView
+    compile 'com.ms-square:expandableTextView:0.1.4'
 }

@@ -14,11 +14,10 @@
         android:id="@+id/activity_map_to_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.yummyteam.fastcampus.forkit.map.MapToDetails"
+        tools:context="com.yummyteam.fastcampus.forkit.map.MapToDetails">
 
 
-
-        <LinearLayout
+     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
