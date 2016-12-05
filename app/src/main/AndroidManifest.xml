@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MainView">
+        <activity android:name=".view.main.MainView">
           <intent-filter>
               <action android:name="android.intent.action.MAIN" />
 
@@ -28,10 +28,10 @@
         </activity>
 
         <activity android:name=".MainActivity" />
-        <activity android:name=".Map.MapsActivity" />
-        <activity android:name=".Map.Detail_Restaurant">
+        <activity android:name=".view.map.MapsActivity" />
+        <activity android:name=".view.detail.Detail_Restaurant">
         </activity>
-        <activity android:name=".map.MapsActivity" />
+        <activity android:name=".view.map.MapsActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -54,9 +54,9 @@
                 <category android:name="ANDROID.INTENT.CATEGORY.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".Map.ShowLocationActivity" />
-        <activity android:name=".Map.Detail_menu" />
-        <activity android:name=".Map.Detail_Review" />
+        <activity android:name=".view.detail.showLocationActivity" />
+        <activity android:name=".view.detail.Detail_menu" />
+        <activity android:name=".view.detail.Detail_Review" />
 
     </application>
 

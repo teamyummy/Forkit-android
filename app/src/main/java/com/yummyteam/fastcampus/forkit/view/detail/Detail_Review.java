@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.Map;
+package com.yummyteam.fastcampus.forkit.view.detail;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

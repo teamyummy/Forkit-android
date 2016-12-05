@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.login;
+package com.yummyteam.fastcampus.forkit.view.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

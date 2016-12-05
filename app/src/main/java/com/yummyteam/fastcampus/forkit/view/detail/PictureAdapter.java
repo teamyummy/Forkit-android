@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.map;
+package com.yummyteam.fastcampus.forkit.view.detail;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;

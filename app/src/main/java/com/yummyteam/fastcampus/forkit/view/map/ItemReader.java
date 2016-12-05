@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.map;
+package com.yummyteam.fastcampus.forkit.view.map;
 
 import org.json.JSONArray;
 import org.json.JSONException;

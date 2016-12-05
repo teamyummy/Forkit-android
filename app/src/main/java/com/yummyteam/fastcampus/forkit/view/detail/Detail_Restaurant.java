@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.Map;
+package com.yummyteam.fastcampus.forkit.view.detail;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -105,7 +105,7 @@ public class Detail_Restaurant extends AppCompatActivity {
         startActivity(intent);
     }
     public void goShowLocation (){
-        Intent intent = new Intent(Detail_Restaurant.this,ShowLocationActivity.class);
+        Intent intent = new Intent(Detail_Restaurant.this,showLocationActivity.class);
         intent.putExtra("Res_lat",37.515364);
         intent.putExtra("Res_lon",127.022796);
         startActivity(intent);

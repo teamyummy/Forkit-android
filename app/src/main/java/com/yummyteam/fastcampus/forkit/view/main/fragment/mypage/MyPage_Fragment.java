@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.main.fragment.mypage;
+package com.yummyteam.fastcampus.forkit.view.main.fragment.mypage;
 
 import android.content.Context;
 import android.os.Bundle;

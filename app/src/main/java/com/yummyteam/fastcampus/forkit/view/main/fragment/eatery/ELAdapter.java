@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.main.fragment.eatery;
+package com.yummyteam.fastcampus.forkit.view.main.fragment.eatery;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;

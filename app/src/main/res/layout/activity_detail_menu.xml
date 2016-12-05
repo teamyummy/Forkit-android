@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="20dp"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.yummyteam.fastcampus.forkit.Map.Detail_menu"
+    tools:context=".view.detail.Detail_menu"
     android:background="@drawable/black_menu_vector_background_">
 
     <ListView

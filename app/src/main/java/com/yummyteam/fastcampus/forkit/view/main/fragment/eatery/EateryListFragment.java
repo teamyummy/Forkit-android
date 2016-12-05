@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.main.fragment.eatery;
+package com.yummyteam.fastcampus.forkit.view.main.fragment.eatery;
 
 
 import android.content.Intent;
@@ -27,7 +27,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.yummyteam.fastcampus.forkit.R;
-import com.yummyteam.fastcampus.forkit.map.MapsActivity;
+import com.yummyteam.fastcampus.forkit.view.map.MapsActivity;
 import com.yummyteam.fastcampus.forkit.model.Restaurant_Info;
 
 import java.util.ArrayList;

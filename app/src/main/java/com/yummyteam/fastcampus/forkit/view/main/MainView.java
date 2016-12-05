@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.main;
+package com.yummyteam.fastcampus.forkit.view.main;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -12,8 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import com.yummyteam.fastcampus.forkit.R;
-import com.yummyteam.fastcampus.forkit.main.fragment.eatery.EateryListFragment;
-import com.yummyteam.fastcampus.forkit.main.fragment.mypage.MyPage_Fragment;
+import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.EateryListFragment;
+import com.yummyteam.fastcampus.forkit.view.main.fragment.mypage.MyPage_Fragment;
 
 
 public class MainView extends AppCompatActivity {
