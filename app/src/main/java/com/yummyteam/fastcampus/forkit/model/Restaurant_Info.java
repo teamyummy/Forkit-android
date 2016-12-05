@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.main;
+package com.yummyteam.fastcampus.forkit.model;
 
 import java.util.ArrayList;
 

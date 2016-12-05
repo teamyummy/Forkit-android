@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.Map;
+package com.yummyteam.fastcampus.forkit.map;
 
 /**
  * Created by user on 2016-12-01.

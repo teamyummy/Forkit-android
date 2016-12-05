@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.Map;
+package com.yummyteam.fastcampus.forkit.map;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 import com.yummyteam.fastcampus.forkit.R;
 
-public class mapToDetails extends AppCompatActivity {
+public class MapToDetails extends AppCompatActivity {
 
 
     ListView listView_menu;

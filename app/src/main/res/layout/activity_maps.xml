@@ -12,7 +12,8 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.dongjin.android.googlemap_clustering.MapsActivity" />
+        tools:context="com.dongjin.android.googlemap_clustering.MapsActivity"
+        tools:layout="@layout/place_autocomplete_fragment" />
 
 
     <android.support.v4.view.ViewPager

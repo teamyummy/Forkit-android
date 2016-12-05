@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.Map;
+package com.yummyteam.fastcampus.forkit.map;
 
 import android.app.Activity;
 import android.content.Context;

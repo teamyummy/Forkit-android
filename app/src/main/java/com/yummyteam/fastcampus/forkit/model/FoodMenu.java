@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.main;
+package com.yummyteam.fastcampus.forkit.model;
 
 /**
  * Created by Dabin on 2016-11-29.

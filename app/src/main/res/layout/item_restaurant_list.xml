@@ -14,29 +14,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/restaurant_img_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/xml_border"
-            android:padding="10dp"
-            >
+
 
             <ImageView
                 android:id="@+id/iv_restaurant"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 app:srcCompat="@mipmap/ic_launcher" />
-        </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/restaurant_info_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/restaurant_img_layout"
-            android:layout_alignTop="@id/restaurant_img_layout"
-            android:layout_toRightOf="@id/restaurant_img_layout"
+            android:layout_alignBottom="@id/iv_restaurant"
+            android:layout_alignTop="@id/iv_restaurant"
+            android:layout_toRightOf="@id/iv_restaurant"
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:padding="5dp">

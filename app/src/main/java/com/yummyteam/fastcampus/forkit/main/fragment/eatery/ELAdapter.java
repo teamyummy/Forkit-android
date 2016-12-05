@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.main;
+package com.yummyteam.fastcampus.forkit.main.fragment.eatery;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.Restaurant_Info;
 
 import java.util.ArrayList;
 
@@ -49,7 +50,7 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
         holder.tv_restaurant_name.setText(data.getName());
         holder.tv_restaurant_address.setText(data.getAddress());
         Glide.with(activity)
-                .load("https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ_8KDyKOENB6ND2vZbOnGjureP_xQ_LXrncqLZYxCP_DN2-Nfw")
+                .load(data.getImgs_url().get(0))
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -73,7 +74,7 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
     }
 
     public void addDatas(ArrayList<Restaurant_Info> sub_datas) {
-        this.datas.addAll(sub_datas);
+        this.datas = sub_datas;
         notifyDataSetChanged();
     }
 
