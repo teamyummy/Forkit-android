@@ -24,8 +24,9 @@ public class ItemReader {
             JSONObject object = array.getJSONObject(i);
             double lat = object.getDouble("lat");
             double lng = object.getDouble("lng");
+            int flag=i;
 
-            items.add(new Item(lat, lng));
+            items.add(new Item(lat, lng,flag));
         }
         return items;
     }
