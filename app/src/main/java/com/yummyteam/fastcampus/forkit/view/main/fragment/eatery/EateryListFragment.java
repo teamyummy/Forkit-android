@@ -29,7 +29,7 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 import com.yummyteam.fastcampus.forkit.view.map.MapsActivity;
-import com.yummyteam.fastcampus.forkit.model.Restaurant_Info;
+import com.yummyteam.fastcampus.forkit.model.Restaurants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +48,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
     private RecyclerView restaurant_list;
 
 
-    private ArrayList<Restaurant_Info> datas;
+    private ArrayList<Restaurants> datas;
     private SliderLayout mDemoSlider;
     private LinearLayout filter_layout,map_layout;
     private LayoutInflater inflater;
@@ -122,7 +122,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         datas = new ArrayList<>();
         ArrayList<String> url = new ArrayList<>();
         url.add("https://yt3.ggpht.com/-Xpap6ijaRfM/AAAAAAAAAAI/AAAAAAAAAAA/eyfS-T4Pqxc/s100-c-k-no-mo-rj-c0xffffff/photo.jpg");
-        Restaurant_Info data1 = new Restaurant_Info();
+        Restaurants data1 = new Restaurants();
         data1.setName("오리농원");
         data1.setAddress("신사역에서 좀만 더가봐요");
         data1.setScore(4);
@@ -132,7 +132,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         data1.setLike(false);
         datas.add(data1);
 
-        Restaurant_Info data2 = new Restaurant_Info();
+        Restaurants data2 = new Restaurants();
         data2.setName("서브웨이");
         data2.setAddress("망고식스옆에?");
         data2.setScore(5);

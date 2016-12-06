@@ -14,7 +14,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.yummyteam.fastcampus.forkit.R;
-import com.yummyteam.fastcampus.forkit.model.Restaurant_Info;
+import com.yummyteam.fastcampus.forkit.model.Restaurants;
 import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
  */
 
 public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
-    private ArrayList<Restaurant_Info> datas;
+    private ArrayList<Restaurants> datas;
     private Activity activity;
     public ELAdapter(Activity activity){
         datas = new ArrayList<>();
@@ -39,7 +39,7 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ELAdapter.ViewHolder holder, int position) {
-        final Restaurant_Info data = datas.get(position);
+        final Restaurants data = datas.get(position);
 
         if(data.isLike()){
             holder.tv_isLike.setText(R.string.null_heart);
@@ -84,7 +84,7 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
         return datas.size();
     }
 
-    public void addDatas(ArrayList<Restaurant_Info> sub_datas) {
+    public void addDatas(ArrayList<Restaurants> sub_datas) {
         this.datas = sub_datas;
         notifyDataSetChanged();
     }
