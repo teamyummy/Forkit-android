@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
@@ -26,6 +27,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.Restaurants;
+import com.yummyteam.fastcampus.forkit.networks.ConnectFork2;
 
 import org.json.JSONException;
 
@@ -35,7 +38,7 @@ import java.util.List;
 
 import static com.yummyteam.fastcampus.forkit.R.id.img;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, MapInterface {
 
     private GoogleMap mMap;
     ViewPager pager;
@@ -47,6 +50,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ArrayList<Marker> markers;
     CameraUpdate center;
 
+    ConnectFork2 connectFork;
+
+    CustomAdapter adapter;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +64,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setMap();
 
         pager= (ViewPager)findViewById(R.id.pager);
-        CustomAdapter adapter= new CustomAdapter(getLayoutInflater());
+        adapter= new CustomAdapter(getLayoutInflater());
         pager.setAdapter(adapter);
+
+        connectFork = new ConnectFork2(this);
+        connectFork.getStoreList();
+
+
+
         setCustomMarkerView();
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -77,9 +92,77 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
+    }
+    @Override
+    public void getList(List<Restaurants> data) {
 
+        adapter.addData((ArrayList)data);
 
     }
+
+    class CustomAdapter extends PagerAdapter {
+
+        LayoutInflater inflater;
+        ArrayList<Restaurants> datas;
+
+        public void addData(ArrayList<Restaurants> datas){
+
+            datas.addAll(datas);
+            notifyDataSetChanged();
+        }
+
+        public CustomAdapter(LayoutInflater inflater) {
+            // TODO Auto-generated constructor stub
+            this.inflater = inflater;
+            datas=new ArrayList<>();
+        }
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return datas.size();
+        }
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            // TODO Auto-generated method stub
+
+
+            View view = null;
+            view = inflater.inflate(R.layout.item_map, null);
+
+            CardView cardview = (CardView)view.findViewById(R.id.cardView);
+            ImageView imageView=(ImageView)view.findViewById(img);
+            TextView textView=(TextView)view.findViewById(R.id.textView);
+            TextView textView2=(TextView)view.findViewById(R.id.textView2);
+            TextView textView3=(TextView)view.findViewById(R.id.textView3);
+
+            String img_src ="";
+            if(datas.get(position).getImages().size() == 0)
+            {
+                img_src = "https://yt3.ggpht.com/-Xpap6ijaRfM/AAAAAAAAAAI/AAAAAAAAAAA/eyfS-T4Pqxc/s100-c-k-no-mo-rj-c0xffffff/photo.jpg";
+            }else{
+                img_src = datas.get(position).getImages().get(0).getImg();
+            }
+            imageView.setImageURI(Uri.parse(img_src));
+//            textView3.setText(datas.get(position).getName());
+
+
+            container.addView(view);
+
+            return view;
+        }
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            // TODO Auto-generated method stub
+            container.removeView((View) object);
+        }
+        @Override
+        public boolean isViewFromObject(View v, Object obj) {
+            // TODO Auto-generated method stub
+            return v == obj;
+        }
+    }
+
 
     @Override
     protected  void onResume(){
@@ -221,70 +304,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return bitmap;
 
     }
-
-    public class CustomAdapter extends PagerAdapter {
-
-        LayoutInflater inflater;
-
-        public CustomAdapter(LayoutInflater inflater) {
-            // TODO Auto-generated constructor stub
-
-
-            this.inflater = inflater;
-        }
-
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return 3;
-        }
-
-
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            // TODO Auto-generated method stub
-
-            View view = null;
-            view = inflater.inflate(R.layout.item_map, null);
-
-            CardView cardview = (CardView)view.findViewById(R.id.cardView);
-            ImageView imageView=(ImageView)view.findViewById(img);
-            TextView textView=(TextView)view.findViewById(R.id.textView);
-            TextView textView2=(TextView)view.findViewById(R.id.textView2);
-            TextView textView3=(TextView)view.findViewById(R.id.textView3);
-
-            imageView.setImageResource(R.drawable.food01+position);
-
-            textView3.setText(position+1+".Name");
-
-
-
-
-            container.addView(view);
-
-            return view;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            // TODO Auto-generated method stub
-
-            container.removeView((View) object);
-
-        }
-
-        @Override
-        public boolean isViewFromObject(View v, Object obj) {
-            // TODO Auto-generated method stub
-            return v == obj;
-        }
-
-    }
-
-
-
-
 }
 class Item
 {
@@ -326,5 +345,5 @@ class Item
         this.lon = lon;
     }
 
-
 }
+
