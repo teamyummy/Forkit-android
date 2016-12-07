@@ -27,18 +27,22 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.Restaurants;
+import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
 import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 import com.yummyteam.fastcampus.forkit.view.map.MapsActivity;
-import com.yummyteam.fastcampus.forkit.model.Restaurants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import static com.yummyteam.fastcampus.forkit.R.id.slider;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EateryListFragment extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, View.OnClickListener {
+public class EateryListFragment extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, View.OnClickListener, EateryListInterface {
 
 
     public EateryListFragment() {
@@ -52,7 +56,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
     private SliderLayout mDemoSlider;
     private LinearLayout filter_layout,map_layout;
     private LayoutInflater inflater;
-
+    private ConnectFork connectFork;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,7 +64,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         this.inflater = inflater;
         View view=  inflater.inflate(R.layout.fragment_eatery_list, container, false);
         restaurant_list = (RecyclerView)view.findViewById(R.id.restaurant_list);
-        mDemoSlider = (SliderLayout)view.findViewById(R.id.slider);
+        mDemoSlider = (SliderLayout)view.findViewById(slider);
         filter_layout = (LinearLayout) view.findViewById(R.id.filter_layout);
         map_layout = (LinearLayout) view.findViewById(R.id.map_layout);
 
@@ -68,7 +72,8 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         map_layout.setOnClickListener(this);
         initList();
         initSlider();
-
+        connectFork = new ConnectFork(this);
+        connectFork.getStoreList();
 
 
 
@@ -113,35 +118,9 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         restaurant_list.setLayoutManager(manager);
 
         elAdapter = new ELAdapter(getActivity());
-        initData();
+
         restaurant_list.setAdapter(elAdapter);
 
-    }
-
-    public void initData() {
-        datas = new ArrayList<>();
-        ArrayList<String> url = new ArrayList<>();
-        url.add("https://yt3.ggpht.com/-Xpap6ijaRfM/AAAAAAAAAAI/AAAAAAAAAAA/eyfS-T4Pqxc/s100-c-k-no-mo-rj-c0xffffff/photo.jpg");
-        Restaurants data1 = new Restaurants();
-        data1.setName("오리농원");
-        data1.setAddress("신사역에서 좀만 더가봐요");
-        data1.setScore(4);
-        data1.setImgs_url(url);
-        data1.setTotal_review(2000);
-        data1.setTotal_like(100);
-        data1.setLike(false);
-        datas.add(data1);
-
-        Restaurants data2 = new Restaurants();
-        data2.setName("서브웨이");
-        data2.setAddress("망고식스옆에?");
-        data2.setScore(5);
-        data2.setTotal_review(2600);
-        data2.setTotal_like(102);
-        data2.setLike(true);
-        data2.setImgs_url(url);
-        datas.add(data2);
-        elAdapter.addDatas(datas);
     }
 
 
@@ -228,5 +207,10 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         //wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
         infoDialog.show();
+    }
+
+    @Override
+    public void getList(List<Restaurants> data) {
+        elAdapter.addDatas((ArrayList)data);
     }
 }

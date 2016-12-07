@@ -13,9 +13,9 @@ public class Images {
 
     private String img;
 
-    private String img_t;
+    private String restaurant;
 
-    private String review;
+    private String img_t;
 
     public String getId ()
     {
@@ -57,6 +57,16 @@ public class Images {
         this.img = img;
     }
 
+    public String getRestaurant ()
+    {
+        return restaurant;
+    }
+
+    public void setRestaurant (String restaurant)
+    {
+        this.restaurant = restaurant;
+    }
+
     public String getImg_t ()
     {
         return img_t;
@@ -67,19 +77,9 @@ public class Images {
         this.img_t = img_t;
     }
 
-    public String getReview ()
-    {
-        return review;
-    }
-
-    public void setReview (String review)
-    {
-        this.review = review;
-    }
-
     @Override
     public String toString()
     {
-        return "ClassPojo [id = "+id+", img_s = "+img_s+", alt = "+alt+", img = "+img+", img_t = "+img_t+", review = "+review+"]";
+        return "ClassPojo [id = "+id+", img_s = "+img_s+", alt = "+alt+", img = "+img+", restaurant = "+restaurant+", img_t = "+img_t+"]";
     }
 }

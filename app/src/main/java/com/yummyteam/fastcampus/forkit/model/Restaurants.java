@@ -1,21 +1,21 @@
 package com.yummyteam.fastcampus.forkit.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dabin on 2016-11-29.
  */
 
 public class Restaurants {
-    private ArrayList<String> tags;
+    private List<Tags> tags;
 
     private String created_date;
 
     private String desc_delivery;
 
-    private ArrayList<Menus> menus;
+    private List<Menus> menus;
 
-    private ArrayList<Reviews> reviews;
+    private List<Reviews> reviews;
 
     private String phone;
 
@@ -39,7 +39,7 @@ public class Restaurants {
 
     private String review_score;
 
-    private ArrayList<Images> images;
+    private List<Images> images;
 
     private String longitude;
 
@@ -49,12 +49,12 @@ public class Restaurants {
 
     private String desc_parking;
 
-    public ArrayList<String> getTags ()
+    public List<Tags> getTags ()
     {
         return tags;
     }
 
-    public void setTags (ArrayList<String> tags)
+    public void setTags (List<Tags> tags)
     {
         this.tags = tags;
     }
@@ -79,22 +79,22 @@ public class Restaurants {
         this.desc_delivery = desc_delivery;
     }
 
-    public ArrayList<Menus> getMenus ()
+    public List<Menus> getMenus ()
     {
         return menus;
     }
 
-    public void setMenus (ArrayList<Menus> menus)
+    public void setMenus (List<Menus> menus)
     {
         this.menus = menus;
     }
 
-    public ArrayList<Reviews> getReviews ()
+    public List<Reviews> getReviews ()
     {
         return reviews;
     }
 
-    public void setReviews (ArrayList<Reviews> reviews)
+    public void setReviews (List<Reviews> reviews)
     {
         this.reviews = reviews;
     }
@@ -209,12 +209,12 @@ public class Restaurants {
         this.review_score = review_score;
     }
 
-    public ArrayList<Images> getImages ()
+    public List<Images> getImages ()
     {
         return images;
     }
 
-    public void setImages (ArrayList<Images> images)
+    public void setImages (List<Images> images)
     {
         this.images = images;
     }

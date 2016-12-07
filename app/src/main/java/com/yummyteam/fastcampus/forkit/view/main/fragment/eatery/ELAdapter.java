@@ -41,18 +41,25 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
     public void onBindViewHolder(ELAdapter.ViewHolder holder, int position) {
         final Restaurants data = datas.get(position);
 
-        if(data.isLike()){
+        if(data.getMy_like().equals("true")){
             holder.tv_isLike.setText(R.string.null_heart);
         }else{
             holder.tv_isLike.setText(R.string.max_heart);
         }
-        holder.tv_total_review.setText(data.getTotal_review()+"");
-        holder.tv_avg_like.setText(data.getScore()+"");
+        holder.tv_total_review.setText(""+data.getReviews().size());
+        holder.tv_avg_like.setText(data.getTotal_like()+"");
 //        holder.tv_total_favorite.setText(data.getTotal_like());
         holder.tv_restaurant_name.setText(data.getName());
         holder.tv_restaurant_address.setText(data.getAddress());
+        String img_src = "";
+        if(data.getImages().size() == 0)
+        {
+            img_src = "https://yt3.ggpht.com/-Xpap6ijaRfM/AAAAAAAAAAI/AAAAAAAAAAA/eyfS-T4Pqxc/s100-c-k-no-mo-rj-c0xffffff/photo.jpg";
+        }else{
+            img_src = data.getImages().get(0).getImg();
+        }
         Glide.with(activity)
-                .load(data.getImgs_url().get(0))
+                .load(img_src)
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -85,7 +92,7 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
     }
 
     public void addDatas(ArrayList<Restaurants> sub_datas) {
-        this.datas = sub_datas;
+        this.datas.addAll(sub_datas);
         notifyDataSetChanged();
     }
 
