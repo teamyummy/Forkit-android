@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Dabin on 2016-11-29.
  */
 
-public class Restaurants {
+public class Results {
     private List<Tags> tags;
 
     private String created_date;

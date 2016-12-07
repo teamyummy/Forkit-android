@@ -1,6 +1,6 @@
 package com.yummyteam.fastcampus.forkit.view.main.fragment.eatery;
 
-import com.yummyteam.fastcampus.forkit.model.Restaurants;
+import com.yummyteam.fastcampus.forkit.model.Results;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface EateryListInterface {
 
-    void getList(List<Restaurants> data);
+    void getList(List<Results> data);
 }
