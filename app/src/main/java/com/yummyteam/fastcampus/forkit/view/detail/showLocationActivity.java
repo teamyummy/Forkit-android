@@ -115,8 +115,8 @@ class ShowLocationActivity extends AppCompatActivity
         LatLng myLocation = new LatLng(latitude, longitude);
         googleMap.addMarker(new MarkerOptions().
                 position(myLocation).title("Marker in me")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_rdp_direction_map_mylocation)));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation,18));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_filter_price_pressed)));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation,14));
 
 
         LatLng restaurantLocation= new LatLng(lat,lon);
