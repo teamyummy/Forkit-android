@@ -2,7 +2,8 @@ package com.yummyteam.fastcampus.forkit.networks;
 
 import android.util.Log;
 
-import com.yummyteam.fastcampus.forkit.model.Restaurants;
+import com.yummyteam.fastcampus.forkit.model.RestaurantsData;
+import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.EateryListInterface;
 
 import java.util.List;
@@ -19,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ConnectFork {
     String baseUrl = "http://mangoplates.com/";
-    List<Restaurants> data;
+    List<Results> data;
     EateryListInterface eListener;
     public ConnectFork(EateryListInterface eListener){
         this.eListener = eListener;
@@ -34,15 +35,15 @@ public class ConnectFork {
         //2. Retrofit client에서 사용할 interface
         IRestaurantData service = client.create(IRestaurantData.class);
         String value = "restaurants";
-        Call<List<Restaurants>> remoteData = service.getRestaurantsList(value);
+        Call<RestaurantsData> remoteData = service.getRestaurantsList(value);
         // 4. 비동기 데이터를 받기 위한 리스너 세팅
         Log.e("tag","connect start");
-        remoteData.enqueue(new Callback<List<Restaurants>>() {
+        remoteData.enqueue(new Callback<RestaurantsData>() {
             @Override
-            public void onResponse(Call<List<Restaurants>> call, Response<List<Restaurants>> response) {
+            public void onResponse(Call<RestaurantsData> call, Response<RestaurantsData> response) {
                 if(response.isSuccessful()){
                     Log.e("tag1","size = " + response.body());
-                    data = response.body();
+                    data = response.body().getResults();
                     eListener.getList(data);
                 }else{
                     Log.e("tag2",response.message()+call.request().body());
@@ -51,7 +52,7 @@ public class ConnectFork {
             }
 
             @Override
-            public void onFailure(Call<List<Restaurants>> call, Throwable t) {
+            public void onFailure(Call<RestaurantsData> call, Throwable t) {
                 Log.e("onFailure","request body ="+call.request().body());
                 t.printStackTrace();
                 data = null;
@@ -60,6 +61,16 @@ public class ConnectFork {
 
         });
 
+    }
+
+    public void searchRestaurants(String search){
+        Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        IRestaurantData service = client.create(IRestaurantData.class);
+        String value = "restaurants";
+        //Call<List<Results>> remoteData = service.getSearchRestaurantsList(value,search);
     }
 }
 

@@ -27,7 +27,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.yummyteam.fastcampus.forkit.R;
-import com.yummyteam.fastcampus.forkit.model.Restaurants;
+import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
 import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 import com.yummyteam.fastcampus.forkit.view.map.MapsActivity;
@@ -52,7 +52,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
     private RecyclerView restaurant_list;
 
 
-    private ArrayList<Restaurants> datas;
+    private ArrayList<Results> datas;
     private SliderLayout mDemoSlider;
     private LinearLayout filter_layout,map_layout;
     private LayoutInflater inflater;
@@ -210,7 +210,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
     }
 
     @Override
-    public void getList(List<Restaurants> data) {
+    public void getList(List<Results> data) {
         elAdapter.addDatas((ArrayList)data);
     }
 }

@@ -1,22 +1,47 @@
 package com.yummyteam.fastcampus.forkit.model;
 
-import com.google.gson.annotations.SerializedName;
+import java.util.List;
 
 /**
  * Created by Dabin on 2016-12-06.
  */
 
 public class RestaurantsData {
-    @SerializedName("[0]")
-    public Restaurants restaurantses;
+    private String count;
+    private String next;
+    private String previous;
+    private List<Results> results;
 
-    @SerializedName("0")
-    public Restaurants getRestaurantses() {
-        return restaurantses;
+    public String getCount() {
+        return count;
     }
 
-    @SerializedName("0")
-    public void setRestaurantses(Restaurants restaurantses) {
-        this.restaurantses = restaurantses;
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+
+    public String getNext() {
+        return next;
+    }
+
+    public void setNext(String next) {
+        this.next = next;
+    }
+
+    public String getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(String previous) {
+        this.previous = previous;
+    }
+
+    public List<Results> getResults() {
+        return results;
+    }
+
+    public void setResults(List<Results> results) {
+        this.results = results;
     }
 }
