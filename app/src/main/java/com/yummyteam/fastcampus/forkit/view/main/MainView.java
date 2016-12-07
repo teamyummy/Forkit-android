@@ -57,7 +57,6 @@ public class MainView extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                eateryListFragment.initData();
                 return true;
             }
             @Override
