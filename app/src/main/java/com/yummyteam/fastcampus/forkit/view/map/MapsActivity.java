@@ -1,5 +1,7 @@
 package com.yummyteam.fastcampus.forkit.view.map;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -67,11 +69,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         pager.setAdapter(adapter);
 
 
-
         connectFork = new ConnectFork2(this);
         connectFork.getStoreList();
 
         setCustomMarkerView();
+
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -130,16 +132,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             // TODO Auto-generated method stub
-            Results data =datas.get(position);
+            final Results data =datas.get(position);
 
             View view = null;
             view = inflater.inflate(R.layout.item_map, null);
 
-            CardView cardview = (CardView)view.findViewById(R.id.cardView);
+            CardView cardView = (CardView)view.findViewById(R.id.cardView);
             ImageView imageView=(ImageView)view.findViewById(img);
             TextView textView=(TextView)view.findViewById(R.id.textView);
             TextView textView2=(TextView)view.findViewById(R.id.textView2);
             TextView textView3=(TextView)view.findViewById(R.id.textView3);
+
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    pagerAni(view);
+                    pagerAni2(view);
+
+
+
+//                    Intent intent = new Intent (MapsActivity.this, Detail_Restaurant.class);
+//                    intent.putExtra("restaurant_id",data.getId());
+//                    MapsActivity.this.startActivity(intent);
+//                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+//                    MapsActivity.this.finish();
+                }
+            });
+
 
             String img_src ="";
             if(data.getImages().size() == 0) {
@@ -166,6 +185,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // TODO Auto-generated method stub
             return v == obj;
         }
+    }
+    int y=0;
+    int r=0;
+    int x=0;
+    public void pagerAni(View v){
+
+        y=y-200;
+        r=r+720;
+        ObjectAnimator ani1 = ObjectAnimator.ofFloat(pager, "translationY", y);
+        ObjectAnimator ani2 = ObjectAnimator.ofFloat(pager, "rotation", r);
+
+        AnimatorSet aniset= new AnimatorSet();
+        aniset.setDuration(1000);
+        aniset.playTogether(ani1,ani2);
+        aniset.start();
+    }
+    public void pagerAni2(View v){
+
+        y=y-200;
+        x=x-400;
+        ObjectAnimator ani1 = ObjectAnimator.ofFloat(pager, "scaleY", y);
+        ObjectAnimator ani2 = ObjectAnimator.ofFloat(pager, "translationX", x);
+
+        AnimatorSet aniset= new AnimatorSet();
+        aniset.setDuration(1000);
+        aniset.playTogether(ani1,ani2);
+        aniset.start();
     }
 
 
