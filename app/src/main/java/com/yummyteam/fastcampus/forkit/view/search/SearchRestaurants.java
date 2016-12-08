@@ -77,6 +77,7 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
             elAdapter.removeallData();
             Log.e("getKeyWord","size is not null"+results.size());
             elAdapter.addDatas((ArrayList)results);
+            noSearch_content.setVisibility(View.GONE);
         }
     }
 

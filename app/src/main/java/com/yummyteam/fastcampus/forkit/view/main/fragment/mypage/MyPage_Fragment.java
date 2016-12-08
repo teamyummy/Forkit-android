@@ -95,6 +95,7 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener {
                 try {
                     cache.delete();
                     btn_sign.setText(LOGIN);
+                    tv_profile_myPage.setText("로그인 해주세요");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
