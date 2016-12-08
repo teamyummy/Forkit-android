@@ -36,9 +36,21 @@
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/tv_profile_my"
                 android:layout_below="@id/iv_profile_my"
                 android:layout_centerHorizontal="true"
                 android:text="ID" />
+
+            <Button
+                android:text="로그인 하기"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:textColor="@color/toolbar_title"
+                android:id="@+id/btn_sign"
+                android:layout_below="@id/tv_profile_my"
+                android:layout_centerHorizontal="true"
+                android:background="@color/toolbar_background" />
         </RelativeLayout>
 
         <LinearLayout

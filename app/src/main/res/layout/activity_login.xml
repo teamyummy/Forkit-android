@@ -71,7 +71,13 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
-
+            <TextView
+                android:id="@+id/tv_jump"
+                android:layout_marginTop="10dp"
+                android:text="건너뛰기"
+                android:layout_gravity="right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -18,14 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".view.main.MainView">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".view.map.MapsActivity" />
-        <activity android:name=".view.detail.Detail_Restaurant"></activity>
+        <activity android:name=".view.detail.Detail_Restaurant" />
         <!--
             dabin : AIzaSyDcJGOqP_ZlnKHWC3JGwRv7SdCmrQcA_Qo
             dongjin : AIzaSyDzTwhbzlgkkwlt_W8d1dh-kAZjSGrf7h4
@@ -56,7 +52,14 @@
         <activity android:name=".view.detail.ShowLocationActivity" />
         <activity android:name=".view.detail.Detail_menu" />
         <activity android:name=".view.detail.Detail_Review" />
-        <activity android:name=".view.search.SearchRestaurants"></activity>
+        <activity android:name=".view.search.SearchRestaurants" />
+        <activity android:name=".view.logo.Logo">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

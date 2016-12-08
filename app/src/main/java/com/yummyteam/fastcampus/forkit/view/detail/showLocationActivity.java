@@ -23,7 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.yummyteam.fastcampus.forkit.R;
 
-class ShowLocationActivity extends AppCompatActivity
+public class ShowLocationActivity extends AppCompatActivity
         implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
