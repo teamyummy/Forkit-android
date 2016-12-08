@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -32,6 +33,7 @@ import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
 import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 import com.yummyteam.fastcampus.forkit.view.map.MapsActivity;
+import com.yummyteam.fastcampus.forkit.view.search.SearchRestaurants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +61,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
     private LayoutInflater inflater;
     private ConnectFork connectFork;
     private Toolbar toolbar;
+    private ImageButton ib_search_toolbar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,6 +80,8 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         connectFork = new ConnectFork(this);
         connectFork.getStoreList();
         toolbar = (Toolbar)view.findViewById(R.id.toolBar_search);
+        ib_search_toolbar = (ImageButton)view.findViewById(R.id.ib_search_toolbar);
+        ib_search_toolbar.setOnClickListener(this);
 
 
 
@@ -174,6 +179,10 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
             case R.id.tv_dialog_flilter_ok:
                 infoDialog.dismiss();
                 Log.e("tag","click! dismiss");
+                break;
+            case R.id.ib_search_toolbar:
+                Intent searchIntent = new Intent(getContext(), SearchRestaurants.class);
+                startActivity(searchIntent);
                 break;
         }
 

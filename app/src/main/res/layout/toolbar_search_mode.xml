@@ -18,6 +18,7 @@
             android:background="@color/toolbar_background"
             app:srcCompat="@mipmap/ic_arrow_back_white_24dp" />
         <EditText
+            android:id="@+id/et_search"
             android:layout_toRightOf="@id/ib_back_toolbar"
             android:layout_centerInParent="true"
             android:layout_width="match_parent"

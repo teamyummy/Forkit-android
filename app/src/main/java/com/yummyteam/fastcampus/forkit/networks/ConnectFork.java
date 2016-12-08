@@ -5,7 +5,9 @@ import android.util.Log;
 import com.yummyteam.fastcampus.forkit.model.RestaurantsData;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.EateryListInterface;
+import com.yummyteam.fastcampus.forkit.view.search.SearchInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -22,9 +24,13 @@ public class ConnectFork {
     String baseUrl = "http://mangoplates.com/";
     List<Results> data;
     EateryListInterface eListener;
+    SearchInterface sListener;
     public ConnectFork(EateryListInterface eListener){
         this.eListener = eListener;
 
+    }
+    public ConnectFork(SearchInterface sListener){
+        this.sListener = sListener;
     }
     public void getStoreList() {
 
@@ -69,8 +75,28 @@ public class ConnectFork {
                 .build();
 
         IRestaurantData service = client.create(IRestaurantData.class);
-        String value = "restaurants";
-        //Call<List<Results>> remoteData = service.getSearchRestaurantsList(value,search);
+        String value ="restaurants";
+        Call<RestaurantsData> remoteData = service.getSearchRestaurantsList(value,search);
+        Log.e("tag",remoteData.request().url().toString());
+        remoteData.enqueue(new Callback<RestaurantsData>() {
+            @Override
+            public void onResponse(Call<RestaurantsData> call, Response<RestaurantsData> response) {
+                if (response.isSuccessful()){
+                    Log.e("respone","success");
+                    sListener.setResult(response.body().getResults());
+                }else{
+                    Log.e("respone","fail");
+                    List<Results> list = new ArrayList<Results>();
+                    sListener.setResult(list);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RestaurantsData> call, Throwable t) {
+                Log.e("connect","failure");
+                t.printStackTrace();
+            }
+        });
     }
 }
 

@@ -17,5 +17,5 @@ public interface IRestaurantData {
     Call<RestaurantsData> getRestaurantsList(@Path("value") String value);
 
     @GET("api/v1/{value}/")
-    Call<RestaurantsData> getSearchRestaurantsList(@Path("value") String value, @Query("Search") String search);
+    Call<RestaurantsData> getSearchRestaurantsList(@Path("value") String value, @Query(value = "search", encoded = true) String search );
 }
