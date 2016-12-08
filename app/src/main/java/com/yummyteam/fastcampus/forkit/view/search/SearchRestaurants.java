@@ -70,11 +70,12 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
 
     @Override
     public void setResult(List<Results> results) {
+        elAdapter.removeallData();
         if(results.size() ==0){
+
             Log.e("getKeyWord","result size = 0");
             noSearch_content.setVisibility(View.VISIBLE);
         }else{
-            elAdapter.removeallData();
             Log.e("getKeyWord","size is not null"+results.size());
             elAdapter.addDatas((ArrayList)results);
             noSearch_content.setVisibility(View.GONE);
