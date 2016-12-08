@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -57,6 +58,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
     private LinearLayout filter_layout,map_layout;
     private LayoutInflater inflater;
     private ConnectFork connectFork;
+    private Toolbar toolbar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,6 +76,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         initSlider();
         connectFork = new ConnectFork(this);
         connectFork.getStoreList();
+        toolbar = (Toolbar)view.findViewById(R.id.toolBar_search);
 
 
 

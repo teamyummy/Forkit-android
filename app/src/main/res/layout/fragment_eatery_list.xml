@@ -2,19 +2,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <include
+        android:id="@+id/eatery_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar_search"/>
+
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:layout_below="@id/eatery_bar"
+        android:id="@+id/sub_menu_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:id="@+id/sub_menu_layout">
+        android:orientation="horizontal">
+
         <LinearLayout
             android:id="@+id/filter_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/xml_border"
             android:layout_weight="1"
+            android:background="@drawable/xml_border"
             android:gravity="center">
 
             <ImageView
@@ -24,10 +32,10 @@
 
             <TextView
                 android:id="@+id/tv_filter_button"
-                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/filter"/>
+                android:gravity="center"
+                android:text="@string/filter" />
         </LinearLayout>
 
         <LinearLayout
@@ -35,8 +43,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/xml_border">
+            android:background="@drawable/xml_border"
+            android:gravity="center">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -45,41 +53,41 @@
 
             <TextView
                 android:id="@+id/tv_map_button"
-                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/map"/>
+                android:gravity="center"
+                android:text="@string/map" />
         </LinearLayout>
 
     </LinearLayout>
+
     <LinearLayout
-        android:layout_below="@id/sub_menu_layout"
+        android:id="@+id/slide_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/slide_layout">
+        android:layout_below="@id/sub_menu_layout"
+        android:orientation="vertical">
 
         <com.daimajia.slider.library.SliderLayout
             android:id="@+id/slider"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            />
+            android:layout_height="200dp" />
 
         <com.daimajia.slider.library.Indicators.PagerIndicator
             android:id="@+id/custom_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            />
+            android:gravity="center" />
     </LinearLayout>
 
 
     <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="10dp"
+        android:id="@+id/restaurant_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/slide_layout"
         android:layout_alignParentStart="true"
-        android:id="@+id/restaurant_list" />
+        android:layout_below="@id/slide_layout"
+        android:layout_marginTop="10dp" />
+
 
 </RelativeLayout>
