@@ -11,6 +11,7 @@
     <string name="filter">필터</string>
     <string name="null_heart">♡</string>
     <string name="max_heart">♥</string>
+    <string name="forkit">ForkIt</string>
 
     <string name="title_activity_login">Sign in</string>
 
