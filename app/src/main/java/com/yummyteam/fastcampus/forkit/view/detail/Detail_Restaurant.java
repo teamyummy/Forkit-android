@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -14,8 +15,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.Results;
+import com.yummyteam.fastcampus.forkit.networks.ConnectFork2;
+import com.yummyteam.fastcampus.forkit.view.map.GetResultsInterface;
 
-public class Detail_Restaurant extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Detail_Restaurant extends AppCompatActivity implements GetResultsInterface {
 
 
     ListView listView_menu;
@@ -28,23 +35,35 @@ public class Detail_Restaurant extends AppCompatActivity {
 
     TextView tvDetailMenu;
     TextView tvDetailReview;
+    TextView tvStoreName;
+
+    Results data;
+    ArrayList<String> datas;
+
+    ArrayAdapter arrayAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_restaurant);
 
+        datas = new ArrayList<>();
 
-        PictureAdapter pictureAdapter =new PictureAdapter(null,R.layout.item_picture_maptodetails,this);
-        recyclerView1=(RecyclerView)findViewById(R.id.recyclerview1);
-        recyclerView1.setAdapter(pictureAdapter);
-        RecyclerView.LayoutManager manager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
-        recyclerView1.setLayoutManager(manager);
+        Intent intent =getIntent();
+        Bundle bundle = intent.getExtras();
+        String id= bundle.getString("restaurant_id");
 
-        ReviewAdapter reviewAdapter= new ReviewAdapter(null,R.layout.item_review,this);
-        recyclerView_Review=(RecyclerView)findViewById(R.id.recyclerview_review);
-        recyclerView_Review.setAdapter(reviewAdapter);
-        RecyclerView.LayoutManager manager2 = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-        recyclerView_Review.setLayoutManager(manager2);
+
+        ConnectFork2 connectFork = new ConnectFork2(this);
+        connectFork.getStoreDetail(id);
+
+        topPictureList();
+        reviewList();
+        setList_Menu();
+
+
+        tvStoreName=(TextView)findViewById(R.id.tvStoreName);
+        listView_menu = (ListView) findViewById(R.id.listView_menu);
+
 
         tvDetailReview=(TextView)findViewById(R.id.tvDetail_Review);
         tvDetailReview.setOnClickListener(new View.OnClickListener() {
@@ -54,8 +73,7 @@ public class Detail_Restaurant extends AppCompatActivity {
             }
         });
 
-        listView_menu = (ListView) findViewById(R.id.listView_menu);
-        setList_Menu();
+
         tvDetailMenu =(TextView)findViewById(R.id.tvDetailMenu);
         tvDetailMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +112,26 @@ public class Detail_Restaurant extends AppCompatActivity {
         });
 
     }
+    public void setDatas(){
 
+        tvStoreName.setText(data.getName());
+
+    }
+
+    public void topPictureList(){
+        PictureAdapter pictureAdapter =new PictureAdapter(null,R.layout.item_picture_maptodetails,this);
+        recyclerView1=(RecyclerView)findViewById(R.id.recyclerview1);
+        recyclerView1.setAdapter(pictureAdapter);
+        RecyclerView.LayoutManager manager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
+        recyclerView1.setLayoutManager(manager);
+    }
+    public void reviewList(){
+        ReviewAdapter reviewAdapter= new ReviewAdapter(null,R.layout.item_review,this);
+        recyclerView_Review=(RecyclerView)findViewById(R.id.recyclerview_review);
+        recyclerView_Review.setAdapter(reviewAdapter);
+        RecyclerView.LayoutManager manager2 = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView_Review.setLayoutManager(manager2);
+    }
 
     public void goDetailReview(){
         Intent intent = new Intent(this,Detail_Review.class);
@@ -102,27 +139,60 @@ public class Detail_Restaurant extends AppCompatActivity {
     }
     public void goDetailMenu(){
         Intent intent =new Intent(this,Detail_menu.class);
+        intent.putExtra("menu",datas);
         startActivity(intent);
     }
     public void goShowLocation (){
         Intent intent = new Intent(Detail_Restaurant.this,ShowLocationActivity.class);
-        intent.putExtra("Res_lat",37.515364);
-        intent.putExtra("Res_lon",127.022796);
+        intent.putExtra("Res_lat", Double.parseDouble(data.getLatitude()));
+        intent.putExtra("Res_lon", Double.parseDouble(data.getLongitude()));
         startActivity(intent);
     }
 
     public void setList_Menu(){
-        String[] datas = {"Sandwich", "Awesome Sandwich", "Hot Sandwich", "Coke"};
 
-        ArrayAdapter adapter = new ArrayAdapter(         // 인자 전달
+
+
+
+        arrayAdapter = new ArrayAdapter(         // 인자 전달
                 this,                               // 컨택스트
                 android.R.layout.simple_list_item_1,// 아이템 레이아웃
                 datas                               // 데이터
         );
 
+
         listView_menu = (ListView) findViewById(R.id.listView_menu);
-        listView_menu.setAdapter(adapter);
+        listView_menu.setAdapter(arrayAdapter);
+
+    }
+    public void addMenuData(Results data){
+
+
+        int size=data.getMenus().size();
+
+        for (int i = 0; i < size; i++) {
+            String menu = data.getMenus().get(i).getName();
+
+            datas.add(menu);
+        }
+        arrayAdapter.notifyDataSetChanged();
+
 
     }
 
+    @Override
+    public void getList(List<Results> data) {
+
+
+    }
+
+    @Override
+    public void getDetail(Results data) {
+        this.data=data;
+        Log.e("DataTag",this.data.getName());
+        setDatas();
+        addMenuData(this.data);
+
+
+    }
 }

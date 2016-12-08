@@ -1,29 +1,29 @@
 package com.yummyteam.fastcampus.forkit.view.map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.yummyteam.fastcampus.forkit.model.Results;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Created by user on 2016-11-11.
  */
 
 public class ItemReader {
-    private static final String REGEX_INPUT_BOUNDARY_BEGINNING = "\\A";
 
-    public List<Item> read(InputStream inputStream) throws JSONException {
+    ArrayList<Results> datas;
+
+    public ItemReader(ArrayList<Results> datas){
+        this.datas=datas;
+    }
+
+    public List<Item> read()  {
         List<Item> items = new ArrayList<Item>();
-        String json = new Scanner(inputStream).useDelimiter(REGEX_INPUT_BOUNDARY_BEGINNING).next();
-        JSONArray array = new JSONArray(json);
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            double lat = object.getDouble("lat");
-            double lng = object.getDouble("lng");
+
+
+        for (int i = 0; i < datas.size(); i++) {
+            double lat = Double.parseDouble(datas.get(i).getLatitude());
+            double lng = Double.parseDouble(datas.get(i).getLongitude());
             int flag=i;
 
             items.add(new Item(lat, lng,flag));

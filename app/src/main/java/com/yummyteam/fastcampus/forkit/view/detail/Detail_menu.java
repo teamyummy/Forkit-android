@@ -1,5 +1,6 @@
 package com.yummyteam.fastcampus.forkit.view.detail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
@@ -7,21 +8,26 @@ import android.widget.ListView;
 
 import com.yummyteam.fastcampus.forkit.R;
 
+import java.util.ArrayList;
+
 public class Detail_menu extends AppCompatActivity {
 
     ListView listView;
-
+    ArrayList<String> datas;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_menu);
+
+        Intent intent = getIntent();
+        Bundle bundle =intent.getExtras();
+        datas=bundle.getStringArrayList("menu");
 
         setList_Menu();
 
     }
 
     public void setList_Menu(){
-        String[] datas = {"Sandwich", "Awesome Sandwich", "Hot Sandwich", "Coke"};
 
         ArrayAdapter adapter = new ArrayAdapter(
                 this,
