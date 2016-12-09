@@ -169,6 +169,7 @@ public class LoginActivity extends AppCompatActivity implements LoginInterface {
                 cache.write(token);
                 Log.e("tag","token is "+token);
                 Intent intent = new Intent(this,MainView.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 finish();
             } catch (IOException e) {

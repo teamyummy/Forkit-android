@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.view.login.LoginActivity;
+import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.ELAdapter;
 
 import java.io.IOException;
 
@@ -41,6 +44,7 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener {
     private ImageView iv_profile_myPage;
     private TextView tv_profile_myPage;
     private Button btn_sign;
+    private RecyclerView mylist;
 
     private final String LOGIN = "로그인 하기";
     private final String LOGOUT = "로그아웃";
@@ -52,6 +56,13 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener {
         iv_profile_myPage = (ImageView)view.findViewById(R.id.iv_profile_my);
         tv_profile_myPage = (TextView)view.findViewById(R.id.tv_profile_my);
         btn_sign  = (Button)view.findViewById(R.id.btn_sign);
+        mylist = (RecyclerView)view.findViewById(R.id.mylist);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+        mylist.setLayoutManager(manager);
+
+        initAdapters();
+        setMyReviw();
+        setMyFavorite();
         if(token.equals("")) {
             btn_sign.setText(LOGIN);
             tv_profile_myPage.setText("로그인 해주세요");
@@ -69,6 +80,17 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    private void initAdapters() {
+        ELAdapter elAdapter = new ELAdapter(getActivity());
+        mylist.setAdapter(elAdapter);
+    }
+
+    private void setMyFavorite() {
+
+    }
+
+    private void setMyReviw() {
+    }
 
 
     @Override
@@ -90,6 +112,7 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener {
             Button temp_btn = (Button)view;
             if(temp_btn.getText().toString().equals(LOGIN)){
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
             }else if(temp_btn.getText().toString().equals(LOGOUT)){
                 try {
