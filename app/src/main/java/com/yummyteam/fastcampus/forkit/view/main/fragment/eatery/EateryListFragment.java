@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -29,10 +30,13 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Results;
+import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
 import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 import com.yummyteam.fastcampus.forkit.view.map.MapsActivity;
+import com.yummyteam.fastcampus.forkit.view.search.SearchRestaurants;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,18 +51,20 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
 
 
     public EateryListFragment() {
-        // Required empty public constructor
+       cache = TokenCache.getInstance();
     }
 
     private RecyclerView restaurant_list;
 
-
+    private TokenCache cache;
     private ArrayList<Results> datas;
     private SliderLayout mDemoSlider;
     private LinearLayout filter_layout,map_layout;
     private LayoutInflater inflater;
     private ConnectFork connectFork;
     private Toolbar toolbar;
+    private ImageButton ib_search_toolbar;
+    private String token;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,13 +81,27 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         initList();
         initSlider();
         connectFork = new ConnectFork(this);
-        connectFork.getStoreList();
+
         toolbar = (Toolbar)view.findViewById(R.id.toolBar_search);
-
-
+        ib_search_toolbar = (ImageButton)view.findViewById(R.id.ib_search_toolbar);
+        ib_search_toolbar.setOnClickListener(this);
+        try {
+            token = cache.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setToken();
 
 
         return view;
+    }
+
+    private void setToken() {
+        if(token.equals("")){
+            connectFork.getStoreList();
+        }else{
+            connectFork.getStoreList_withToken(token);
+        }
     }
 
     private void initSlider()
@@ -175,6 +195,10 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
             case R.id.tv_dialog_flilter_ok:
                 infoDialog.dismiss();
                 Log.e("tag","click! dismiss");
+                break;
+            case R.id.ib_search_toolbar:
+                Intent searchIntent = new Intent(getContext(), SearchRestaurants.class);
+                startActivity(searchIntent);
                 break;
         }
 

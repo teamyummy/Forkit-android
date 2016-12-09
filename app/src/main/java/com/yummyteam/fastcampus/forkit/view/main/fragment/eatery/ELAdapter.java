@@ -41,14 +41,14 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
     public void onBindViewHolder(ELAdapter.ViewHolder holder, int position) {
         final Results data = datas.get(position);
 
-        if(data.getMy_like().equals("true")){
+        if(data.getMy_like().equals("false")){
             holder.tv_isLike.setText(R.string.null_heart);
         }else{
             holder.tv_isLike.setText(R.string.max_heart);
         }
         holder.tv_total_review.setText(""+data.getReviews().size());
         holder.tv_avg_like.setText(data.getTotal_like()+"");
-//        holder.tv_total_favorite.setText(data.getTotal_like());
+        holder.tv_total_favorite.setText(data.getTotal_like());
         holder.tv_restaurant_name.setText(data.getName());
         holder.tv_restaurant_address.setText(data.getAddress());
         String img_src = "";
