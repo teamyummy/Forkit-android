@@ -5,7 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context=".view.detail.showLocationActivity">
+    tools:context=".view.detail.ShowLocationActivity">
+
+    <include
+        android:id="@+id/toolBar_sub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar_sub"/>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -14,6 +20,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/toolBar_sub"
         tools:context="com.dongjin.android.googlemap_clustering.MapsActivity" />
 
 </RelativeLayout>

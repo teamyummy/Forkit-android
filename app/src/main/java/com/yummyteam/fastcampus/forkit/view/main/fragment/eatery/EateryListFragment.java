@@ -80,6 +80,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
 
 
 
+
         return view;
     }
 

@@ -6,25 +6,7 @@
     android:orientation="vertical"
     android:background="@drawable/xml_border_orange_thin"
 
-    android:layout_margin="5dp"
-    android:padding="8dp">
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/linear5" />
-
-    <TextView
-        android:text="name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvStoreName_review"
-        android:textSize="24sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        />
+    >
 
 
     <TextView
@@ -35,7 +17,8 @@
         android:textSize="16sp"
         android:layout_below="@+id/tvStoreName_review"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:padding="10dp" />
 
 
     <com.ms.square.android.expandabletextview.ExpandableTextView
@@ -64,103 +47,70 @@
             android:background="@android:color/transparent"/>
     </com.ms.square.android.expandabletextview.ExpandableTextView>
 
-    <TextView
-        android:text="Like"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/recyclerView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp"
-        android:id="@+id/tvLike" />
+        android:id="@+id/askLinear"
+        android:paddingTop="20dp"
+        android:background="@drawable/xml_border_orange_thin"
+        android:layout_marginTop="36dp"
+        android:layout_below="@+id/tvLike"
+        android:layout_toEndOf="@+id/expand_text_view">
+
+        <TextView
+            android:text="이 평가가 도움이 되었나요?"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4"
+            android:layout_weight="1.04"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            app:srcCompat="@mipmap/ic_egmt_review_rating_2_normal"
+            android:id="@+id/imageView2"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/ic_egmt_review_rating_3_normal"
+            android:id="@+id/imageView3"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
     <TextView
-        android:text="like"
-        android:layout_width="wrap_content"
+        android:text="name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvHowLike"
-        android:layout_alignBaseline="@+id/tvLike"
-        android:layout_alignBottom="@+id/tvLike"
-        android:layout_toRightOf="@+id/tvLike"
-        android:layout_toEndOf="@+id/tvLike" />
+        android:id="@+id/tvStoreName_review"
+        android:textSize="24sp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/expand_text_view"
+        android:padding="10dp"
+        android:paddingBottom="10dp" />
 
-    <TextView
-        android:text="dislike"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvComment"
-        android:layout_alignBaseline="@+id/tvHowLike"
-        android:layout_alignBottom="@+id/tvHowLike"
-        android:layout_toRightOf="@+id/tvHowLike"
-        android:layout_toEndOf="@+id/tvHowLike"
-        android:layout_marginLeft="36dp"
-        android:layout_marginStart="36dp" />
+        android:id="@+id/recyclerView"
+        android:padding="10dp"
+        android:layout_below="@+id/tvDate"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvHowComment"
-        android:layout_alignBaseline="@+id/tvComment"
-        android:layout_alignBottom="@+id/tvComment"
-        android:layout_toRightOf="@+id/tvComment"
-        android:layout_toEndOf="@+id/tvComment" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvLike"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="9dp"
-        android:id="@+id/linear">
-
-    </LinearLayout>
-
-
-    <TextView
-        android:text="#placeTag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvStore"
-        android:layout_above="@+id/expand_text_view"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:id="@+id/recyclerView"
-        android:layout_below="@+id/expand_text_view"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/linear"
-        android:layout_alignParentStart="true"
-        android:id="@+id/linear5">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_review_thumb_up_24dp"
-            android:id="@+id/imageButton"
-            android:layout_weight="1"
-            android:background="@color/cardview_light_background" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_review_thumb_down_24dp"
-            android:id="@+id/imageButton2"
-            android:layout_weight="1"
-            android:background="@color/cardview_light_background" />
-    </LinearLayout>
+        android:id="@+id/tvLike"
+        android:paddingTop="10dp"
+        android:layout_below="@+id/recyclerView"
+        android:layout_toEndOf="@+id/expand_text_view" />
 
 
 </RelativeLayout>

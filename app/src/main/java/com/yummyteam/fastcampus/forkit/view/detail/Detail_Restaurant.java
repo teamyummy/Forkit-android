@@ -1,5 +1,7 @@
 package com.yummyteam.fastcampus.forkit.view.detail;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,15 +9,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.Images;
 import com.yummyteam.fastcampus.forkit.model.Results;
+import com.yummyteam.fastcampus.forkit.model.Reviews;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork2;
 import com.yummyteam.fastcampus.forkit.view.map.GetResultsInterface;
 
@@ -32,15 +38,28 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     ImageView igCall;
     ImageView igNavi;
     ImageView igPostReview;
+    ImageView imageLike;
 
     TextView tvDetailMenu;
     TextView tvDetailReview;
     TextView tvStoreName;
+    TextView tvRating;
+    TextView tvBookMark;
+    TextView tvReview;
+    TextView tvAddress;
+    TextView tvPhone;
+    TextView tvParking;
+    TextView tvHours;
 
     Results data;
     ArrayList<String> datas;
 
     ArrayAdapter arrayAdapter;
+    ImageButton ib_back_toolbar;
+    Toolbar toolbar;
+
+    PictureAdapter pictureAdapter;
+    ReviewAdapter reviewAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +79,26 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         reviewList();
         setList_Menu();
 
+        toolbar = (Toolbar)findViewById(R.id.toolBar_sub);
+        ib_back_toolbar=(ImageButton)findViewById(R.id.ib_back_toolbar);
+        ib_back_toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Detail_Restaurant.this.finish();
+            }
+        });
+
 
         tvStoreName=(TextView)findViewById(R.id.tvStoreName);
+        tvRating=(TextView)findViewById(R.id.tvRating);
+        tvBookMark=(TextView)findViewById(R.id.tvBookMark);
+        tvReview=(TextView)findViewById(R.id.tvReview);
+        tvAddress=(TextView)findViewById(R.id.tvAddress);
+        tvPhone=(TextView)findViewById(R.id.tvPhone);
+        tvParking=(TextView)findViewById(R.id.tvParking);
+        tvHours=(TextView)findViewById(R.id.tvHours);
         listView_menu = (ListView) findViewById(R.id.listView_menu);
+        imageLike=(ImageView)findViewById(R.id.imageLike);
 
 
         tvDetailReview=(TextView)findViewById(R.id.tvDetail_Review);
@@ -112,21 +148,43 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         });
 
     }
+    float scale_x=1;
+    float scale_y=1;
+    public void buttonSmaller(View v){
+            scale_x=scale_x*1.5f;
+            scale_y=scale_y*1.5f;
+
+            ObjectAnimator ani1 = ObjectAnimator.ofFloat(imageLike, "scaleX", scale_x);
+            ObjectAnimator ani2 = ObjectAnimator.ofFloat(imageLike, "scaleY", scale_y);//배수
+
+            AnimatorSet aniset= new AnimatorSet();
+            aniset.setDuration(500);
+            aniset.playTogether(ani1,ani2);
+            aniset.start();
+
+    }
     public void setDatas(){
 
         tvStoreName.setText(data.getName());
 
+        tvRating.setText("평점  ㅣ  "+data.getReview_score());
+        tvBookMark.setText("즐겨찾기  ㅣ  "+data.getTotal_like());
+        tvReview.setText("Review  ㅣ  "+data.getReview_count());
+        tvAddress.setText(data.getAddress());
+        tvPhone.setText(data.getPhone());
+        tvHours.setText(data.getOperation_hour());
+        tvParking.setText(data.getDesc_parking());
     }
 
     public void topPictureList(){
-        PictureAdapter pictureAdapter =new PictureAdapter(null,R.layout.item_picture_maptodetails,this);
+        pictureAdapter =new PictureAdapter(R.layout.item_picture_maptodetails,this);
         recyclerView1=(RecyclerView)findViewById(R.id.recyclerview1);
         recyclerView1.setAdapter(pictureAdapter);
         RecyclerView.LayoutManager manager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
         recyclerView1.setLayoutManager(manager);
     }
     public void reviewList(){
-        ReviewAdapter reviewAdapter= new ReviewAdapter(null,R.layout.item_review,this);
+        reviewAdapter= new ReviewAdapter(R.layout.item_review,this);
         recyclerView_Review=(RecyclerView)findViewById(R.id.recyclerview_review);
         recyclerView_Review.setAdapter(reviewAdapter);
         RecyclerView.LayoutManager manager2 = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
@@ -152,8 +210,6 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     public void setList_Menu(){
 
 
-
-
         arrayAdapter = new ArrayAdapter(         // 인자 전달
                 this,                               // 컨택스트
                 android.R.layout.simple_list_item_1,// 아이템 레이아웃
@@ -166,8 +222,6 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
 
     }
     public void addMenuData(Results data){
-
-
         int size=data.getMenus().size();
 
         for (int i = 0; i < size; i++) {
@@ -176,8 +230,6 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
             datas.add(menu);
         }
         arrayAdapter.notifyDataSetChanged();
-
-
     }
 
     @Override
@@ -192,6 +244,8 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         Log.e("DataTag",this.data.getName());
         setDatas();
         addMenuData(this.data);
+        pictureAdapter.addImageData((ArrayList<Images>) data.getImages());
+        reviewAdapter.addReviewData((ArrayList<Reviews>) data.getReviews());
 
 
     }

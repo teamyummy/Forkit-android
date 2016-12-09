@@ -1,21 +1,26 @@
 package com.yummyteam.fastcampus.forkit.view.map;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +37,7 @@ import com.squareup.picasso.Picasso;
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork2;
+import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +63,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     List<Item> items;
 
+    Toolbar toolbar;
+    ImageButton ib_back_toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +73,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         setMap();
 
+
+
         pager= (ViewPager)findViewById(R.id.pager);
         adapter= new CustomAdapter(getLayoutInflater());
         pager.setAdapter(adapter);
+
+        toolbar=(Toolbar)findViewById(R.id.toolBar_sub);
+        ib_back_toolbar=(ImageButton)findViewById(R.id.ib_back_toolbar);
+        ib_back_toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MapsActivity.this.finish();
+            }
+        });
 
 
         connectFork = new ConnectFork2(this);
@@ -105,6 +125,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+
+
     class CustomAdapter extends PagerAdapter {
 
         LayoutInflater inflater;
@@ -139,23 +161,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             CardView cardView = (CardView)view.findViewById(R.id.cardView);
             ImageView imageView=(ImageView)view.findViewById(img);
-            TextView textView=(TextView)view.findViewById(R.id.textView);
-            TextView textView2=(TextView)view.findViewById(R.id.textView2);
-            TextView textView3=(TextView)view.findViewById(R.id.textView3);
+            TextView tvStoreName=(TextView)view.findViewById(R.id.tvStoreName);
+            TextView tvRating=(TextView)view.findViewById(R.id.tvRating);
+
 
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     pagerAni(view);
-                    pagerAni2(view);
+                    loadMain(data);
 
-
-
-//                    Intent intent = new Intent (MapsActivity.this, Detail_Restaurant.class);
-//                    intent.putExtra("restaurant_id",data.getId());
-//                    MapsActivity.this.startActivity(intent);
-//                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-//                    MapsActivity.this.finish();
                 }
             });
 
@@ -168,7 +183,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             Picasso.with(MapsActivity.this).load(img_src).into(imageView);
             Log.e("IMAGE TAG", img_src);
-            textView3.setText(data.getName());
+            Log.e("Image position", position+"");
+            tvStoreName.setText(data.getName());
+            tvRating.setText("★"+data.getReview_score()+"");
 
 
             container.addView(view);
@@ -186,6 +203,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return v == obj;
         }
     }
+    private final int SPLASH_DISPLAY_LENGTH =1100;
+    private void loadMain(final Results data){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent (MapsActivity.this, Detail_Restaurant.class);
+                intent.putExtra("restaurant_id",data.getId());
+                MapsActivity.this.startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                MapsActivity.this.finish();
+            }
+        },SPLASH_DISPLAY_LENGTH);
+
+
+    }
     int y=0;
     int r=0;
     int x=0;
@@ -197,19 +229,55 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ObjectAnimator ani2 = ObjectAnimator.ofFloat(pager, "rotation", r);
 
         AnimatorSet aniset= new AnimatorSet();
-        aniset.setDuration(1000);
-        aniset.playTogether(ani1,ani2);
-        aniset.start();
-    }
-    public void pagerAni2(View v){
+        aniset.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
 
-        y=y-200;
-        x=x-400;
-        ObjectAnimator ani1 = ObjectAnimator.ofFloat(pager, "scaleY", y);
-        ObjectAnimator ani2 = ObjectAnimator.ofFloat(pager, "translationX", x);
+            }
 
-        AnimatorSet aniset= new AnimatorSet();
-        aniset.setDuration(1000);
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                x=x+1600;
+
+                ObjectAnimator ani = ObjectAnimator.ofFloat(pager, "translationX", x);
+
+                ani.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                });
+                ani.setDuration(500);
+                ani.start();
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        aniset.setDuration(700);
         aniset.playTogether(ani1,ani2);
         aniset.start();
     }
