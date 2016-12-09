@@ -42,7 +42,6 @@ import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yummyteam.fastcampus.forkit.R.id.img;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GetResultsInterface {
 
@@ -160,9 +159,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             view = inflater.inflate(R.layout.item_map, null);
 
             CardView cardView = (CardView)view.findViewById(R.id.cardView);
-            ImageView imageView=(ImageView)view.findViewById(img);
+            ImageView imageView=(ImageView)view.findViewById(R.id.imageView4);
             TextView tvStoreName=(TextView)view.findViewById(R.id.tvStoreName);
             TextView tvRating=(TextView)view.findViewById(R.id.tvRating);
+            TextView tvAdr=(TextView)view.findViewById(R.id.tvAdr);
 
 
             cardView.setOnClickListener(new View.OnClickListener() {
@@ -186,7 +186,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e("Image position", position+"");
             tvStoreName.setText(data.getName());
             tvRating.setText("★"+data.getReview_score()+"");
-
+            tvAdr.setText(data.getAddress());
 
             container.addView(view);
 
