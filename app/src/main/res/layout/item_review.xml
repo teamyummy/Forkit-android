@@ -3,114 +3,110 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@drawable/xml_border_orange_thin"
+    android:orientation="vertical"
 
     >
 
 
     <TextView
-        android:text="date"
+        android:id="@+id/tvStoreName_review"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvDate"
-        android:textSize="16sp"
-        android:layout_below="@+id/tvStoreName_review"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:padding="10dp" />
+        android:layout_alignParentTop="true"
+        android:padding="10dp"
+        android:paddingBottom="10dp"
+        android:text="name"
+        android:textSize="24sp" />
 
+
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvStoreName_review"
+        android:padding="10dp"
+        android:text="date"
+        android:textSize="16sp" />
 
     <com.ms.square.android.expandabletextview.ExpandableTextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
         android:id="@+id/expand_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        expandableTextView:maxCollapsedLines="4"
-        expandableTextView:animDuration="200"
-        android:layout_below="@+id/tvDate">
+        android:layout_below="@id/tvDate"
+        app:animDuration="200"
+        app:maxCollapsedLines="4">
+
         <TextView
-            android:id="@+id/expandable_text"
+            android:id="@id/expandable_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:textSize="16sp"
-            android:textColor="#666666" />
+            android:textColor="#666666"
+            android:textSize="16sp" />
+
         <ImageButton
-            android:id="@+id/expand_collapse"
+            android:id="@id/expand_collapse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp"
             android:layout_gravity="right|bottom"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:padding="16dp" />
     </com.ms.square.android.expandabletextview.ExpandableTextView>
 
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/askLinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/askLinear"
-        android:paddingTop="20dp"
-        android:background="@drawable/xml_border_orange_thin"
-        android:layout_marginTop="36dp"
         android:layout_below="@+id/tvLike"
-        android:layout_toEndOf="@+id/expand_text_view">
+        android:layout_marginTop="36dp"
+        android:background="@drawable/xml_border_orange_thin"
+        android:orientation="horizontal"
+        android:paddingTop="20dp">
 
         <TextView
-            android:text="이 평가가 도움이 되었나요?"
+            android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView4"
             android:layout_weight="1.04"
+            android:text="이 평가가 도움이 되었나요?"
             android:textSize="20dp" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            app:srcCompat="@mipmap/ic_egmt_review_rating_2_normal"
             android:id="@+id/imageView2"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_egmt_review_rating_2_normal" />
 
         <ImageView
+            android:id="@+id/imageView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/ic_egmt_review_rating_3_normal"
-            android:id="@+id/imageView3"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_egmt_review_rating_3_normal" />
 
     </LinearLayout>
 
-    <TextView
-        android:text="name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvStoreName_review"
-        android:textSize="24sp"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/expand_text_view"
-        android:padding="10dp"
-        android:paddingBottom="10dp" />
-
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyclerView"
-        android:padding="10dp"
-        android:layout_below="@+id/tvDate"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/expand_text_view"
+        android:padding="10dp" />
 
     <TextView
-        android:text="TextView"
+        android:id="@+id/tvLike"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvLike"
-        android:paddingTop="10dp"
         android:layout_below="@+id/recyclerView"
-        android:layout_toEndOf="@+id/expand_text_view" />
+        android:paddingTop="10dp"
+        android:text="TextView" />
 
 
 </RelativeLayout>

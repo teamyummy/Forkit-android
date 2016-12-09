@@ -185,7 +185,7 @@ public class PostReviewFragment extends DialogFragment {
             View view = null;
             view = inflater.inflate(R.layout.item_picture_maptodetails, null);
 
-            ImageView imageView=(ImageView)view.findViewById(R.id.img);
+            ImageView imageView=(ImageView)view.findViewById(R.id.imageView4);
             imageView.setImageBitmap(fileBtimaps.get(position));
 
 
