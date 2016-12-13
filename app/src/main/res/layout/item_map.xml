@@ -4,27 +4,30 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cardView"
     android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/cardView">
+    android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="386dp"
-            android:layout_height="102dp"
+            android:layout_height="80dp"
             android:weightSum="1">
 
             <ImageView
-                android:layout_width="50dp"
                 app:srcCompat="@drawable/btn_unpress_like"
                 android:id="@+id/imageView4"
-                android:layout_weight="0.42"
-                android:layout_height="100dp" />
+                android:layout_weight="0.4"
+                android:layout_height="80dp"
+                android:layout_width="40dp"
+                android:elevation="0dp" />
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
                 <TextView
                     android:text="TextView"
@@ -33,7 +36,7 @@
                     android:id="@+id/tvStoreName"
                     android:layout_weight="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:paddingTop="20dp"
+                    android:paddingTop="5dp"
                     android:paddingLeft="5dp"
                     android:maxEms="10" />
 
@@ -44,7 +47,17 @@
                     android:id="@+id/tvRating"
                     android:layout_weight="1"
                     android:paddingLeft="5dp"
-                    android:layout_marginTop="-10dp" />
+                    />
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvAddress"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:maxEms="20"
+                    android:textSize="10sp" />
 
             </LinearLayout>
 
