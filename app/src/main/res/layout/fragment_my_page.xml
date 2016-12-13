@@ -59,6 +59,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_my_reviews"
                 android:background="@drawable/xml_border"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -67,6 +68,7 @@
                 android:text="내가 쓴 리뷰" />
 
             <TextView
+                android:id="@+id/tv_my_favorites"
                 android:background="@drawable/xml_border"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -75,9 +77,30 @@
                 android:text="즐겨찾기" />
         </LinearLayout>
     </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"></android.support.v7.widget.RecyclerView>
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mylist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <ProgressBar
+            android:id="@+id/mp_progress"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/noSearch_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textSize="30dp"
+            android:text="검색 결과가 없습니다."/>
+    </LinearLayout>
+
 </LinearLayout>

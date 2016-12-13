@@ -61,14 +61,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
-                android:text="평정순" />
+                android:text="평점순" />
 
             <RadioButton
                 android:id="@+id/rb_dialog_recomend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
-                android:text="추천수" />
+                android:text="추천순" />
 
             <RadioButton
                 android:id="@+id/rb_dialog_review"

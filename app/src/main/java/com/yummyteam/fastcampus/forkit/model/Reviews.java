@@ -27,6 +27,27 @@ public class Reviews {
 
     private String restaurant;
 
+    private String my_like;
+
+    private String my_like_id;
+
+
+    public String getMy_like() {
+        return my_like;
+    }
+
+    public void setMy_like(String my_like) {
+        this.my_like = my_like;
+    }
+
+    public String getMy_like_id() {
+        return my_like_id;
+    }
+
+    public void setMy_like_id(String my_like_id) {
+        this.my_like_id = my_like_id;
+    }
+
     public String getCreated_date ()
     {
         return created_date;

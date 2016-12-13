@@ -25,6 +25,8 @@ public class Results {
 
     private String my_like;
 
+    private String my_like_id;
+
     private String id;
 
     private String register;
@@ -48,6 +50,14 @@ public class Results {
     private String can_parking;
 
     private String desc_parking;
+
+    public String getMy_like_id() {
+        return my_like_id;
+    }
+
+    public void setMy_like_id(String my_like_id) {
+        this.my_like_id = my_like_id;
+    }
 
     public List<Tags> getTags ()
     {
