@@ -10,7 +10,9 @@ import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.EateryListInter
 import com.yummyteam.fastcampus.forkit.view.search.SearchInterface;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +42,7 @@ public class ConnectFork {
         this.lListener = lListener;
     }
 
-    public void getStoreList() {
+    public void getStoreList(String page,String ordered, String tags) {
 
         //1. 레트로핏 설정
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
@@ -48,10 +50,16 @@ public class ConnectFork {
                 .build();
         //2. Retrofit client에서 사용할 interface
         IRestaurantData service = client.create(IRestaurantData.class);
-        String value = "restaurants";
-        Call<RestaurantsData> remoteData = service.getRestaurantsList(value);
+        Map<String,String> query = new HashMap<>();
+        query.put("page",page);
+        query.put("ordering",ordered);
+        if(tags.length()>0){
+            query.put("tags",tags);
+        }
+        Call<RestaurantsData> remoteData = service.getRestaurantsList(query);
+        Log.e("connect","url = "+remoteData.request().url().toString());
         // 4. 비동기 데이터를 받기 위한 리스너 세팅
-        Log.e("tag","connect start");
+        Log.e("tag","connect start = " +remoteData.request().url().toString());
         remoteData.enqueue(new Callback<RestaurantsData>() {
             @Override
             public void onResponse(Call<RestaurantsData> call, Response<RestaurantsData> response) {
@@ -61,6 +69,7 @@ public class ConnectFork {
                     eListener.getList(data);
                 }else{
                     Log.e("tag2",response.message()+call.request().body());
+                    eListener.getList(null);
                     data = null;
                 }
             }
@@ -119,22 +128,30 @@ public class ConnectFork {
         remoteData.enqueue(new Callback<Auth>() {
             @Override
             public void onResponse(Call<Auth> call, Response<Auth> response) {
+
+
                 if(response.isSuccessful()){
+                    Log.e("tag",response.message().toString());
+                    //Log.e("tag",response.errorBody().toString());
+                    //Log.e("tag",response.headers().toString());
                     lListener.setToken(response.body().getToken());
                 }else{
+
                     Log.e("auth","respone fail");
+                    lListener.setToken("");
                 }
             }
 
             @Override
             public void onFailure(Call<Auth> call, Throwable t) {
                 Log.e("auth","connect fail");
+                lListener.setToken("");
             }
         });
 
     }
 
-    public void getStoreList_withToken(String token) {
+    public void getStoreList_withToken(String token,String page,String ordered,String tags) {
         //1. 레트로핏 설정
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -143,20 +160,27 @@ public class ConnectFork {
 
         String token_complete = "token " + token;
         IRestaurantData service = client.create(IRestaurantData.class);
-        String value = "restaurants";
-        Call<RestaurantsData> remoteData = service.getRestaurantsList(token_complete,value);
+        Map<String,String> query = new HashMap<>();
+        query.put("page",page);
+        query.put("ordering",ordered);
+        if(tags.length()>0){
+            query.put("tags",tags);
+        }
+        Call<RestaurantsData> remoteData = service.getRestaurantsList(token_complete,query);
+        Log.e("connect","url = "+remoteData.request().url().toString());
         // 4. 비동기 데이터를 받기 위한 리스너 세팅
         Log.e("tag","connect start");
         remoteData.enqueue(new Callback<RestaurantsData>() {
             @Override
             public void onResponse(Call<RestaurantsData> call, Response<RestaurantsData> response) {
                 if(response.isSuccessful()){
-                    Log.e("tag1","size = " + response.body());
+                    Log.e("tag1","size = " + response.body().getResults().size());
                     data = response.body().getResults();
                     eListener.getList(data);
                 }else{
                     Log.e("tag2",response.message()+call.request().body());
                     data = null;
+                    eListener.getList(data);
                 }
             }
 

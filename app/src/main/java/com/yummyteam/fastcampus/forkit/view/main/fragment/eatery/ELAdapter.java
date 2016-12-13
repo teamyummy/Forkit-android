@@ -1,11 +1,13 @@
 package com.yummyteam.fastcampus.forkit.view.main.fragment.eatery;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,36 +17,54 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Results;
+import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
+import com.yummyteam.fastcampus.forkit.view.login.LoginActivity;
+import com.yummyteam.fastcampus.forkit.view.main.ActivityConnectInterface;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
  * Created by Dabin on 2016-11-29.
  */
 
-public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
+public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> implements View.OnClickListener {
     private ArrayList<Results> datas;
-    private Activity activity;
-    public ELAdapter(Activity activity){
+    private TokenCache cache;
+    private String token;
+    private static final int LIKED = R.mipmap.ic_favorite_pink_36dp;
+    private static final int DISLIKED = R.mipmap.ic_favorite_border_black_36dp;
+
+    private ActivityConnectInterface acInterface;
+    public ELAdapter() throws IOException {
         datas = new ArrayList<>();
-        this.activity = activity;
+        cache = TokenCache.getInstance();
+
+        token = cache.read();
     }
 
+    public void setInterface(ActivityConnectInterface acInterface){
+        this.acInterface = acInterface;
+    }
+    private ViewGroup parent;
     @Override
     public ELAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_restaurant_list,parent,false);
+        this.parent = parent;
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ELAdapter.ViewHolder holder, int position) {
         final Results data = datas.get(position);
-
+        holder.ib_isLike.setTag(position);
         if(data.getMy_like().equals("false")){
-            holder.tv_isLike.setText(R.string.null_heart);
-        }else{
-            holder.tv_isLike.setText(R.string.max_heart);
+            holder.ib_isLike.setImageResource(DISLIKED);
+            holder.ib_isLike.setBackgroundColor(Color.WHITE);
+        }else if(data.getMy_like().equals("true")){
+            holder.ib_isLike.setBackgroundColor(Color.WHITE);
+            holder.ib_isLike.setImageResource(LIKED);
         }
         holder.tv_total_review.setText(""+data.getReviews().size());
         holder.tv_avg_like.setText(data.getTotal_like()+"");
@@ -58,7 +78,7 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
         }else{
             img_src = data.getImages().get(0).getImg();
         }
-        Glide.with(activity)
+        Glide.with(parent.getContext())
                 .load(img_src)
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
@@ -78,11 +98,13 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(activity, Detail_Restaurant.class);
+                Intent intent = new Intent(parent.getContext(), Detail_Restaurant.class);
                 intent.putExtra("restaurant_id",data.getId());
-                activity.startActivity(intent);
+                parent.getContext().startActivity(intent);
             }
         });
+
+        holder.ib_isLike.setOnClickListener(this);
 
     }
 
@@ -101,15 +123,48 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.ib_isLike:
+                if(token.length()>0){
+                    ImageButton ib = (ImageButton)view;
+                    if(ib.getTag() !=null){
+                        int position = (Integer) ib.getTag();
+                        String like = datas.get(position).getMy_like();
+                        if(like.equals("false")){
+                            datas.get(position).setMy_like("true");
+                            ib.setImageResource(LIKED);
+                        }else if(like.equals("true")){
+                            datas.get(position).setMy_like("false");
+                            ib.setImageResource(DISLIKED);
+                        }
+                        acInterface.setFavorite(datas.get(position).getId(),datas.get(position).getMy_like());
+                    }else{
+                        Log.e("tag","ib tag is null!");
+                    }
+
+                }else{
+                    Intent intent = new Intent(parent.getContext(), LoginActivity.class);
+                    parent.getContext().startActivity(intent);
+                }
+                break;
+        }
+
+
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_restaurant;
-        TextView tv_total_review,tv_total_favorite,tv_avg_like,tv_isLike;
+        TextView tv_total_review,tv_total_favorite,tv_avg_like;
         TextView tv_restaurant_address,tv_restaurant_name;
+        ImageButton ib_isLike;
 
         public ViewHolder(View itemView) {
             super(itemView);
             iv_restaurant = (ImageView)itemView.findViewById(R.id.iv_restaurant);
-            tv_isLike = (TextView)itemView.findViewById(R.id.tv_isLike);
+            ib_isLike = (ImageButton) itemView.findViewById(R.id.ib_isLike);
             tv_avg_like = (TextView)itemView.findViewById(R.id.tv_avg_like);
             tv_total_favorite = (TextView)itemView.findViewById(R.id.tv_total_favorite);
             tv_total_review = (TextView)itemView.findViewById(R.id.tv_total_review);

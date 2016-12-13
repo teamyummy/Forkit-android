@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Reviews;
 
@@ -25,7 +26,7 @@ public class MyReviewAdapter extends RecyclerView.Adapter<MyReviewAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_restaurant_list,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_my_reviews,parent,false);
         return new ViewHolder(view);
     }
 
@@ -40,8 +41,11 @@ public class MyReviewAdapter extends RecyclerView.Adapter<MyReviewAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private ExpandableTextView myReview_content;
         public ViewHolder(View itemView) {
             super(itemView);
+
+
         }
     }
 }

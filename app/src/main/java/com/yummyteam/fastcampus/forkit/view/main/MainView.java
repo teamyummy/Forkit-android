@@ -13,12 +13,13 @@ import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.EateryListFragm
 import com.yummyteam.fastcampus.forkit.view.main.fragment.mypage.MyPage_Fragment;
 
 
-public class MainView extends AppCompatActivity {
+public class MainView extends AppCompatActivity implements ActivityConnectInterface {
 
     private EateryListFragment eateryListFragment;
     private ViewPager pager;
     private EateryListFragment eterFragment;
     private MyPage_Fragment myPage_fragment;
+    private PagerAdapter pagerAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +31,9 @@ public class MainView extends AppCompatActivity {
         pager = (ViewPager)findViewById(R.id.pager);
         eateryListFragment = new EateryListFragment();
         myPage_fragment = new MyPage_Fragment();
+        myPage_fragment.setInterface(this);
 
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+       pagerAdapter = new PagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
 
         //pager가 변경시에 탭을 변경시켜주는 리스너
@@ -40,6 +42,21 @@ public class MainView extends AppCompatActivity {
         tab.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(pager));
 
 
+    }
+
+    @Override
+    public void setFavorite(String id, String like) {
+
+    }
+
+    @Override
+    public void refresh() {
+        eateryListFragment = new EateryListFragment();
+        myPage_fragment = new MyPage_Fragment();
+        myPage_fragment.setInterface(this);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(pagerAdapter);
+        pager.setCurrentItem(1);
     }
 
 

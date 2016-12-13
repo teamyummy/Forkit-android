@@ -14,12 +14,14 @@ import android.widget.Toast;
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
+import com.yummyteam.fastcampus.forkit.view.main.ActivityConnectInterface;
 import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.ELAdapter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchRestaurants extends AppCompatActivity implements View.OnClickListener, SearchInterface {
+public class SearchRestaurants extends AppCompatActivity implements View.OnClickListener, SearchInterface,ActivityConnectInterface {
     private ImageButton ib_back_toolbar;
     private TextView noSearch_content;
     private EditText et_search;
@@ -31,13 +33,16 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_restaurants);
-        init();
-
+        try {
+            init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
 
-    private void init() {
+    private void init() throws IOException {
         ib_back_toolbar = (ImageButton)findViewById(R.id.ib_back_toolbar);
         noSearch_content = (TextView)findViewById(R.id.noSearch_content);
         et_search = (EditText)findViewById(R.id.et_search);
@@ -48,7 +53,8 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
         searchedList = (RecyclerView)findViewById(R.id.searched_list);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         searchedList.setLayoutManager(manager);
-        elAdapter = new ELAdapter(this);
+        elAdapter = new ELAdapter();
+        elAdapter.setInterface(this);
         searchedList.setAdapter(elAdapter);
 
     }
@@ -85,5 +91,15 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
     @Override
     public void showAlert() {
         Toast.makeText(getBaseContext(),"내용을 입력해 주세요",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setFavorite(String id, String like) {
+
+    }
+
+    @Override
+    public void refresh() {
+
     }
 }

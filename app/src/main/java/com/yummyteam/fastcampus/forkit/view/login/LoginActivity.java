@@ -23,6 +23,8 @@ import com.yummyteam.fastcampus.forkit.view.main.MainView;
 
 import java.io.IOException;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -169,7 +171,7 @@ public class LoginActivity extends AppCompatActivity implements LoginInterface {
                 cache.write(token);
                 Log.e("tag","token is "+token);
                 Intent intent = new Intent(this,MainView.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
             } catch (IOException e) {
