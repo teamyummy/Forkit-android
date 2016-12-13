@@ -162,7 +162,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             ImageView imageView=(ImageView)view.findViewById(R.id.imageView4);
             TextView tvStoreName=(TextView)view.findViewById(R.id.tvStoreName);
             TextView tvRating=(TextView)view.findViewById(R.id.tvRating);
-            TextView tvAdr=(TextView)view.findViewById(R.id.tvAdr);
+
 
 
             cardView.setOnClickListener(new View.OnClickListener() {
@@ -186,7 +186,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e("Image position", position+"");
             tvStoreName.setText(data.getName());
             tvRating.setText("★"+data.getReview_score()+"");
-            tvAdr.setText(data.getAddress());
+
 
             container.addView(view);
 

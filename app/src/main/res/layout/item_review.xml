@@ -5,8 +5,9 @@
     android:layout_height="wrap_content"
     android:background="@drawable/xml_border_orange_thin"
     android:orientation="vertical"
-
-    >
+    android:id="@+id/relative"
+    android:paddingTop="10dp"
+    android:layout_marginTop="30dp">
 
 
     <TextView
@@ -61,8 +62,8 @@
         android:id="@+id/askLinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvLike"
-        android:layout_marginTop="36dp"
+        android:layout_below="@+id/likeLinear"
+        android:layout_marginTop="20dp"
         android:background="@drawable/xml_border_orange_thin"
         android:orientation="horizontal"
         android:paddingTop="20dp">
@@ -73,22 +74,24 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.04"
             android:text="이 평가가 도움이 되었나요?"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:paddingTop="10dp" />
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:id="@+id/btnLike"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            app:srcCompat="@mipmap/ic_egmt_review_rating_2_normal" />
+            app:srcCompat="@mipmap/ic_egmt_review_rating_2_normal"
+            android:layout_marginBottom="10dp" />
 
         <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/btnDisLike"
+            android:layout_width="80dp"
             android:layout_weight="1"
-            app:srcCompat="@mipmap/ic_egmt_review_rating_3_normal" />
+            app:srcCompat="@mipmap/ic_egmt_review_rating_3_normal"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp" />
 
     </LinearLayout>
 
@@ -100,13 +103,36 @@
         android:layout_below="@id/expand_text_view"
         android:padding="10dp" />
 
-    <TextView
-        android:id="@+id/tvLike"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/likeLinear"
         android:layout_below="@+id/recyclerView"
-        android:paddingTop="10dp"
-        android:text="TextView" />
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:id="@+id/tvLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="TextView"
+
+            android:layout_toEndOf="@+id/expand_text_view"
+            android:layout_weight="1" />
+
+        TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:id="@+id/tvLike"
+            android:layout_above="@+id/askLinear"
+            android:layout_toEndOf="@+id/tvLike"
+            android:layout_weight="1" />
+    </LinearLayout>
 
 
 </RelativeLayout>
+
+

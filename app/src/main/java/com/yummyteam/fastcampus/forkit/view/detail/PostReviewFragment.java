@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -22,9 +24,14 @@ import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
 import com.darsh.multipleimageselect.models.Image;
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.Results;
+import com.yummyteam.fastcampus.forkit.model.TokenCache;
+import com.yummyteam.fastcampus.forkit.networks.ConnectFork2;
+import com.yummyteam.fastcampus.forkit.view.map.GetResultsInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotateImage;
@@ -32,7 +39,7 @@ import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotate
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostReviewFragment extends DialogFragment {
+public class PostReviewFragment extends DialogFragment implements GetResultsInterface {
 
     ImageView igAddPhoto;
     ViewPager viewPager;
@@ -40,10 +47,22 @@ public class PostReviewFragment extends DialogFragment {
     ArrayList<Bitmap> fileBtimaps;
     RatingBar ratingBar;
     TextView rb_tv;
+    EditText etReview;
+
+    Button btnOk;
+    Button btnCancel;
+
+    String score;
+    private String token;
+    String content;
+
+    private TokenCache cache;
+
+
 
 
     public PostReviewFragment() {
-        // Required empty public constructor
+        cache = TokenCache.getInstance();
     }
 
 
@@ -51,6 +70,18 @@ public class PostReviewFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        final ConnectFork2 connectFork2=new ConnectFork2(this);
+
+        try {
+            token = cache.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
         View view = inflater.inflate(R.layout.fragment_postreview, container, false);
 
         ratingBar = (RatingBar) view.findViewById(R.id.ratingBar);
@@ -59,6 +90,25 @@ public class PostReviewFragment extends DialogFragment {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 rb_tv.setText(rating+"/5");
+                score=((int)rating)+"";
+            }
+        });
+        etReview=(EditText)view.findViewById(R.id.etReview);
+
+
+        btnOk=(Button)view.findViewById(R.id.btnOk);
+        btnCancel=(Button)view.findViewById(R.id.btnCancel);
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                content=etReview.getText().toString();
+
+                connectFork2.postReview(token,content,score);
+                Log.e("Token", token);
+                Log.e("Content", content);
+                Log.e("score", score+"");
+
             }
         });
 
@@ -71,8 +121,6 @@ public class PostReviewFragment extends DialogFragment {
 //set limit on number of images that can be selected, default is 10
                 intent.putExtra(Constants.INTENT_EXTRA_LIMIT, 10);
                 startActivityForResult(intent, Constants.REQUEST_CODE);
-
-
 
             }
         });
@@ -159,6 +207,16 @@ public class PostReviewFragment extends DialogFragment {
         return degree;
     }
 
+    @Override
+    public void getList(List<Results> data) {
+
+    }
+
+    @Override
+    public void getDetail(Results data) {
+
+    }
+
     public class CustomAdapter extends PagerAdapter {
 
         LayoutInflater inflater;
@@ -177,7 +235,6 @@ public class PostReviewFragment extends DialogFragment {
         }
 
 
-
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             // TODO Auto-generated method stub
@@ -187,10 +244,6 @@ public class PostReviewFragment extends DialogFragment {
 
             ImageView imageView=(ImageView)view.findViewById(R.id.imageView4);
             imageView.setImageBitmap(fileBtimaps.get(position));
-
-
-
-
 
 
             container.addView(view);
