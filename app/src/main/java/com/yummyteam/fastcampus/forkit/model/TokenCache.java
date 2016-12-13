@@ -70,13 +70,42 @@ public class TokenCache {
         return text;
     }
 
+    public String readID() throws  IOException{
+        File cacheDir = getCacheDir(context);
+        File cacheFile = new File(cacheDir, "ID.txt");
+        String text = "";
+        if (cacheFile.exists()) {
+            FileInputStream inputStream = new FileInputStream(cacheFile);
+            Scanner s = new Scanner(inputStream);
+            while (s.hasNext()) {
+                text += s.nextLine();
+            }
+            inputStream.close();
+        }
+
+        return text;
+    }
+
     public void delete() throws IOException {
         File cacheDir = getCacheDir(context);
         File cacheFile = new File(cacheDir, "Token.txt");
+        File cacheIdFile = new File(cacheDir,"ID.txt");
         if (cacheFile.exists()) {
             cacheFile.delete();
+        }
+        if(cacheIdFile.exists()){
+            cacheIdFile.delete();
         }
     }
 
 
+    public void writeId(String obj) throws IOException {
+        File cacheDir = getCacheDir(context);
+        File cacheFile = new File(cacheDir, "ID.txt");
+        if (!cacheFile.exists()) cacheFile.createNewFile();
+        FileWriter fileWriter = new FileWriter(cacheFile);
+        fileWriter.write(obj);
+        fileWriter.flush();
+        fileWriter.close();
+    }
 }

@@ -82,7 +82,11 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener {
             btn_sign.setText(LOGIN);
             tv_profile_myPage.setText("로그인 해주세요");
         }else{
-            tv_profile_myPage.setText("로그인 되셨습니다.");
+            try {
+                tv_profile_myPage.setText("ID : "+cache.readID());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             btn_sign.setText(LOGOUT);
         }
         Glide.with(getContext())
