@@ -162,7 +162,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             ImageView imageView=(ImageView)view.findViewById(R.id.imageView4);
             TextView tvStoreName=(TextView)view.findViewById(R.id.tvStoreName);
             TextView tvRating=(TextView)view.findViewById(R.id.tvRating);
-            TextView tvAdr=(TextView)view.findViewById(R.id.tvAdr);
+            TextView tvAddress=(TextView)view.findViewById(R.id.tvAddress);
+
 
 
             cardView.setOnClickListener(new View.OnClickListener() {
@@ -179,14 +180,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if(data.getImages().size() == 0) {
                 img_src = "https://yt3.ggpht.com/-Xpap6ijaRfM/AAAAAAAAAAI/AAAAAAAAAAA/eyfS-T4Pqxc/s100-c-k-no-mo-rj-c0xffffff/photo.jpg";
             }else{
-                img_src = data.getImages().get(0).getImg();
+                img_src = data.getImages().get(0).getImg_t();
             }
             Picasso.with(MapsActivity.this).load(img_src).into(imageView);
             Log.e("IMAGE TAG", img_src);
             Log.e("Image position", position+"");
             tvStoreName.setText(data.getName());
             tvRating.setText("★"+data.getReview_score()+"");
-            tvAdr.setText(data.getAddress());
+            tvAddress.setText(data.getAddress());
+
 
             container.addView(view);
 

@@ -28,6 +28,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     int itemLayout;
     Context context;
     RecyclerAdapter recyclerAdapter;
+    ImageView selectedImg;
 
 
     public ReviewAdapter(int itemLayout, Context context){
@@ -51,7 +52,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ReviewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final ReviewAdapter.ViewHolder holder, int position) {
         Reviews data = reviews.get(position);
 
         RecyclerAdapter recyclerAdapter = new RecyclerAdapter(data,R.layout.item_picture_maptodetails,context);
@@ -60,12 +61,71 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
         RecyclerView.LayoutManager manager =new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
         holder.recyclerView.setLayoutManager(manager);
-        holder.tvName.setText(data.getAuthor());
+        holder.tvName.setText("글쓴이 : "+data.getAuthor());
         holder.tvDate.setText(data.getCreated_date());
         holder.content.setText(data.getContent());
+        holder.tvLike.setText("공감 "+data.getLike()+"개 "+"  비공감 "+data.getDislike()+"개");
 
+
+        Log.e("Like",data.getLike());
+        holder.btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectLike(holder.btnLike,holder.btnDisLike);
+
+            }
+        });
+        holder.btnDisLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectDisLike(holder.btnDisLike,holder.btnLike);
+
+            }
+        });
 
     }
+
+    public void selectLike(ImageView clickedImg,ImageView unClickedImg){
+
+        if(selectedImg !=null){
+            if(selectedImg != clickedImg){
+                clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
+                unClickedImg.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
+                selectedImg=clickedImg;
+
+
+            }else{
+                clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
+                selectedImg=null;
+            }
+        }else{
+            clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
+            selectedImg=clickedImg;
+
+        }
+
+    }
+    public void selectDisLike(ImageView clickedImg,ImageView unClickedImg){
+
+        if(selectedImg !=null){
+            if(selectedImg != clickedImg){
+                clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
+                unClickedImg.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
+                selectedImg=clickedImg;
+
+
+            }else{
+                clickedImg.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
+                selectedImg=null;
+            }
+        }else{
+            clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
+            selectedImg=clickedImg;
+
+        }
+
+    }
+
 
     @Override
     public int getItemCount() {
@@ -77,6 +137,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         RecyclerView recyclerView;
         TextView tvName;
         TextView tvDate;
+        TextView tvLike;
+
+        ImageView btnLike;
+        ImageView btnDisLike;
         ExpandableTextView content;
 
 
@@ -87,9 +151,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             recyclerView=(RecyclerView) itemView.findViewById(R.id.recyclerView);
             tvDate=(TextView)itemView.findViewById(R.id.tvDate);
             content=(ExpandableTextView) itemView.findViewById(R.id.expand_text_view);
+            tvLike=(TextView)itemView.findViewById(R.id.tvLike);
+            btnLike=(ImageView)itemView.findViewById(R.id.btnLike);
+            btnDisLike=(ImageView)itemView.findViewById(R.id.btnDisLike);
 
 
         }
+
     }
     private class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
@@ -124,6 +192,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             if(review.getImages().size()==0){
                 img_src = "https://yt3.ggpht.com/-Xpap6ijaRfM/AAAAAAAAAAI/AAAAAAAAAAA/eyfS-T4Pqxc/s100-c-k-no-mo-rj-c0xffffff/photo.jpg";
             }else{
+                if(review.getImages().size()<3){
+                    review.getImages().add(review.getImages().get(0));
+                    review.getImages().add(review.getImages().get(0));
+                }
                 img_src = review.getImages().get(position).getImg();
             }
             Picasso.with(context).load(img_src).into(holder.reviewImg);
@@ -134,7 +206,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
         @Override
         public int getItemCount() {
-            return review.getImages().size() ;
+
+            if(review.getImages().size() <3){
+                return 3;
+            }else{
+
+                return review.getImages().size() ;
+            }
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

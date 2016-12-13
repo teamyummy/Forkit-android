@@ -4,9 +4,13 @@ import com.yummyteam.fastcampus.forkit.model.RestaurantsData;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.Reviews;
 
+import java.util.Map;
+
 import retrofit2.Call;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -19,12 +23,14 @@ public interface IRestaurantData2 {
     @GET("api/v1/{value}/")
     Call<RestaurantsData> getRestaurantsList(@Path("value") String value);
 
-    @GET("api/v1/{value}/{pk}")
+    @GET("api/v1/{value}/{pk}/")
     Call<Results> getRestaurantsDetail(@Path("value") String value, @Path("pk") String pk);
 
+
     @FormUrlEncoded
-    @POST("api/v1/{value/{pk}/{value2}")
-    Call<Reviews> postReviews(@Path("value") String value, @Path("pk") String pk,@Path("value2") String value2);
+    @POST("api/v1/restaurants/1/reviews/")
+    Call<Reviews> postReviews(@Header("Authorization")String token,
+                                    @FieldMap Map<String, String> fieldMap);
 
 
 

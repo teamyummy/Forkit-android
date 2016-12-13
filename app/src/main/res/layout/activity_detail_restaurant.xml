@@ -49,11 +49,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="left|right"
                         android:text="Subway"
                         android:textAppearance="@android:style/TextAppearance.Holo.Large"
-                        android:textSize="50dp"
-                        tools:textColor="@color/toolbar_title" />
+                        tools:textColor="@color/toolbar_title"
+                        android:gravity="center_horizontal"
+                        android:textStyle="italic"
+                        android:textSize="40dp" />
 
                 </LinearLayout>
 
@@ -70,7 +71,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/tvRating"
                         android:layout_weight="1"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:paddingLeft="5dp" />
 
                     <TextView
                         android:text="TextView"
@@ -78,7 +80,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/tvBookMark"
                         android:layout_weight="1"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:gravity="center_horizontal" />
 
                     <TextView
                         android:text="TextView"
@@ -86,7 +89,9 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/tvReview"
                         android:layout_weight="1"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:gravity="right"
+                        android:paddingRight="5dp" />
                 </LinearLayout>
 
 
@@ -320,8 +325,8 @@
                                 android:id="@+id/igNavi"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:layout_weight="0.5"
-                                app:srcCompat="@drawable/img_location_filter_guide" />
+                                android:layout_weight="0.1"
+                                app:srcCompat="@drawable/btn_rdp_tab_checkin_normal" />
 
                         </LinearLayout>
 
@@ -344,7 +349,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:layout_marginLeft="10dp"
-                                android:layout_weight="0.5"
+                                android:layout_weight="0.1"
                                 app:srcCompat="@drawable/btn_restaurant_call" />
                         </LinearLayout>
 

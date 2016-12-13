@@ -53,6 +53,10 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
         if(images.size() == 0) {
             img_src = "https://yt3.ggpht.com/-Xpap6ijaRfM/AAAAAAAAAAI/AAAAAAAAAAA/eyfS-T4Pqxc/s100-c-k-no-mo-rj-c0xffffff/photo.jpg";
         }else{
+            if(images.size()<3){
+                images.add(images.get(0));
+                images.add(images.get(0));
+            }
             img_src = images.get(position).getImg();
         }
         Picasso.with(context).load(img_src).into(holder.image);
@@ -64,7 +68,13 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return images.size();
+
+        if(images.size() <3){
+            return 3;
+        }else{
+
+            return images.size() ;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

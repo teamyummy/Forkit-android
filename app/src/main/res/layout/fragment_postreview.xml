@@ -60,6 +60,29 @@
             android:selectAllOnFocus="false"
             android:layout_below="@+id/rb_tv"
             android:layout_alignStart="@+id/ratingBar" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true">
+
+            <Button
+                android:text="ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnOk"
+                android:layout_weight="1" />
+
+            <Button
+                android:text="cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnCancel"
+                android:layout_weight="1" />
+        </LinearLayout>
+
     </RelativeLayout>
 
 </ScrollView>

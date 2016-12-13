@@ -1,5 +1,6 @@
 package com.yummyteam.fastcampus.forkit.view.detail;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -39,6 +40,9 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     ImageView igNavi;
     ImageView igPostReview;
     ImageView imageLike;
+    ImageView selectedLikeImage;
+
+    Boolean isSelected;
 
     TextView tvDetailMenu;
     TextView tvDetailReview;
@@ -60,16 +64,22 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
 
     PictureAdapter pictureAdapter;
     ReviewAdapter reviewAdapter;
+
+    String id;
+    String phoneN;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_restaurant);
 
+        phoneN="";
         datas = new ArrayList<>();
 
         Intent intent =getIntent();
         Bundle bundle = intent.getExtras();
-        String id= bundle.getString("restaurant_id");
+        id= bundle.getString("restaurant_id");
 
 
         ConnectFork2 connectFork = new ConnectFork2(this);
@@ -105,7 +115,10 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         tvDetailReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(Detail_Restaurant.this,Detail_Review.class);
+                intent.putExtra("restaurant_id",id);
                 goDetailReview();
+
             }
         });
 
@@ -123,7 +136,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:01027249108"));
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+phoneN));
                 startActivity(intent);
 
             }
@@ -147,22 +160,19 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
             }
         });
 
-    }
-    float scale_x=1;
-    float scale_y=1;
-    public void buttonSmaller(View v){
-            scale_x=scale_x*1.5f;
-            scale_y=scale_y*1.5f;
-
-            ObjectAnimator ani1 = ObjectAnimator.ofFloat(imageLike, "scaleX", scale_x);
-            ObjectAnimator ani2 = ObjectAnimator.ofFloat(imageLike, "scaleY", scale_y);//배수
-
-            AnimatorSet aniset= new AnimatorSet();
-            aniset.setDuration(500);
-            aniset.playTogether(ani1,ani2);
-            aniset.start();
+        imageLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(selectedLikeImage != null){
+                    selectLike(false);
+                }else{
+                    selectLike(true);
+                }
+            }
+        });
 
     }
+
     public void setDatas(){
 
         tvStoreName.setText(data.getName());
@@ -174,6 +184,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         tvPhone.setText(data.getPhone());
         tvHours.setText(data.getOperation_hour());
         tvParking.setText(data.getDesc_parking());
+        phoneN=data.getPhone();
     }
 
     public void topPictureList(){
@@ -190,9 +201,107 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         RecyclerView.LayoutManager manager2 = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerView_Review.setLayoutManager(manager2);
     }
+    float scale_x=1;
+    float scale_y=1;
+    public void biggerButton(){
+        scale_x=scale_x*1.25f;
+        scale_y=scale_y*1.25f;
+
+        ObjectAnimator ani1 = ObjectAnimator.ofFloat(imageLike, "scaleX", scale_x);
+        ObjectAnimator ani2 = ObjectAnimator.ofFloat(imageLike, "scaleY", scale_y);//배수
+
+        AnimatorSet aniset= new AnimatorSet();
+        aniset.setDuration(200);
+        aniset.playTogether(ani1,ani2);
+        aniset.start();
+
+    }
+
+    public ImageView selectLike(Boolean isSelected){
+
+        if(isSelected){
+
+            scale_x=scale_x*0.8f;
+            scale_y=scale_y*0.8f;
+
+            ObjectAnimator ani1 = ObjectAnimator.ofFloat(imageLike, "scaleX", scale_x);
+            ObjectAnimator ani2 = ObjectAnimator.ofFloat(imageLike, "scaleY", scale_y);//배수
+
+            AnimatorSet aniset= new AnimatorSet();
+            aniset.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    biggerButton();
+                    imageLike.setImageResource(R.drawable.btn_common_card_like_pressed);
+                    selectedLikeImage=imageLike;
+
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+
+                }
+            });
+            aniset.setDuration(200);
+            aniset.playTogether(ani1,ani2);
+            aniset.start();
+
+
+        }else{
+            scale_x=scale_x*0.8f;
+            scale_y=scale_y*0.8f;
+
+            ObjectAnimator ani1 = ObjectAnimator.ofFloat(imageLike, "scaleX", scale_x);
+            ObjectAnimator ani2 = ObjectAnimator.ofFloat(imageLike, "scaleY", scale_y);//배수
+
+            AnimatorSet aniset= new AnimatorSet();
+            aniset.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    biggerButton();
+                    imageLike.setImageResource(R.drawable.btn_unpress_like);
+                    selectedLikeImage= null;
+
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+
+                }
+            });
+            aniset.setDuration(200);
+            aniset.playTogether(ani1,ani2);
+            aniset.start();
+
+
+        }
+
+        return imageLike;
+    }
 
     public void goDetailReview(){
         Intent intent = new Intent(this,Detail_Review.class);
+        intent.putExtra("restaurant_id",id);
         startActivity(intent);
     }
     public void goDetailMenu(){
@@ -208,15 +317,11 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     }
 
     public void setList_Menu(){
-
-
-        arrayAdapter = new ArrayAdapter(         // 인자 전달
-                this,                               // 컨택스트
-                android.R.layout.simple_list_item_1,// 아이템 레이아웃
-                datas                               // 데이터
+        arrayAdapter = new ArrayAdapter(
+                this,
+                android.R.layout.simple_list_item_1,
+                datas
         );
-
-
         listView_menu = (ListView) findViewById(R.id.listView_menu);
         listView_menu.setAdapter(arrayAdapter);
 
@@ -230,6 +335,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
             datas.add(menu);
         }
         arrayAdapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -246,7 +352,5 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         addMenuData(this.data);
         pictureAdapter.addImageData((ArrayList<Images>) data.getImages());
         reviewAdapter.addReviewData((ArrayList<Reviews>) data.getReviews());
-
-
     }
 }
