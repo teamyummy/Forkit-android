@@ -25,6 +25,8 @@ import com.yummyteam.fastcampus.forkit.view.main.ActivityConnectInterface;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static android.R.attr.id;
+
 /**
  * Created by Dabin on 2016-11-29.
  */
@@ -153,6 +155,16 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> implem
         }
 
 
+    }
+
+
+    public void changeMyLike(String r_id,String f_id,String like) {
+        for(Results results : datas){
+            if(results.getId().equals(r_id)){
+                results.setMy_like(like);
+                results.setMy_like_id(f_id);
+            }
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

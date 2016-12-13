@@ -1,6 +1,7 @@
 package com.yummyteam.fastcampus.forkit.networks;
 
 import com.yummyteam.fastcampus.forkit.model.Auth;
+import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.RestaurantsData;
 
 import java.util.Map;
@@ -34,5 +35,7 @@ public interface IRestaurantData {
     @POST("/api/v1/token-auth/")
     Call<Auth> login(@Field("username")String username,@Field("password")String password);
 
+    @POST("/api/vi/restaurants/{id}/favors/")
+    Call<Favors> setRestaurantsLike(@Header("Authorization")String Authorization,@Path("id") String id);
 
 }

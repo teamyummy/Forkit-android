@@ -3,9 +3,11 @@ package com.yummyteam.fastcampus.forkit.networks;
 import android.util.Log;
 
 import com.yummyteam.fastcampus.forkit.model.Auth;
+import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.RestaurantsData;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.view.login.LoginInterface;
+import com.yummyteam.fastcampus.forkit.view.main.ActivityConnectInterface;
 import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.EateryListInterface;
 import com.yummyteam.fastcampus.forkit.view.search.SearchInterface;
 
@@ -30,6 +32,7 @@ public class ConnectFork {
     EateryListInterface eListener;
     SearchInterface sListener;
     LoginInterface lListener;
+    ActivityConnectInterface anInterface;
     public ConnectFork(EateryListInterface eListener){
         this.eListener = eListener;
 
@@ -41,6 +44,8 @@ public class ConnectFork {
     public ConnectFork(LoginInterface lListener) {
         this.lListener = lListener;
     }
+
+    public ConnectFork(ActivityConnectInterface anInterface){this.anInterface = anInterface;}
 
     public void getStoreList(String page,String ordered, String tags) {
 
@@ -193,6 +198,40 @@ public class ConnectFork {
 
 
         });
+    }
+
+
+    public void setRestaurantsLike(String token, final String id){
+        Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        //2. Retrofit client에서 사용할 interface
+
+        String token_complete = "token " + token;
+        IRestaurantData service = client.create(IRestaurantData.class);
+        Call<Favors> remoteData = service.setRestaurantsLike(token_complete,id);
+        Log.e("connect","url = "+remoteData.request().url().toString());
+        remoteData.enqueue(new Callback<Favors>() {
+            @Override
+            public void onResponse(Call<Favors> call, Response<Favors> response) {
+                if(response.isSuccessful()){
+                    Log.e("tag","code = "+response.code());
+                    Favors myfavor = response.body();
+                    anInterface.getFavorite(myfavor.getId(),id,"true");
+                }else{
+                    Log.e("respone fail",response.message().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Favors> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    public void setInterface(ActivityConnectInterface anInterface) {
+        this.anInterface = anInterface;
     }
 }
 

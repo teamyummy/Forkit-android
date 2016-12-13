@@ -9,17 +9,24 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.TokenCache;
+import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
 import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.EateryListFragment;
 import com.yummyteam.fastcampus.forkit.view.main.fragment.mypage.MyPage_Fragment;
+
+import java.io.IOException;
 
 
 public class MainView extends AppCompatActivity implements ActivityConnectInterface {
 
     private EateryListFragment eateryListFragment;
     private ViewPager pager;
-    private EateryListFragment eterFragment;
+
     private MyPage_Fragment myPage_fragment;
     private PagerAdapter pagerAdapter;
+    private ConnectFork connectFork;
+    private TokenCache cache;
+    private String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,13 +48,29 @@ public class MainView extends AppCompatActivity implements ActivityConnectInterf
         //tab에서 변경시에 pager를 변경시주는 리스너
         tab.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(pager));
 
+        connectFork = new ConnectFork(this);
+        cache = TokenCache.getInstance();
 
+        try {
+            token = cache.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void setFavorite(String id, String like) {
+        if(like.equals("true")){
+            connectFork.setRestaurantsLike(token,id);
+        }
 
     }
+
+    @Override
+    public void getFavorite(String r_id,String f_id, String like) {
+            eateryListFragment.changeMylike(r_id,f_id,like);
+    }
+
 
     @Override
     public void refresh() {

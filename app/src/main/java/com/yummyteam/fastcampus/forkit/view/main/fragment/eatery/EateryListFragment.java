@@ -345,7 +345,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
 
     }
 
-    public void setCheckBoxes(View view) {
+    private void setCheckBoxes(View view) {
 
         ck_dialog_korea = (CheckBox) view.findViewById(R.id.ck_dialog_korea);
         ck_dialog_japan = (CheckBox) view.findViewById(R.id.ck_dialog_japan);
@@ -426,5 +426,9 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         } else {
             checkList.remove(tag);
         }
+    }
+
+    public void changeMylike(String r_id,String f_id, String like) {
+        elAdapter.changeMyLike(r_id,f_id,like);
     }
 }
