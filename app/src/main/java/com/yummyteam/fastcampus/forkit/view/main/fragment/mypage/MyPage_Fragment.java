@@ -20,8 +20,6 @@ import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
 import com.yummyteam.fastcampus.forkit.view.login.LoginActivity;
 import com.yummyteam.fastcampus.forkit.view.main.ActivityConnectInterface;
-import com.yummyteam.fastcampus.forkit.view.main.MainView;
-import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.ELAdapter;
 
 import java.io.IOException;
 
@@ -29,7 +27,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 
-public class MyPage_Fragment extends Fragment implements View.OnClickListener {
+public class MyPage_Fragment extends Fragment implements View.OnClickListener,MyPageInterface {
 
     private TokenCache cache;
     private String token;
@@ -70,7 +68,7 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener {
         mylist = (RecyclerView)view.findViewById(R.id.mylist);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
         mylist.setLayoutManager(manager);
-        //connectFork = new ConnectFork();
+        connectFork = new ConnectFork(this);
         try {
             initAdapters();
         } catch (IOException e) {
@@ -98,12 +96,14 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener {
 
         return view;
     }
+    private MyFavorsAdapter mfAdapter;
+    private MyReviewAdapter mrAdapter;
 
     private void initAdapters() throws IOException {
-        ELAdapter elAdapter = new ELAdapter();
-        elAdapter.setInterface((MainView)getActivity());
-        mylist.setAdapter(elAdapter);
-        MyReviewAdapter mrAdapter = new MyReviewAdapter(getActivity());
+         mfAdapter = new MyFavorsAdapter();
+        mrAdapter= new MyReviewAdapter();
+        mylist.setAdapter(mfAdapter);
+
     }
 
     private void setMyFavorite() {

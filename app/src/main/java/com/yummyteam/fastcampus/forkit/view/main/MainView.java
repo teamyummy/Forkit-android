@@ -59,9 +59,11 @@ public class MainView extends AppCompatActivity implements ActivityConnectInterf
     }
 
     @Override
-    public void setFavorite(String id, String like) {
+    public void setFavorite(String r_id, String like,String f_id) {
         if(like.equals("true")){
-            connectFork.setRestaurantsLike(token,id);
+            connectFork.setRestaurantsLike(token,r_id);
+        }else if(like.equals("false")){
+            connectFork.setRestaurantsDislike(token,r_id,f_id);
         }
 
     }

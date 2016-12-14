@@ -77,7 +77,11 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
     public void getKeyWord(String keyWord) {
         this.keyWord = keyWord;
         Log.e("getKeyWord","keyword = " + this.keyWord);
-        connect.searchRestaurants(this.keyWord);
+        if(token.equals("")) {
+            connect.searchRestaurants(this.keyWord);
+        }else{
+            connect.searchRestaurants_withToken(this.keyWord,token);
+        }
     }
 
     @Override
@@ -99,9 +103,10 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
         Toast.makeText(getBaseContext(),"내용을 입력해 주세요",Toast.LENGTH_SHORT).show();
     }
 
+
     @Override
-    public void setFavorite(String id, String like) {
-        connect.setRestaurantsLike(token,id);
+    public void setFavorite(String r_id, String like, String f_id) {
+        connect.setRestaurantsLike(token,r_id);
     }
 
     @Override

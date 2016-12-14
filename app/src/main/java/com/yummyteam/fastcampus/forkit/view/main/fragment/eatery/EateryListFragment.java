@@ -33,7 +33,6 @@ import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
-import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 import com.yummyteam.fastcampus.forkit.view.main.MainView;
 import com.yummyteam.fastcampus.forkit.view.map.MapsActivity;
 import com.yummyteam.fastcampus.forkit.view.search.SearchRestaurants;
@@ -192,8 +191,8 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
     @Override
     public void onSliderClick(BaseSliderView slider) {
         Toast.makeText(getContext(), slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getContext(), Detail_Restaurant.class);
-        startActivity(intent);
+//        Intent intent = new Intent(getContext(), Detail_Restaurant.class);
+//        startActivity(intent);
     }
 
     @Override

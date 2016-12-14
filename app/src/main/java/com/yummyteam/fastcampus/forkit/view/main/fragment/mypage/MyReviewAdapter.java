@@ -1,6 +1,5 @@
 package com.yummyteam.fastcampus.forkit.view.main.fragment.mypage;
 
-import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,15 +16,15 @@ import java.util.ArrayList;
  */
 
 public class MyReviewAdapter extends RecyclerView.Adapter<MyReviewAdapter.ViewHolder> {
-    private Activity activity;
+    private ViewGroup parent;
     private ArrayList<Reviews> datas;
-    public MyReviewAdapter(Activity activity){
-        this.activity = activity;
+    public MyReviewAdapter(){
         datas = new ArrayList<>();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        this.parent = parent;
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_my_reviews,parent,false);
         return new ViewHolder(view);
     }
