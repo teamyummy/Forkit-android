@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Results;
+import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
 import com.yummyteam.fastcampus.forkit.view.main.ActivityConnectInterface;
 import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.ELAdapter;
@@ -29,6 +30,8 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
     private ConnectFork connect;
     private RecyclerView searchedList;
     private ELAdapter elAdapter;
+    private TokenCache cache;
+    private String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +52,16 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
         SearchEditorActionListener listener = new SearchEditorActionListener(this);
         et_search.setOnEditorActionListener(listener);
         ib_back_toolbar.setOnClickListener(this);
-        connect  = new ConnectFork(this);
+        connect  = new ConnectFork((SearchInterface) this);
+        connect.setInterface((ActivityConnectInterface)this);
         searchedList = (RecyclerView)findViewById(R.id.searched_list);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         searchedList.setLayoutManager(manager);
         elAdapter = new ELAdapter();
         elAdapter.setInterface(this);
         searchedList.setAdapter(elAdapter);
+        cache = TokenCache.getInstance();
+        token = cache.read();
 
     }
 
@@ -71,7 +77,11 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
     public void getKeyWord(String keyWord) {
         this.keyWord = keyWord;
         Log.e("getKeyWord","keyword = " + this.keyWord);
-        connect.searchRestaurants(this.keyWord);
+        if(token.equals("")) {
+            connect.searchRestaurants(this.keyWord);
+        }else{
+            connect.searchRestaurants_withToken(this.keyWord,token);
+        }
     }
 
     @Override
@@ -93,9 +103,15 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
         Toast.makeText(getBaseContext(),"내용을 입력해 주세요",Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void setFavorite(String id, String like) {
 
+    @Override
+    public void setFavorite(String r_id, String like, String f_id) {
+        connect.setRestaurantsLike(token,r_id);
+    }
+
+    @Override
+    public void getFavorite(String r_id, String f_id, String like) {
+        elAdapter.changeMyLike(r_id,f_id,like);
     }
 
     @Override

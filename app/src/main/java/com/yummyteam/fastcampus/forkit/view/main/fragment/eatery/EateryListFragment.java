@@ -33,8 +33,8 @@ import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
-import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 import com.yummyteam.fastcampus.forkit.view.main.MainView;
+import com.yummyteam.fastcampus.forkit.view.main.MainViewInterface;
 import com.yummyteam.fastcampus.forkit.view.map.MapsActivity;
 import com.yummyteam.fastcampus.forkit.view.search.SearchRestaurants;
 
@@ -134,7 +134,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         return view;
     }
 
-    private void setToken(int page) {
+    public void setToken(int page) {
         if (token.equals("")) {
             connectFork.getStoreList(page + "", ordered, filter);
         } else {
@@ -192,8 +192,8 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
     @Override
     public void onSliderClick(BaseSliderView slider) {
         Toast.makeText(getContext(), slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getContext(), Detail_Restaurant.class);
-        startActivity(intent);
+//        Intent intent = new Intent(getContext(), Detail_Restaurant.class);
+//        startActivity(intent);
     }
 
     @Override
@@ -234,7 +234,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
                 Log.e("tag", "click! cancle");
                 break;
             case R.id.tv_dialog_flilter_ok:
-                progressBar.setVisibility(View.VISIBLE);
+
                 infoDialog.dismiss();
                 changeList();
                 break;
@@ -246,7 +246,14 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
 
     }
 
+    public void adapterRefresh(){
+        progressBar.setVisibility(View.VISIBLE);
+        elAdapter.removeallData();
+        page = 1;
+        connectFork.getStoreList_withToken(token, page + "", ordered, filter);
+    }
     private void changeList() {
+        progressBar.setVisibility(View.VISIBLE);
         elAdapter.removeallData();
         if (!ordered_temp.equals("")) {
             ordered = ordered_temp;
@@ -331,7 +338,6 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
     public void getList(List<Results> data) {
         progressBar.setVisibility(View.GONE);
         if (data != null) {
-
             elAdapter.addDatas((ArrayList) data);
             scrolled_count = 0;
         } else {
@@ -345,7 +351,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
 
     }
 
-    public void setCheckBoxes(View view) {
+    private void setCheckBoxes(View view) {
 
         ck_dialog_korea = (CheckBox) view.findViewById(R.id.ck_dialog_korea);
         ck_dialog_japan = (CheckBox) view.findViewById(R.id.ck_dialog_japan);
@@ -426,5 +432,16 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         } else {
             checkList.remove(tag);
         }
+    }
+
+    public void changeMylike(String r_id,String f_id, String like) {
+        elAdapter.changeMyLike(r_id,f_id,like);
+        service.refresh_allFragment();
+    }
+
+
+    private MainViewInterface service;
+    public void setService(MainViewInterface service) {
+        this.service = service;
     }
 }

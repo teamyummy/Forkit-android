@@ -9,17 +9,24 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.TokenCache;
+import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
 import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.EateryListFragment;
 import com.yummyteam.fastcampus.forkit.view.main.fragment.mypage.MyPage_Fragment;
 
+import java.io.IOException;
 
-public class MainView extends AppCompatActivity implements ActivityConnectInterface {
+
+public class MainView extends AppCompatActivity implements ActivityConnectInterface,MainViewInterface {
 
     private EateryListFragment eateryListFragment;
     private ViewPager pager;
-    private EateryListFragment eterFragment;
+
     private MyPage_Fragment myPage_fragment;
     private PagerAdapter pagerAdapter;
+    private ConnectFork connectFork;
+    private TokenCache cache;
+    private String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +37,9 @@ public class MainView extends AppCompatActivity implements ActivityConnectInterf
         tab.addTab(tab.newTab().setText("MyPage"));
         pager = (ViewPager)findViewById(R.id.pager);
         eateryListFragment = new EateryListFragment();
+        eateryListFragment.setService(this);
         myPage_fragment = new MyPage_Fragment();
+        myPage_fragment.setService(this);
         myPage_fragment.setInterface(this);
 
        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
@@ -41,22 +50,48 @@ public class MainView extends AppCompatActivity implements ActivityConnectInterf
         //tab에서 변경시에 pager를 변경시주는 리스너
         tab.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(pager));
 
+        connectFork = new ConnectFork(this);
+        cache = TokenCache.getInstance();
+
+        try {
+            token = cache.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setFavorite(String r_id, String like,String f_id) {
+        if(like.equals("true")){
+            connectFork.setRestaurantsLike(token,r_id);
+        }else if(like.equals("false")){
+            connectFork.setRestaurantsDislike(token,r_id,f_id);
+        }
 
     }
 
     @Override
-    public void setFavorite(String id, String like) {
-
+    public void getFavorite(String r_id,String f_id, String like) {
+            eateryListFragment.changeMylike(r_id,f_id,like);
     }
+
 
     @Override
     public void refresh() {
         eateryListFragment = new EateryListFragment();
+        eateryListFragment.setService(this);
         myPage_fragment = new MyPage_Fragment();
+        myPage_fragment.setService(this);
         myPage_fragment.setInterface(this);
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
         pager.setCurrentItem(1);
+    }
+
+    @Override
+    public void refresh_allFragment(){
+        eateryListFragment.adapterRefresh();
+        myPage_fragment.refresh(false);
     }
 
 

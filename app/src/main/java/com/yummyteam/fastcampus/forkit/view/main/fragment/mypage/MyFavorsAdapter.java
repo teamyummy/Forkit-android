@@ -1,4 +1,4 @@
-package com.yummyteam.fastcampus.forkit.view.main.fragment.eatery;
+package com.yummyteam.fastcampus.forkit.view.main.fragment.mypage;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -20,8 +19,6 @@ import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
-import com.yummyteam.fastcampus.forkit.view.login.LoginActivity;
-import com.yummyteam.fastcampus.forkit.view.main.ActivityConnectInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,44 +27,37 @@ import java.util.ArrayList;
  * Created by Dabin on 2016-11-29.
  */
 
-public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> implements View.OnClickListener {
+public class MyFavorsAdapter extends RecyclerView.Adapter<MyFavorsAdapter.ViewHolder> implements View.OnClickListener {
     private ArrayList<Results> datas;
     private TokenCache cache;
     private String token;
     private static final int LIKED = R.mipmap.ic_favorite_pink_36dp;
-    private static final int DISLIKED = R.mipmap.ic_favorite_border_black_36dp;
 
-    private ActivityConnectInterface acInterface;
     private ImageButton temp_ib;
+    private MyPageInterface mpInterface;
 
-    public ELAdapter() throws IOException {
+    public MyFavorsAdapter(MyPageInterface mpInterface) throws IOException {
         datas = new ArrayList<>();
         cache = TokenCache.getInstance();
-
+        this.mpInterface = mpInterface;
         token = cache.read();
     }
 
-    public void setInterface(ActivityConnectInterface acInterface) {
-        this.acInterface = acInterface;
-    }
 
     private ViewGroup parent;
 
     @Override
-    public ELAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyFavorsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_restaurant_list, parent, false);
         this.parent = parent;
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ELAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(MyFavorsAdapter.ViewHolder holder, int position) {
         final Results data = datas.get(position);
         holder.ib_isLike.setTag(position);
-        if (data.getMy_like().equals("false")) {
-            holder.ib_isLike.setImageResource(DISLIKED);
-            holder.ib_isLike.setBackgroundColor(Color.WHITE);
-        } else if (data.getMy_like().equals("true")) {
+        if (data.getMy_like().equals("true")) {
             holder.ib_isLike.setBackgroundColor(Color.WHITE);
             holder.ib_isLike.setImageResource(LIKED);
         }
@@ -139,25 +129,12 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> implem
                     if (ib.getTag() != null) {
                         int position = (Integer) ib.getTag();
                         String like = datas.get(position).getMy_like();
-                        if (like.equals("false")) {
-                            datas.get(position).setMy_like("true");
-                            ib.setImageResource(LIKED);
-                            temp_ib = ib;
-                        } else if (like.equals("true")) {
-                            datas.get(position).setMy_like("false");
-                            ib.setImageResource(DISLIKED);
+                        if (like.equals("true")) {
+                            mpInterface.removeFavorite(datas.get(position).getId(),datas.get(position).getMy_like_id());
                         }
-                        clickable = false;
-                        acInterface.setFavorite(datas.get(position).getId(), datas.get(position).getMy_like(), datas.get(position).getMy_like_id());
                     } else {
                         Log.e("tag", "ib tag is null!");
                     }
-
-                }  else if (token.length() > 0 && clickable == false) {
-                    Toast.makeText(parent.getContext(), "잠시만 기다려주세요", Toast.LENGTH_SHORT).show();
-                }else {
-                    Intent intent = new Intent(parent.getContext(), LoginActivity.class);
-                    parent.getContext().startActivity(intent);
                 }
                 break;
         }
@@ -166,18 +143,6 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> implem
     }
 
 
-    public void changeMyLike(String r_id, String f_id, String like) {
-        Log.e("button", "change myLike");
-        for (Results results : datas) {
-            if (results.getId().equals(r_id)) {
-                results.setMy_like(like);
-                results.setMy_like_id(f_id);
-                clickable = true;
-                Toast.makeText(parent.getContext(), "변경이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-            }
-        }
-        Log.e("button", "click able = " + clickable);
-    }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
