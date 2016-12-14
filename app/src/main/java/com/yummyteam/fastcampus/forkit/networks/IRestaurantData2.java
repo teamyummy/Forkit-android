@@ -1,17 +1,25 @@
 package com.yummyteam.fastcampus.forkit.networks;
 
+import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.RestaurantsData;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.Reviews;
+import com.yummyteam.fastcampus.forkit.model.reviewImagesResponse;
 
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 /**
@@ -25,13 +33,39 @@ public interface IRestaurantData2 {
 
     @GET("api/v1/{value}/{pk}/")
     Call<Results> getRestaurantsDetail(@Path("value") String value, @Path("pk") String pk);
+    @GET("api/v1/restaurants/{pk}/")
+    Call<Results> getRestaurantsDetailwithToken(@Header("Authorization")String token,
+                                                @Path("pk") String pk);
 
 
     @FormUrlEncoded
-    @POST("api/v1/restaurants/1/reviews/")
+    @POST("api/v1/restaurants/{pk}/reviews/")
     Call<Reviews> postReviews(@Header("Authorization")String token,
+                              @Path("pk")String pk,
                                     @FieldMap Map<String, String> fieldMap);
 
+
+    @Multipart
+    @POST("api/v1/restaurants/{pk}/reviews/{pk2}/images/")
+    Call<reviewImagesResponse> postPhotos(@Header("Authorization")String token,
+                                          @Part("alt") RequestBody alt, @Path("pk")String pk, @Path("pk2")String pk2,
+                                          @Part MultipartBody.Part file);
+
+
+    @POST("api/v1/restaurants/{pk}/favors/")
+    Call<Favors> putLikeRestaurant(@Header("Authorization")String token,
+                                   @Path("pk") String pk
+                                                );
+    @GET("api/v1/restaurants/{pk}/favors/")
+    Call<Favors> getLikeId(@Header("Authorization")String token,@Path("pk") String pk);
+
+    @DELETE("api/v1/restaurants/{pk}/favors/")
+    Call<Favors> deleteLikeRestaurant(@Header("Authorization")String token,@Path("pk")String pk);
+
+    @FormUrlEncoded
+    @POST("api/v1/restaurants/{pk}/reviews/{pk}/likes/")
+    Call<Favors> postLikeReview(@Header("Authorization")String token, @Path("pk")String pk, @Path("pk2")String pke2,
+                          @Field("Up and Down")String like);
 
 
 }

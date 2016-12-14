@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.Reviews;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork2;
@@ -18,7 +19,7 @@ import com.yummyteam.fastcampus.forkit.view.map.GetResultsInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Detail_Review extends AppCompatActivity implements GetResultsInterface {
+public class Detail_Review extends AppCompatActivity implements GetResultsInterface,GetLikeId {
     RecyclerView recyclerView_Review;
     Toolbar toolbar;
     ImageButton ib_back_toolbar;
@@ -33,7 +34,7 @@ public class Detail_Review extends AppCompatActivity implements GetResultsInterf
         Bundle bundle = intent.getExtras();
         String id= bundle.getString("restaurant_id");
 
-        ConnectFork2 connectFork = new ConnectFork2(this);
+        ConnectFork2 connectFork = new ConnectFork2(this,this);
         connectFork.getStoreDetail(id);
 
         reviewAdapter= new ReviewAdapter(R.layout.item_review,this);
@@ -66,6 +67,11 @@ public class Detail_Review extends AppCompatActivity implements GetResultsInterf
 
         this.data=data;
         reviewAdapter.addReviewData((ArrayList<Reviews>) data.getReviews());
+    }
+
+    @Override
+    public void getLikeList(Favors favors) {
+
     }
 }
 

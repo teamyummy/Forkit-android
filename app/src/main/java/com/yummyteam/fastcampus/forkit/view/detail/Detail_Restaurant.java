@@ -18,18 +18,22 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.Images;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.Reviews;
+import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork2;
 import com.yummyteam.fastcampus.forkit.view.map.GetResultsInterface;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Detail_Restaurant extends AppCompatActivity implements GetResultsInterface {
+public class Detail_Restaurant extends AppCompatActivity implements GetResultsInterface,GetLikeId {
 
 
     ListView listView_menu;
@@ -55,6 +59,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     TextView tvParking;
     TextView tvHours;
 
+    String lk;
     Results data;
     ArrayList<String> datas;
 
@@ -68,6 +73,18 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     String id;
     String phoneN;
 
+    TokenCache cache;
+    String token;
+
+    ConnectFork2 connectFork;
+    Favors favors;
+
+    public Detail_Restaurant(){
+
+        cache = TokenCache.getInstance();
+        datas = new ArrayList<>();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,15 +92,21 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         setContentView(R.layout.activity_detail_restaurant);
 
         phoneN="";
-        datas = new ArrayList<>();
+
 
         Intent intent =getIntent();
         Bundle bundle = intent.getExtras();
         id= bundle.getString("restaurant_id");
 
 
-        ConnectFork2 connectFork = new ConnectFork2(this);
-        connectFork.getStoreDetail(id);
+        connectFork = new ConnectFork2(this,this);
+        try {
+            token = cache.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        checkToken();
+
 
         topPictureList();
         reviewList();
@@ -109,6 +132,10 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         tvHours=(TextView)findViewById(R.id.tvHours);
         listView_menu = (ListView) findViewById(R.id.listView_menu);
         imageLike=(ImageView)findViewById(R.id.imageLike);
+
+
+
+
 
 
         tvDetailReview=(TextView)findViewById(R.id.tvDetail_Review);
@@ -163,13 +190,51 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         imageLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
                 if(selectedLikeImage != null){
                     selectLike(false);
+                    data.setMy_like("false");
+                    connectFork.deleteLike(token,id);
+
+
                 }else{
-                    selectLike(true);
+                    if(token!=null){
+                        selectLike(true);
+                        connectFork.putLikeRestau(token,id);
+                        data.setMy_like("true");
+                    }else{
+                        Toast.makeText(getApplicationContext(),"로그인을 해주세요",Toast.LENGTH_LONG).show();
+                    }
+
+
                 }
             }
         });
+
+    }
+
+    public void checkToken(){
+        if(token!=null){
+            connectFork.getStoreDetailwithToken(id,token);
+
+        }else{
+
+            connectFork.getStoreDetail(id);
+        }
+    }
+    public void setDefaultLikeImg(){
+        if(token!=null){
+            if(data.getMy_like() !="false"){
+                selectLike(true);
+            }else{
+                selectLike(false);
+            }
+
+        }else{
+            selectLike(false);
+        }
 
     }
 
@@ -352,5 +417,13 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         addMenuData(this.data);
         pictureAdapter.addImageData((ArrayList<Images>) data.getImages());
         reviewAdapter.addReviewData((ArrayList<Reviews>) data.getReviews());
+        setDefaultLikeImg();
+    }
+
+    @Override
+    public void getLikeList(Favors favors) {
+
+        this.favors=favors;
+        lk=favors.getId();
     }
 }

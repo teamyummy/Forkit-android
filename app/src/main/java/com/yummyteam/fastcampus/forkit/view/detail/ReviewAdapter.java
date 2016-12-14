@@ -53,7 +53,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ReviewAdapter.ViewHolder holder, int position) {
-        Reviews data = reviews.get(position);
+        final Reviews data = reviews.get(position);
 
         RecyclerAdapter recyclerAdapter = new RecyclerAdapter(data,R.layout.item_picture_maptodetails,context);
         holder.recyclerView.setAdapter(recyclerAdapter);
@@ -71,47 +71,52 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectLike(holder.btnLike,holder.btnDisLike);
+                selectLike(holder.btnLike,holder.btnDisLike,data);
 
             }
         });
         holder.btnDisLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectDisLike(holder.btnDisLike,holder.btnLike);
+                selectDisLike(holder.btnDisLike,holder.btnLike,data);
 
             }
         });
 
     }
 
-    public void selectLike(ImageView clickedImg,ImageView unClickedImg){
+    public void selectLike(ImageView clickedImg, ImageView unClickedImg, Reviews data){
 
         if(selectedImg !=null){
             if(selectedImg != clickedImg){
                 clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
                 unClickedImg.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
                 selectedImg=clickedImg;
+                data.setMy_like(1+"");
 
 
             }else{
                 clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
                 selectedImg=null;
+                data.setMy_like(0+"");
             }
-        }else{
+        }else if(selectedImg ==null){
             clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
             selectedImg=clickedImg;
-
+            data.setMy_like((1+""));
         }
 
+
     }
-    public void selectDisLike(ImageView clickedImg,ImageView unClickedImg){
+    public void selectDisLike(ImageView clickedImg,ImageView unClickedImg,Reviews data){
 
         if(selectedImg !=null){
             if(selectedImg != clickedImg){
                 clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
                 unClickedImg.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
                 selectedImg=clickedImg;
+
+
 
 
             }else{

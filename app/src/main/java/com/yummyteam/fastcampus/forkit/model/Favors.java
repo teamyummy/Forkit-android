@@ -41,4 +41,10 @@ public class Favors {
     public void setCreated_date(String created_date) {
         this.created_date = created_date;
     }
+
+    @Override
+    public String toString()
+    {
+        return "ClassPojo [created_date = "+created_date+", id = "+id+", restaurant = "+restaurant+", user = "+user+"]";
+    }
 }

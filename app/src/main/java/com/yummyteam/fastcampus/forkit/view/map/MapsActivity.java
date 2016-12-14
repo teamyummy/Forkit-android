@@ -35,15 +35,17 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork2;
 import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
+import com.yummyteam.fastcampus.forkit.view.detail.GetLikeId;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GetResultsInterface {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GetResultsInterface,GetLikeId {
 
     private GoogleMap mMap;
     ViewPager pager;
@@ -88,7 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
-        connectFork = new ConnectFork2(this);
+        connectFork = new ConnectFork2(this,this);
         connectFork.getStoreList();
 
         setCustomMarkerView();
@@ -124,6 +126,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    @Override
+    public void getLikeList(Favors favors) {
+
+    }
 
 
     class CustomAdapter extends PagerAdapter {

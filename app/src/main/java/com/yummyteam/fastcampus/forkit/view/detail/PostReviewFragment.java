@@ -24,6 +24,7 @@ import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
 import com.darsh.multipleimageselect.models.Image;
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork2;
@@ -39,12 +40,13 @@ import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotate
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostReviewFragment extends DialogFragment implements GetResultsInterface {
+public class PostReviewFragment extends DialogFragment implements GetResultsInterface,GetLikeId {
 
     ImageView igAddPhoto;
     ViewPager viewPager;
     ArrayList<Image> images;
     ArrayList<Bitmap> fileBtimaps;
+    List<String> filePaths;
     RatingBar ratingBar;
     TextView rb_tv;
     EditText etReview;
@@ -57,6 +59,8 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
     String content;
 
     private TokenCache cache;
+
+    ArrayList<Object> filePath;
 
 
 
@@ -71,7 +75,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        final ConnectFork2 connectFork2=new ConnectFork2(this);
+        final ConnectFork2 connectFork2=new ConnectFork2(this,this);
 
         try {
             token = cache.read();
@@ -104,7 +108,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
             public void onClick(View view) {
                 content=etReview.getText().toString();
 
-                connectFork2.postReview(token,content,score);
+                connectFork2.postReview(token,content,score,filePaths);
                 Log.e("Token", token);
                 Log.e("Content", content);
                 Log.e("score", score+"");
@@ -137,9 +141,16 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
 
+            filePaths=new ArrayList<>();
             fileBtimaps=new ArrayList<>();
             //The array list has the image paths of the selected images
             images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+            for(int i= 0, l=images.size();i<l;i++){
+
+                filePaths.add(images.get(i).path);
+            }
+
+
             for(int i= 0, l=images.size();i<l;i++){
                 fileBtimaps.add(getThumbnailImage(images.get(i).path));
             }
@@ -217,6 +228,11 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
 
     }
 
+    @Override
+    public void getLikeList(Favors favors) {
+
+    }
+
     public class CustomAdapter extends PagerAdapter {
 
         LayoutInflater inflater;
@@ -242,7 +258,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
             View view = null;
             view = inflater.inflate(R.layout.item_picture_maptodetails, null);
 
-            ImageView imageView=(ImageView)view.findViewById(R.id.imageView4);
+            ImageView imageView=(ImageView)view.findViewById(R.id.reviewImg);
             imageView.setImageBitmap(fileBtimaps.get(position));
 
 
@@ -266,5 +282,6 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
         }
 
     }
+
 
 }
