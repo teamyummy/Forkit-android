@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class MyReviewAdapter extends RecyclerView.Adapter<MyReviewAdapter.ViewHolder> {
     private ViewGroup parent;
     private ArrayList<Reviews> datas;
-    public MyReviewAdapter(){
+    public MyReviewAdapter(MyPage_Fragment myPage_fragment){
         datas = new ArrayList<>();
     }
 

@@ -3,7 +3,9 @@ package com.yummyteam.fastcampus.forkit.networks;
 import com.yummyteam.fastcampus.forkit.model.Auth;
 import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.RestaurantsData;
+import com.yummyteam.fastcampus.forkit.model.Results;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -29,11 +31,11 @@ public interface IRestaurantData {
     @GET("api/v1/restaurants/")
     Call<RestaurantsData> getRestaurantsList(@Header("Authorization")String Authorization,@QueryMap Map<String,String> query);
 
-    @GET("api/v1/{value}/")
-    Call<RestaurantsData> getSearchRestaurantsList(@Path("value") String value, @Query(value = "search", encoded = true) String search );
+    @GET("api/v1/restaurants/")
+    Call<RestaurantsData> getSearchRestaurantsList(@Query(value = "search", encoded = true) String search );
 
-    @GET("api/v1/{value}/")
-    Call<RestaurantsData> getSearchRestaurantsList_withToken(@Header("Authorization") String Authorization,@Path("value") String value, @Query(value = "search", encoded = true) String search );
+    @GET("api/v1/restaurants/")
+    Call<RestaurantsData> getSearchRestaurantsList_withToken(@Header("Authorization") String Authorization,@Query(value = "search", encoded = true) String search );
 
     @FormUrlEncoded
     @POST("/api/v1/token-auth/")
@@ -45,5 +47,6 @@ public interface IRestaurantData {
     @DELETE("/api/v1/restaurants/{r_id}/favors/{f_id}/")
     Call<String> setRestaurantsDislike(@Header("Authorization")String Authorization,@Path("r_id") String r_id,@Path("f_id")String f_id);
 
-
+    @GET("/api/v1/my/favor-rests/")
+    Call<List<Results>> getMyFavorites(@Header("Authorization") String Authorization);
 }

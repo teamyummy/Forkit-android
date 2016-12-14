@@ -34,11 +34,12 @@ public class MyFavorsAdapter extends RecyclerView.Adapter<MyFavorsAdapter.ViewHo
     private static final int LIKED = R.mipmap.ic_favorite_pink_36dp;
 
     private ImageButton temp_ib;
+    private MyPageInterface mpInterface;
 
-    public MyFavorsAdapter() throws IOException {
+    public MyFavorsAdapter(MyPageInterface mpInterface) throws IOException {
         datas = new ArrayList<>();
         cache = TokenCache.getInstance();
-
+        this.mpInterface = mpInterface;
         token = cache.read();
     }
 
@@ -129,7 +130,7 @@ public class MyFavorsAdapter extends RecyclerView.Adapter<MyFavorsAdapter.ViewHo
                         int position = (Integer) ib.getTag();
                         String like = datas.get(position).getMy_like();
                         if (like.equals("true")) {
-                            //acInterface.setFavorite(datas.get(position).getId(), datas.get(position).getMy_like(), datas.get(position).getMy_like_id());
+                            mpInterface.removeFavorite(datas.get(position).getId(),datas.get(position).getMy_like_id());
                         }
                     } else {
                         Log.e("tag", "ib tag is null!");

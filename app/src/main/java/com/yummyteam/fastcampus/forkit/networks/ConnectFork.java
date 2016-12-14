@@ -59,19 +59,9 @@ public class ConnectFork {
 
     public void getStoreList(String page, String ordered, String tags) {
 
-        //1. 레트로핏 설정
-        Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        //2. Retrofit client에서 사용할 interface
-        IRestaurantData service = client.create(IRestaurantData.class);
-        Map<String, String> query = new HashMap<>();
-        query.put("page", page);
-        query.put("ordering", ordered);
-        if (tags.length() > 0) {
-            query.put("tags", tags);
-        }
-        Call<RestaurantsData> remoteData = service.getRestaurantsList(query);
+
+        HashMap<String,String> query = (HashMap)getFilter(page,ordered,tags);
+        Call<RestaurantsData> remoteData = createClient().getRestaurantsList(query);
         Log.e("connect", "url = " + remoteData.request().url().toString());
         // 4. 비동기 데이터를 받기 위한 리스너 세팅
         Log.e("tag", "connect start = " + remoteData.request().url().toString());
@@ -102,13 +92,8 @@ public class ConnectFork {
     }
 
     public void searchRestaurants(String search) {
-        Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        IRestaurantData service = client.create(IRestaurantData.class);
-        String value = "restaurants";
-        Call<RestaurantsData> remoteData = service.getSearchRestaurantsList(value, search);
+        Call<RestaurantsData> remoteData = createClient().getSearchRestaurantsList(search);
         Log.e("tag", remoteData.request().url().toString());
         remoteData.enqueue(new Callback<RestaurantsData>() {
             @Override
@@ -132,13 +117,8 @@ public class ConnectFork {
     }
 
     public void login(String name, String passwd) {
-        Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        IRestaurantData service = client.create(IRestaurantData.class);
-
-        final Call<Auth> remoteData = service.login(name, passwd);
+        final Call<Auth> remoteData =createClient().login(name, passwd);
         Log.e("tag", remoteData.request().url().toString());
         remoteData.enqueue(new Callback<Auth>() {
             @Override
@@ -166,22 +146,21 @@ public class ConnectFork {
 
     }
 
-    public void getStoreList_withToken(String token, String page, String ordered, String tags) {
-        //1. 레트로핏 설정
-        Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        //2. Retrofit client에서 사용할 interface
-
-        String token_complete = "token " + token;
-        IRestaurantData service = client.create(IRestaurantData.class);
+    private Map getFilter(String page,String ordered,String tags){
         Map<String, String> query = new HashMap<>();
         query.put("page", page);
         query.put("ordering", ordered);
         if (tags.length() > 0) {
             query.put("tags", tags);
         }
-        Call<RestaurantsData> remoteData = service.getRestaurantsList(token_complete, query);
+        return query;
+    }
+    public void getStoreList_withToken(String token, String page, String ordered, String tags) {
+
+        String token_complete = make_token(token);
+
+        HashMap<String,String> query = (HashMap)getFilter(page,ordered,tags);
+        Call<RestaurantsData> remoteData =createClient().getRestaurantsList(token_complete, query);
         Log.e("connect", "url = " + remoteData.request().url().toString());
         // 4. 비동기 데이터를 받기 위한 리스너 세팅
         Log.e("tag", "connect start");
@@ -212,18 +191,11 @@ public class ConnectFork {
 
 
     public void setRestaurantsLike(String token, String id) {
-        Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        //2. Retrofit client에서 사용할 interface
-
-        String token_complete = "token " + token;
-        Log.e("token", token);
+        String token_complete = make_token(token);
 
         final String r_id = id;
         Log.e("complete toekn", token_complete);
-        IRestaurantData service = client.create(IRestaurantData.class);
-        Call<Favors> remoteData = service.setRestaurantsLike(token_complete, id);
+        Call<Favors> remoteData = createClient().setRestaurantsLike(token_complete, id);
         Log.e("connect", "url = " + remoteData.request().url().toString());
         remoteData.enqueue(new Callback<Favors>() {
             @Override
@@ -251,16 +223,8 @@ public class ConnectFork {
 
     public void searchRestaurants_withToken(String keyWord, String token) {
 
-        Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        //2. Retrofit client에서 사용할 interface
-        String value = "restaurants";
-        String token_complete = "token " + token;
-        Log.e("token", token);
-        Log.e("complete toekn", token_complete);
-        IRestaurantData service = client.create(IRestaurantData.class);
-        Call<RestaurantsData> remoteData = service.getSearchRestaurantsList_withToken(token_complete, value, keyWord);
+        String token_complete = make_token(token);
+        Call<RestaurantsData> remoteData = createClient().getSearchRestaurantsList_withToken(token_complete,keyWord);
 
         remoteData.enqueue(new Callback<RestaurantsData>() {
             @Override
@@ -285,26 +249,42 @@ public class ConnectFork {
 
     }
 
-    public void setRestaurantsDislike(String token, final String r_id, String f_id) {
-
+    private IRestaurantData createClient(){
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        //2. Retrofit client에서 사용할 interface
-        String value = "restaurants";
+        return getService(client);
+    }
+
+    private String make_token(String token){
         String token_complete = "token " + token;
-        Log.e("token", token);
+        return token_complete;
+    }
+
+    private IRestaurantData getService(Retrofit client){
+        return client.create(IRestaurantData.class);
+    }
+
+    public void setRestaurantsDislike(String token, final String r_id, String f_id) {
+
+
+        String token_complete = make_token(token);
+
         final String id = r_id;
-        Log.e("complete toekn", token_complete);
-        IRestaurantData service = client.create(IRestaurantData.class);
-        Call<String> remoteData = service.setRestaurantsDislike(token_complete, id, f_id);
+
+        Call<String> remoteData = createClient().setRestaurantsDislike(token_complete, id, f_id);
 
         remoteData.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
                     Log.e("tag", "code = " + response.code());
-                    anInterface.getFavorite(id, "0", "false");
+                    if(anInterface !=null){
+                        anInterface.getFavorite(id, "0", "false");
+                    }
+                    if(mpInterface !=null){
+                        mpInterface.refresh(true);
+                    }
                 } else {
                     Log.e("tag", "code = " + response.code());
                 }
@@ -316,6 +296,28 @@ public class ConnectFork {
             }
         });
 
+    }
+
+
+    public void getMyFavorites(String token){
+
+        String token_complete = make_token(token);
+        Call<List<Results>> remoteData = createClient().getMyFavorites(token_complete);
+        remoteData.enqueue(new Callback<List<Results>>() {
+            @Override
+            public void onResponse(Call<List<Results>> call, Response<List<Results>> response) {
+                if(response.isSuccessful()){
+                    mpInterface.setData(response.body());
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Results>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 }
 

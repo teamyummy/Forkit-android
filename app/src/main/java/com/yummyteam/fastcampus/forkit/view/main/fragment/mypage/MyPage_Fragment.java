@@ -1,27 +1,35 @@
 package com.yummyteam.fastcampus.forkit.view.main.fragment.mypage;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
 import com.yummyteam.fastcampus.forkit.view.login.LoginActivity;
 import com.yummyteam.fastcampus.forkit.view.main.ActivityConnectInterface;
+import com.yummyteam.fastcampus.forkit.view.main.MainViewInterface;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -57,11 +65,15 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener,My
     private ConnectFork connectFork;
     private final String LOGIN = "로그인 하기";
     private final String LOGOUT = "로그아웃";
+    private ProgressBar progressBar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
         View view = inflater.inflate(R.layout.fragment_my_page, container, false);
+        progressBar = (ProgressBar)view.findViewById(R.id.mp_progress);
         iv_profile_myPage = (ImageView)view.findViewById(R.id.iv_profile_my);
         tv_profile_myPage = (TextView)view.findViewById(R.id.tv_profile_my);
         btn_sign  = (Button)view.findViewById(R.id.btn_sign);
@@ -100,14 +112,18 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener,My
     private MyReviewAdapter mrAdapter;
 
     private void initAdapters() throws IOException {
-         mfAdapter = new MyFavorsAdapter();
-        mrAdapter= new MyReviewAdapter();
+        mfAdapter = new MyFavorsAdapter(this);
+        mrAdapter= new MyReviewAdapter(this);
         mylist.setAdapter(mfAdapter);
 
     }
 
     private void setMyFavorite() {
-
+        mfAdapter.removeallData();
+        if(token.length()>0) {
+            connectFork.getMyFavorites(token);
+            progressBar.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -162,5 +178,60 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener,My
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void setData(List<Results> body) {
+        if(body.size() > 0 ){
+            mfAdapter.addDatas((ArrayList)body);
+        }else{
+
+        }
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void removeFavorite(final String r_id, final String my_like_id) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setTitle("삭제");
+        dialog.setMessage("정말로 삭제 하시 겠습니까?");
+        dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                    connectFork.setRestaurantsDislike(token,r_id,my_like_id);
+            }
+        });
+        dialog.show();
+
+    }
+
+    private void refresh_myfavors() {
+        setMyFavorite();
+    }
+    public void refresh(boolean check){
+        Log.e("ag","mfadapter = " +mfAdapter );
+        Log.e("ag","mradapter = " +mrAdapter );
+        Log.e("ag","getAdapter = " +mylist.getAdapter() );
+        if(mylist.getAdapter() == mfAdapter){
+            refresh_myfavors();
+            Log.e("ag","mfadapter");
+        }else if(mylist.getAdapter() == mrAdapter){
+            Log.e("ag","mradapter");
+        }
+        if(check){
+            service.refresh_allFragment();
+        }
+
+    }
+
+    private MainViewInterface service;
+    public void setService(MainViewInterface service) {
+        this.service = service;
     }
 }

@@ -17,7 +17,7 @@ import com.yummyteam.fastcampus.forkit.view.main.fragment.mypage.MyPage_Fragment
 import java.io.IOException;
 
 
-public class MainView extends AppCompatActivity implements ActivityConnectInterface {
+public class MainView extends AppCompatActivity implements ActivityConnectInterface,MainViewInterface {
 
     private EateryListFragment eateryListFragment;
     private ViewPager pager;
@@ -37,7 +37,9 @@ public class MainView extends AppCompatActivity implements ActivityConnectInterf
         tab.addTab(tab.newTab().setText("MyPage"));
         pager = (ViewPager)findViewById(R.id.pager);
         eateryListFragment = new EateryListFragment();
+        eateryListFragment.setService(this);
         myPage_fragment = new MyPage_Fragment();
+        myPage_fragment.setService(this);
         myPage_fragment.setInterface(this);
 
        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
@@ -77,11 +79,19 @@ public class MainView extends AppCompatActivity implements ActivityConnectInterf
     @Override
     public void refresh() {
         eateryListFragment = new EateryListFragment();
+        eateryListFragment.setService(this);
         myPage_fragment = new MyPage_Fragment();
+        myPage_fragment.setService(this);
         myPage_fragment.setInterface(this);
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
         pager.setCurrentItem(1);
+    }
+
+    @Override
+    public void refresh_allFragment(){
+        eateryListFragment.adapterRefresh();
+        myPage_fragment.refresh(false);
     }
 
 
