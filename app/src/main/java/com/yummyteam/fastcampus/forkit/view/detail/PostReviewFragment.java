@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
+import com.darsh.multipleimageselect.models.Image;
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.TokenCache;
@@ -47,9 +48,8 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
     ViewPager viewPager;
 
     ArrayList<Bitmap> fileBtimaps;
-    ArrayList<Uri> images;
     ArrayList<String> filePath;
-    List<Uri> fileUris;
+    ArrayList<Image> images;
     RatingBar ratingBar;
     TextView rb_tv;
     EditText etReview;
@@ -72,6 +72,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
 
     public PostReviewFragment() {
         cache = TokenCache.getInstance();
+        images=new ArrayList<>();
     }
 
 
@@ -87,6 +88,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
 
 
@@ -113,7 +115,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
             public void onClick(View view) {
                 content=etReview.getText().toString();
 
-                connectFork2.postReview(token,content,score,filePath);
+                connectFork2.postReview(token,content,score,images);
                 Log.e("Token", token);
                 Log.e("Content", content);
                 Log.e("score", score+"");
@@ -150,25 +152,26 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
 
-            fileBtimaps=new ArrayList<>();
             //The array list has the image paths of the selected images
-            images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
-            for(int i= 0, l=images.size();i<l;i++){
-                filePath.add(getRealPathFromURI(images.get(i)));
-            }
+            if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
 
-            for(int i= 0, l=images.size();i<l;i++){
-                fileBtimaps.add(getThumbnailImage(images.get(i).getPath()));
-            }
+                fileBtimaps = new ArrayList<>();
 
+                images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+                for (int i = 0, l = images.size(); i < l; i++) {
+                    fileBtimaps.add(getThumbnailImage(images.get(i).path));
+
+
+
+                }
+
+
+            }
             igAddPhoto.setVisibility(View.INVISIBLE);
-
-            CustomAdapter adapter= new CustomAdapter(getActivity().getLayoutInflater());
+            CustomAdapter adapter = new CustomAdapter(getActivity().getLayoutInflater());
             viewPager.setAdapter(adapter);
 
-
         }
-
     }
         public String getRealPathFromURI(Uri contentUri){
         try{

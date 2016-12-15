@@ -5,7 +5,7 @@ import com.yummyteam.fastcampus.forkit.model.RestaurantsData;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.ReviewLike;
 import com.yummyteam.fastcampus.forkit.model.Reviews;
-import com.yummyteam.fastcampus.forkit.model.reviewImagesResponse;
+import com.yummyteam.fastcampus.forkit.model.ReviewImagesResponse;
 
 import java.util.Map;
 
@@ -50,7 +50,7 @@ public interface IRestaurantData2 {
 
     @Multipart
     @POST("api/v1/restaurants/{pk}/reviews/{pk2}/images/")
-    Call<reviewImagesResponse> postPhotos(@Header("Authorization")String token,
+    Call<ReviewImagesResponse> postPhotos(@Header("Authorization")String token,
                                           @Part("alt") RequestBody alt, @Path("pk")String pk, @Path("pk2")String pk2,
                                           @Part MultipartBody.Part img);
 

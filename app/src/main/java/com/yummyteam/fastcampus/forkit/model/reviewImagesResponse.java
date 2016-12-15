@@ -4,7 +4,7 @@ package com.yummyteam.fastcampus.forkit.model;
  * Created by user on 2016-12-14.
  */
 
-public class reviewImagesResponse   {
+public class ReviewImagesResponse {
         private String id;
 
         private String img_s;
