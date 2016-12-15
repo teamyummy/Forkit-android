@@ -2,10 +2,13 @@ package com.yummyteam.fastcampus.forkit.view.detail;
 
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -22,9 +25,7 @@ import android.widget.TextView;
 
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
-import com.darsh.multipleimageselect.models.Image;
 import com.yummyteam.fastcampus.forkit.R;
-import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork2;
@@ -40,13 +41,15 @@ import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotate
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostReviewFragment extends DialogFragment implements GetResultsInterface,GetLikeId {
+public class PostReviewFragment extends DialogFragment implements GetResultsInterface {
 
     ImageView igAddPhoto;
     ViewPager viewPager;
-    ArrayList<Image> images;
+
     ArrayList<Bitmap> fileBtimaps;
-    List<String> filePaths;
+    ArrayList<Uri> images;
+    ArrayList<String> filePath;
+    List<Uri> fileUris;
     RatingBar ratingBar;
     TextView rb_tv;
     EditText etReview;
@@ -59,8 +62,10 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
     String content;
 
     private TokenCache cache;
+    String imgPath;
 
-    ArrayList<Object> filePath;
+    private final static int REQ_CODE_CAMERA = 10;
+    private final static int REQ_CODE_GALLERY = 20;
 
 
 
@@ -75,7 +80,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        final ConnectFork2 connectFork2=new ConnectFork2(this,this);
+        final ConnectFork2 connectFork2=new ConnectFork2(this);
 
         try {
             token = cache.read();
@@ -108,7 +113,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
             public void onClick(View view) {
                 content=etReview.getText().toString();
 
-                connectFork2.postReview(token,content,score,filePaths);
+                connectFork2.postReview(token,content,score,filePath);
                 Log.e("Token", token);
                 Log.e("Content", content);
                 Log.e("score", score+"");
@@ -126,9 +131,14 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
                 intent.putExtra(Constants.INTENT_EXTRA_LIMIT, 10);
                 startActivityForResult(intent, Constants.REQUEST_CODE);
 
+//                Intent intent = new Intent(Intent.ACTION_PICK
+//                        , MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                intent.setType("image/*"); // 이미지만 필터링
+//                startActivityForResult(Intent.createChooser(intent,"Select Picture"),REQ_CODE_GALLERY);
+
+
             }
         });
-
 
         viewPager=(ViewPager)view.findViewById(R.id.viewPager);
 
@@ -136,27 +146,21 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
 
         return view;
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
 
-            filePaths=new ArrayList<>();
             fileBtimaps=new ArrayList<>();
             //The array list has the image paths of the selected images
             images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
             for(int i= 0, l=images.size();i<l;i++){
-
-                filePaths.add(images.get(i).path);
+                filePath.add(getRealPathFromURI(images.get(i)));
             }
-
 
             for(int i= 0, l=images.size();i<l;i++){
-                fileBtimaps.add(getThumbnailImage(images.get(i).path));
+                fileBtimaps.add(getThumbnailImage(images.get(i).getPath()));
             }
-//            for (int i = 0, l = images.size(); i < l; i++) {
-//                fileUris.add(new File(images.get(i).path).toURI());
-//            }
+
             igAddPhoto.setVisibility(View.INVISIBLE);
 
             CustomAdapter adapter= new CustomAdapter(getActivity().getLayoutInflater());
@@ -165,6 +169,18 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
 
         }
 
+    }
+        public String getRealPathFromURI(Uri contentUri){
+        try{
+            String[] proj = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContext().getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }catch (Exception e){
+            e.printStackTrace();
+            return contentUri.getPath();
+        }
     }
 
     private Bitmap getThumbnailImage(String imgPath) {
@@ -217,6 +233,136 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
         }
         return degree;
     }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        try {
+//            if (null != data.getData()) {
+//                Bitmap image = null;
+//                Uri uri = data.getData();
+//                switch (requestCode) {
+//                    case REQ_CODE_GALLERY:
+//                        //photo1.setImageURI(uri);
+//                        //break;
+//                    case REQ_CODE_CAMERA:
+//                        imgPath = getRealPathFromURI(uri);
+//                        Log.i("image","imgPath="+imgPath);
+//                        image = getThumbnailImage(imgPath);
+//                        igAddPhoto.setImageBitmap(image);
+//                        //imageView.setImageURI(uri);
+//                        break;
+//                }
+//
+//            }
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    private Bitmap getThumbnailImage(String imgPath) {
+//        Bitmap image = null;
+//        try {
+//            // 이미지 축소
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inSampleSize = 3; // 1/3로 축소
+//
+//            image = BitmapFactory.decodeFile(imgPath,options);
+//
+//            Log.i("image","instance="+image);
+//            int exifDegree = exifOrientationToDegrees(imgPath);
+//            Log.i("image","exifDegree="+exifDegree);
+//            image = rotateImage(image, exifDegree);
+//
+//        }catch (Exception e){
+//            Log.e("Thumbnail Error",e.toString());
+//            e.printStackTrace();
+//        }
+//        return image;
+//    }
+//
+//
+//    /**
+//     * EXIF정보를 회전각도로 변환하는 메서드
+//     * @param imgPath 이미지 경로
+//     * @return 실제 각도
+//     */
+//    public int exifOrientationToDegrees(String imgPath){
+//        int degree = 0;
+//        ExifInterface exif = null;
+//
+//        try{
+//            exif = new ExifInterface(imgPath);
+//        }catch (IOException e){
+//            Log.e("exifOrientation", "cannot read exif");
+//            e.printStackTrace();
+//        }
+//
+//        if (exif != null){
+//            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+//            if (orientation != -1){
+//                // We only recognize a subset of orientation tag values.
+//                switch(orientation){
+//                    case ExifInterface.ORIENTATION_ROTATE_90:
+//                        degree = 90;
+//                        break;
+//                    case ExifInterface.ORIENTATION_ROTATE_180:
+//                        degree = 180;
+//                        break;
+//                    case ExifInterface.ORIENTATION_ROTATE_270:
+//                        degree = 270;
+//                        break;
+//                }
+//            }
+//        }
+//        return degree;
+//    }
+//
+//    // 이미지 회전 함수
+//    public Bitmap rotateImage(Bitmap src, float degree) {
+//
+//        // Matrix 객체 생성
+//        Matrix matrix = new Matrix();
+//        // 회전 각도 셋팅
+//        matrix.postRotate(degree);
+//        // 이미지와 Matrix 를 셋팅해서 Bitmap 객체 생성
+//        return Bitmap.createBitmap(src, 0, 0, src.getWidth(),src.getHeight(), matrix, true);
+//    }
+//
+//    /**
+//     * 이미지를 회전시킵니다.
+//     * @param bitmap 비트맵 이미지
+//     * @param degrees 회전 각도
+//     * @return 회전된 이미지
+//     */
+//    public Bitmap rotate(Bitmap bitmap, int degrees){
+//        if(degrees != 0 && bitmap != null){
+//            Matrix m = new Matrix();
+//            m.setRotate(degrees, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);
+//            try{
+//                Bitmap converted = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
+//                if(bitmap != converted){
+//                    bitmap.recycle();
+//                    bitmap = converted;
+//                }
+//            }catch(OutOfMemoryError ex){ // 메모리 부족
+//                ex.printStackTrace();
+//            }
+//        }
+//        return bitmap;
+//    }
+//
+//    public String getRealPathFromURI(Uri contentUri){
+//        try{
+//            String[] proj = {MediaStore.Images.Media.DATA};
+//            Cursor cursor = getContext().getContentResolver().query(contentUri, proj, null, null, null);
+//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//            cursor.moveToFirst();
+//            return cursor.getString(column_index);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return contentUri.getPath();
+//        }
+//    }
 
     @Override
     public void getList(List<Results> data) {
@@ -229,9 +375,20 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
     }
 
     @Override
-    public void getLikeList(Favors favors) {
+    public void getLikeList(String favors) {
 
     }
+
+    @Override
+    public void setReviewLike(String myLike, String reviewId, Boolean existId, String lkId, Boolean changed) {
+
+    }
+
+    @Override
+    public void getPostReview(String s) {
+
+    }
+
 
     public class CustomAdapter extends PagerAdapter {
 

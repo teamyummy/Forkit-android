@@ -35,17 +35,15 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.yummyteam.fastcampus.forkit.R;
-import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork2;
 import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
-import com.yummyteam.fastcampus.forkit.view.detail.GetLikeId;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GetResultsInterface,GetLikeId {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GetResultsInterface {
 
     private GoogleMap mMap;
     ViewPager pager;
@@ -66,36 +64,55 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     Toolbar toolbar;
     ImageButton ib_back_toolbar;
+    int page;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        pager= (ViewPager)findViewById(R.id.pager);
+        pager.bringToFront();
+        adapter= new CustomAdapter(getLayoutInflater());
+        pager.setAdapter(adapter);
         setMap();
 
 
 
-        pager= (ViewPager)findViewById(R.id.pager);
-        adapter= new CustomAdapter(getLayoutInflater());
-        pager.setAdapter(adapter);
-
-        toolbar=(Toolbar)findViewById(R.id.toolBar_sub);
-        ib_back_toolbar=(ImageButton)findViewById(R.id.ib_back_toolbar);
-        ib_back_toolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MapsActivity.this.finish();
-            }
-        });
 
 
-        connectFork = new ConnectFork2(this,this);
-        connectFork.getStoreList();
+//        toolbar=(Toolbar)findViewById(R.id.toolBar_sub);
+//        ib_back_toolbar=(ImageButton)findViewById(R.id.ib_back_toolbar);
+//        ib_back_toolbar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                MapsActivity.this.finish();
+//            }
+//        });
+
+
+        connectFork = new ConnectFork2(this);
+
+
+        for(int i=1;i<4;i++){
+
+            connectFork.getStoreList(i);
+        }
+
 
         setCustomMarkerView();
 
 
+
+    }
+
+
+    @Override
+    public void getList(List<Results> data) {
+        adapter.addData((ArrayList)data);
+        items= new ItemReader((ArrayList<Results>)data).read();
+        getMarkerItems();
+        changeSelectedMarkerWithPager(0);
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -109,15 +126,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-    }
-
-
-    @Override
-    public void getList(List<Results> data) {
-        adapter.addData((ArrayList)data);
-        items= new ItemReader((ArrayList<Results>)data).read();
-        getMarkerItems();
-        changeSelectedMarkerWithPager(0);
 
     }
 
@@ -127,7 +135,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void getLikeList(Favors favors) {
+    public void getLikeList(String f_id) {
+
+    }
+
+    @Override
+    public void setReviewLike(String myLike, String reviewId, Boolean existId, String lkId, Boolean changed) {
+
+    }
+
+    @Override
+    public void getPostReview(String s) {
 
     }
 
@@ -136,6 +154,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         LayoutInflater inflater;
         ArrayList<Results> datas;
+        Results data;
 
 
 
@@ -159,7 +178,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             // TODO Auto-generated method stub
-            final Results data =datas.get(position);
+            data =datas.get(position);
 
             View view = null;
             view = inflater.inflate(R.layout.item_map, null);

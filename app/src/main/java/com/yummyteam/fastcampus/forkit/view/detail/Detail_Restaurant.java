@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Detail_Restaurant extends AppCompatActivity implements GetResultsInterface,GetLikeId {
+public class Detail_Restaurant extends AppCompatActivity implements GetResultsInterface {
 
 
     ListView listView_menu;
@@ -79,6 +79,11 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     ConnectFork2 connectFork;
     Favors favors;
 
+    Boolean changedLike;
+
+    int count;
+
+
     public Detail_Restaurant(){
 
         cache = TokenCache.getInstance();
@@ -99,7 +104,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         id= bundle.getString("restaurant_id");
 
 
-        connectFork = new ConnectFork2(this,this);
+        connectFork = new ConnectFork2(this);
         try {
             token = cache.read();
         } catch (IOException e) {
@@ -187,33 +192,46 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
             }
         });
 
+        count=0;
+        changedLike=false;
         imageLike.setOnClickListener(new View.OnClickListener() {
+
+
+
             @Override
             public void onClick(View view) {
 
-
-
                 if(selectedLikeImage != null){
                     selectLike(false);
-                    data.setMy_like("false");
-                    connectFork.deleteLike(token,id);
+                    data.setMy_like("true");
+
 
 
                 }else{
                     if(token!=null){
                         selectLike(true);
-                        connectFork.putLikeRestau(token,id);
-                        data.setMy_like("true");
+                        data.setMy_like("false");
+
                     }else{
                         Toast.makeText(getApplicationContext(),"로그인을 해주세요",Toast.LENGTH_LONG).show();
                     }
-
-
                 }
+                count++;
+                if(count%2==0) {
+                    changedLike=false;
+                }else{
+                    changedLike=true;
+                }
+                Log.e("changedLike",changedLike+"");
+                lk=data.getMy_like_id();
+
+
+
             }
         });
 
     }
+
 
     public void checkToken(){
         if(token!=null){
@@ -226,15 +244,16 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     }
     public void setDefaultLikeImg(){
         if(token!=null){
-            if(data.getMy_like() !="false"){
+            if(data.getMy_like().equals("true")){
                 selectLike(true);
-            }else{
+            }else if(data.getMy_like().equals("false")){
                 selectLike(false);
             }
 
         }else{
             selectLike(false);
         }
+
 
     }
 
@@ -263,6 +282,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         reviewAdapter= new ReviewAdapter(R.layout.item_review,this);
         recyclerView_Review=(RecyclerView)findViewById(R.id.recyclerview_review);
         recyclerView_Review.setAdapter(reviewAdapter);
+        reviewAdapter.setLikeInterface(this);
         RecyclerView.LayoutManager manager2 = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerView_Review.setLayoutManager(manager2);
     }
@@ -411,19 +431,132 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
 
     @Override
     public void getDetail(Results data) {
+
         this.data=data;
         Log.e("DataTag",this.data.getName());
         setDatas();
-        addMenuData(this.data);
+        addMenuData(data);
         pictureAdapter.addImageData((ArrayList<Images>) data.getImages());
         reviewAdapter.addReviewData((ArrayList<Reviews>) data.getReviews());
         setDefaultLikeImg();
+
+
+
     }
 
     @Override
-    public void getLikeList(Favors favors) {
-
-        this.favors=favors;
-        lk=favors.getId();
+    public void getLikeList(String f_id) {
+        lk=f_id;
     }
+
+
+    LikeItem likeItem = new LikeItem();
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(changedLike){
+            if(data.getMy_like().equals(true)){
+                connectFork.putLikeRestau(token,data.getId());
+            }else{
+                connectFork.deleteLikeRestau(token,data.getId(),lk);
+            }
+        }
+        try{
+            if(likeItem.getChanged()){
+                if(likeItem.getExistId()){
+                    connectFork.putLike(token,data.getId(),likeItem.getReviewId(),likeItem.getMyLike(),likeItem.getLkId());
+                }else{
+                    connectFork.postLike(token,data.getId(),likeItem.getReviewId(),likeItem.getMyLike());
+                }
+            }else{
+                return;
+            }
+
+
+        }catch (Exception e){
+        }
+
+    }
+
+
+    @Override
+    public void setReviewLike(String myLike,String reviewId,Boolean existId,String lkId,Boolean changed) {
+
+//        if(existId){
+//
+//            connectFork.putLike(token,data.getId(),reviewId,myLike,lkId);
+//
+//        }else {
+//            connectFork.postLike(token, data.getId(), reviewId, myLike);
+//        }
+        likeItem.setExistId(existId);
+        likeItem.setLkId(lkId);
+        likeItem.setMyLike(myLike);
+        likeItem.setReviewId(reviewId);
+        likeItem.setChanged(changed);
+
+    }
+
+    @Override
+    public void getPostReview(String s) {
+        likeItem.setLkId(s);
+        likeItem.setExistId(true);
+        likeItem.setChanged(true);
+    }
+
+
+    class LikeItem{
+        String myLike;
+        String reviewId;
+
+        public Boolean getChanged() {
+            return changed;
+        }
+
+        public void setChanged(Boolean changed) {
+            this.changed = changed;
+        }
+
+        Boolean changed;
+
+        public String getLkId() {
+            return lkId;
+        }
+
+        public void setLkId(String lkId) {
+            this.lkId = lkId;
+        }
+
+        public String getMyLike() {
+            return myLike;
+        }
+
+        public void setMyLike(String myLike) {
+            this.myLike = myLike;
+        }
+
+        public String getReviewId() {
+            return reviewId;
+        }
+
+        public void setReviewId(String reviewId) {
+            this.reviewId = reviewId;
+        }
+
+        public Boolean getExistId() {
+            return existId;
+        }
+
+        public void setExistId(Boolean existId) {
+            this.existId = existId;
+        }
+
+        Boolean existId;
+        String lkId;
+
+    }
+
+
 }

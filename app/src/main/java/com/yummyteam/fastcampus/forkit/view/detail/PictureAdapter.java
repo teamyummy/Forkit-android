@@ -26,11 +26,13 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
     ArrayList<Images> images;
     Context context;
 
+
     public PictureAdapter(int itemLayout, Context context) {
         images=new ArrayList<>();
         this.itemLayout = itemLayout;
         this.context = context;
     }
+
 
     public void addImageData(ArrayList<Images> images){
         this.images.addAll(images);

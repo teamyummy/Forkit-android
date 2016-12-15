@@ -6,9 +6,9 @@ import android.util.Log;
 import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.RestaurantsData;
 import com.yummyteam.fastcampus.forkit.model.Results;
+import com.yummyteam.fastcampus.forkit.model.ReviewLike;
 import com.yummyteam.fastcampus.forkit.model.Reviews;
 import com.yummyteam.fastcampus.forkit.model.reviewImagesResponse;
-import com.yummyteam.fastcampus.forkit.view.detail.GetLikeId;
 import com.yummyteam.fastcampus.forkit.view.map.GetResultsInterface;
 
 import java.io.File;
@@ -34,21 +34,28 @@ public class ConnectFork2 {
     String baseUrl = "http://mangoplates.com/";
     List<Results> data;
     Results detailData;
-    Favors favors;
     GetResultsInterface mListener;
-    GetLikeId mListenr_like;
+
+
     Context context;
     String id;
     String MULTIPART_FORM_DATA="multipart/form-data";
 
-    public ConnectFork2(GetResultsInterface mListener,GetLikeId mListenr_like) {
+    int i;
+
+    public ConnectFork2(GetResultsInterface mListener) {
         this.mListener = mListener;
     }
 
 
-    public void getStoreList() {
+    public void getStoreList(int intPage) {
 
-        //1. 레트로핏 설정
+        Map<String, String> query = new HashMap<>();
+
+        String page =intPage+"";
+        query.put("page", page);
+
+
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -56,7 +63,7 @@ public class ConnectFork2 {
         IRestaurantData2 service = client.create(IRestaurantData2.class);
         String value = "restaurants";
 
-        Call<RestaurantsData> remoteData = service.getRestaurantsList(value);
+        Call<RestaurantsData> remoteData = service.getRestaurantsList(query);
         // 4. 비동기 데이터를 받기 위한 리스너 세팅
         Log.e("tag", "connect start");
         remoteData.enqueue(new Callback<RestaurantsData>() {
@@ -65,6 +72,14 @@ public class ConnectFork2 {
                 if (response.isSuccessful()) {
                     Log.e("tag1", "size = " + response.body());
                     data = response.body().getResults();
+
+//                    while(response.body().getNext()!=null){
+//                        i=1;
+//                        i++;
+//                        getStoreList(i);
+//
+//
+//                    }
                     mListener.getList(data);
                 } else {
                     Log.e("tag2", response.message() + call.request().body());
@@ -88,6 +103,7 @@ public class ConnectFork2 {
 
         String pk = id;
         String value = "restaurants";
+
 
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -160,7 +176,9 @@ public class ConnectFork2 {
         });
     }
 
-    public void postReview(String token, String content, String score, final  List<String> filePath) {
+
+
+    public void postReview(final String token, String content, String score, ArrayList<String> filePaths) {
 
 
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
@@ -199,7 +217,7 @@ public class ConnectFork2 {
                     reviews= response.body();
                     String rvPk =reviews.getId();
                     Log.e("RES PK",rvPk);
-                    postPhotos(filePath,realToken,rvPk);
+                    postPhotos(realToken,rvPk,filePath);
                 }
             }
 
@@ -211,7 +229,7 @@ public class ConnectFork2 {
 
     }
 
-    public void postPhotos(List<String> filePath, String token,String rvPk){
+    public void postPhotos(String token,String rvPk,String path){
 
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -220,13 +238,14 @@ public class ConnectFork2 {
         final IRestaurantData2 service = client.create(IRestaurantData2.class);
 
 
-        File file= new File(filePath.get(0));
+
+        File file= new File(path);
+
             RequestBody requestFile =
                     RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body =
-                    MultipartBody.Part.createFormData("picture", file.getName(), requestFile);
+                    MultipartBody.Part.createFormData("img", file.getName(), requestFile);
 
-        final List<MultipartBody.Part> bodies=new ArrayList<>();
 
 //        for(int i=0; i<filePath.size(); i++){
 //            File file= new File(filePath.get(i));
@@ -265,7 +284,6 @@ public class ConnectFork2 {
                 Log.e("Upload error:", t.getMessage());
             }
         });
-
     }
 
     public void putLikeRestau(String token,String id){
@@ -285,9 +303,10 @@ public class ConnectFork2 {
             @Override
             public void onResponse(Call<Favors> call,
                                    Response<Favors> response) {
-                Log.e("http",response.code()+"");
-                Log.e("response",response.body().toString());
+                Log.e("putlikeRestau_http",response.code()+"");
 
+                Favors favors=response.body();
+                mListener.getLikeList(favors.getId());
 
             }
 
@@ -298,7 +317,7 @@ public class ConnectFork2 {
         });
     }
 
-    public void deleteLike(String token,String rtId){
+    public void deleteLikeRestau(String token,String rtId,String rvId){
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -307,12 +326,13 @@ public class ConnectFork2 {
 
         final String realToken = "token " + token;
 
-        Call<Favors> call = service.deleteLikeRestaurant(realToken,rtId);
+        Call<Favors> call = service.deleteLikeRestaurant(realToken,rtId,rvId);
         call.enqueue(new Callback<Favors>() {
             @Override
             public void onResponse(Call<Favors> call,
                                    Response<Favors> response) {
-                Log.e("http",response.code()+"");
+                Log.e("DeleteLikeRestau_http",response.code()+"");
+
             }
             @Override
             public void onFailure(Call<Favors> call, Throwable t) {
@@ -320,7 +340,39 @@ public class ConnectFork2 {
             }
         });
     }
-    public void getLike(String token,String rtId){
+
+    public void postLike(String token, String rtId, final String rvId, final String like){
+        Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        IRestaurantData2 service = client.create(IRestaurantData2.class);
+
+
+        final String realToken = "token " + token;
+
+        Call<ReviewLike> call = service.postLikeReview(realToken,rtId,rvId,like);
+        call.enqueue(new Callback<ReviewLike>() {
+            @Override
+            public void onResponse(Call<ReviewLike> call,
+                                   Response<ReviewLike> response) {
+                Log.e("PostLikeReview_http",response.code()+"");
+
+                ReviewLike reviewLike=response.body();
+                mListener.getPostReview(reviewLike.getId().toString());
+
+                Log.e("URL", call.request().url().toString());
+
+
+
+            }
+            @Override
+            public void onFailure(Call<ReviewLike> call, Throwable t) {
+                Log.e("Upload error:", t.getMessage());
+            }
+        });
+    }
+    public void putLike(String token,String rtId, String rvId,String lkId,String like){
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -328,46 +380,24 @@ public class ConnectFork2 {
         IRestaurantData2 service = client.create(IRestaurantData2.class);
 
         final String realToken = "token " + token;
+        Log.e("-------lkID",lkId);
 
-        Call<Favors> call = service.getLikeId(realToken,rtId);
-        call.enqueue(new Callback<Favors>() {
+
+        Call<ReviewLike> call = service.putLikeReview(realToken,rtId,rvId,lkId,like);
+        call.enqueue(new Callback<ReviewLike>() {
             @Override
-            public void onResponse(Call<Favors> call,
-                                   Response<Favors> response) {
-                Log.e("http",response.code()+"");
-                favors=response.body();
-                mListenr_like.getLikeList(favors);
+            public void onResponse(Call<ReviewLike> call,
+                                   Response<ReviewLike> response) {
+                Log.e("putLikeReview_http",response.code()+"");
+                Log.e("URL", call.request().url().toString());
 
             }
             @Override
-            public void onFailure(Call<Favors> call, Throwable t) {
+            public void onFailure(Call<ReviewLike> call, Throwable t) {
                 Log.e("Upload error:", t.getMessage());
             }
         });
     }
-    public void postLike(String token,String rtId, String rvId,String like){
-        Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        IRestaurantData2 service = client.create(IRestaurantData2.class);
-
-        final String realToken = "token " + token;
-
-        Call<Favors> call = service.postLikeReview(realToken,rtId,rvId,like);
-        call.enqueue(new Callback<Favors>() {
-            @Override
-            public void onResponse(Call<Favors> call,
-                                   Response<Favors> response) {
-                Log.e("http",response.code()+"");
-
-
-            }
-            @Override
-            public void onFailure(Call<Favors> call, Throwable t) {
-                Log.e("Upload error:", t.getMessage());
-            }
-        });
-    }
 
 }

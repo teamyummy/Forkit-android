@@ -1,26 +1,26 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
+
 
     <include
         android:id="@+id/toolBar_sub"
+        layout="@layout/toolbar_sub"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/toolbar_sub"/>
+        android:layout_height="wrap_content" />
 
-
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <fragment
+        android:layout_below="@id/toolBar_sub"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.dongjin.android.googlemap_clustering.MapsActivity"
-        tools:layout="@layout/place_autocomplete_fragment" />
-
+        tools:layout="@layout/place_autocomplete_fragment"
+        />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
@@ -32,51 +32,92 @@
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="500dp"
-        android:visibility="visible">
+        android:layout_marginTop="500dp">
+
 
     </android.support.v4.view.ViewPager>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/xml_border_orange_thin">
+    <!--<LinearLayout-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="50dp"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginRight="30dp"-->
+        <!--android:background="@drawable/xml_border_orange_thin">-->
 
-        <CheckBox
-            android:text="한식"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox"
-            android:layout_weight="1"
-            android:textColor="@android:color/holo_orange_dark" />
+        <!--<LinearLayout-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1">-->
 
-        <CheckBox
-            android:text="양식"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox2"
-            android:layout_weight="1"
-            android:textColor="@android:color/holo_orange_dark"/>
+            <!--<CheckBox-->
+                <!--android:text="중식"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/checkCh"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textColor="@android:color/holo_orange_dark"/>-->
 
-        <CheckBox
-            android:text="일식"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox5"
-            android:layout_weight="1"
-            android:textColor="@android:color/holo_orange_dark"/>
+            <!--<CheckBox-->
+                <!--android:text="일식"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/checkJp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textColor="@android:color/holo_orange_dark"/>-->
 
-        <CheckBox
-            android:text="중식"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox3"
-            android:layout_weight="1"
-            android:textColor="@android:color/holo_orange_dark"/>
-    </LinearLayout>
+            <!--<CheckBox-->
+                <!--android:text="양식"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/checkWest"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textColor="@android:color/holo_orange_dark"/>-->
 
-</android.support.design.widget.CoordinatorLayout>
+            <!--<CheckBox-->
+                <!--android:text="한식"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/checkKo"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textColor="@android:color/holo_orange_dark" />-->
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center_horizontal|center">-->
+
+            <!--<CheckBox-->
+                <!--android:text="세계음식"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/checkWorld"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textColor="@android:color/holo_orange_dark"/>-->
+
+            <!--<CheckBox-->
+                <!--android:text="까페"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/checkCafe"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textColor="@android:color/holo_orange_dark"/>-->
+
+            <!--<CheckBox-->
+                <!--android:text="주점"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/checkHope"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textColor="@android:color/holo_orange_dark"/>-->
+        <!--</LinearLayout>-->
+
+    <!--</LinearLayout>-->
+
+</RelativeLayout>

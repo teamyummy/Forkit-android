@@ -44,4 +44,10 @@ public class RestaurantsData {
     public void setResults(List<Results> results) {
         this.results = results;
     }
+
+    @Override
+    public String toString()
+    {
+        return "ClassPojo [results = "+results+", previous = "+previous+", count = "+count+", next = "+next+"]";
+    }
 }

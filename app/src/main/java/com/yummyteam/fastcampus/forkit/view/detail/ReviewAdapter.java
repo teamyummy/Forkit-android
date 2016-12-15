@@ -15,6 +15,7 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.squareup.picasso.Picasso;
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Reviews;
+import com.yummyteam.fastcampus.forkit.view.map.GetResultsInterface;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     Context context;
     RecyclerAdapter recyclerAdapter;
     ImageView selectedImg;
+    GetResultsInterface adapterInterFace;
+
+    Boolean existId;
+    Boolean changed;
+    int dataLike;
+    int dataDisLike;
+
+
+
+
 
 
     public ReviewAdapter(int itemLayout, Context context){
@@ -36,6 +47,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         this.itemLayout = itemLayout;
         this.context = context;
     }
+    public void setLikeInterface(GetResultsInterface adapterInterFace){
+        this.adapterInterFace=adapterInterFace;
+    }
+
     public void addReviewData(ArrayList<Reviews> reviews){
         this.reviews=reviews;
         notifyDataSetChanged();
@@ -68,68 +83,115 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
 
         Log.e("Like",data.getLike());
+        Log.e("My_like",data.getMy_like());
+
+
+
+        final String myLike=data.getMy_like();
+
+        if(myLike==1+""){
+            selectedImg=holder.btnLike;
+            holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
+
+        }else if(myLike!=0+""){
+
+        }else if(myLike==(-1)+"") {
+            holder.btnDisLike.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
+
+        }
+
+        if(myLike!=0+""){
+            existId=true;
+        }else{
+            existId=false;
+        }
+
+
+        dataLike= Integer.parseInt(data.getLike());
+        dataDisLike= Integer.parseInt(data.getDislike());
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectLike(holder.btnLike,holder.btnDisLike,data);
+
+                if (selectedImg != null) {
+                    if (selectedImg != holder.btnLike) {
+                        holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
+                        holder.btnDisLike.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
+                        selectedImg = holder.btnLike;
+                        data.setMy_like(1+"");
+
+
+
+                    } else {
+                        holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
+                        selectedImg = null;
+                        data.setMy_like(0+"");
+
+
+                    }
+                } else if (selectedImg == null) {
+                    holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
+                    selectedImg = holder.btnLike;
+                    data.setMy_like(1+"");
+
+
+                }
+                if(data.getMy_like().equals(myLike)){
+                    changed=false;
+                }else{
+                    changed=true;
+                }
+                ;
+                //selectLike(holder.btnLike, holder.btnDisLike, data, existId, finalMyLikeId);
+
+
+                Log.e("changed",changed+"");
+                Log.e("exist",existId+"");
+                adapterInterFace.setReviewLike(data.getMy_like(),data.getId(),existId,data.getMy_like_id(),changed);
 
             }
         });
         holder.btnDisLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectDisLike(holder.btnDisLike,holder.btnLike,data);
+                //selectDisLike(holder.btnDisLike,holder.btnLike,data,existId, finalMyLikeId1);
 
+
+                if(selectedImg !=null){
+                    if(selectedImg != holder.btnDisLike){
+                        holder.btnDisLike.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
+                        holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
+                        selectedImg=holder.btnDisLike;
+                        data.setMy_like((-1)+"");
+
+                    }else{
+                        holder.btnDisLike.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
+                        selectedImg=null;
+                        data.setMy_like(0+"");
+                    }
+                }else{
+                    holder.btnDisLike.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
+                    selectedImg=holder.btnDisLike;
+                    data.setMy_like((-1)+"");
+                }
+                if(data.getMy_like().equals(myLike)){
+                    changed=false;
+                }else{
+                    changed=true;
+                }
+
+
+                Log.e("changed",changed+"");
+                Log.e("exist",existId+"");
+                adapterInterFace.setReviewLike(data.getMy_like(),data.getId(),existId, data.getMy_like_id(),changed);
             }
         });
 
-    }
 
-    public void selectLike(ImageView clickedImg, ImageView unClickedImg, Reviews data){
-
-        if(selectedImg !=null){
-            if(selectedImg != clickedImg){
-                clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
-                unClickedImg.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
-                selectedImg=clickedImg;
-                data.setMy_like(1+"");
-
-
-            }else{
-                clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
-                selectedImg=null;
-                data.setMy_like(0+"");
-            }
-        }else if(selectedImg ==null){
-            clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
-            selectedImg=clickedImg;
-            data.setMy_like((1+""));
-        }
 
 
     }
-    public void selectDisLike(ImageView clickedImg,ImageView unClickedImg,Reviews data){
 
-        if(selectedImg !=null){
-            if(selectedImg != clickedImg){
-                clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
-                unClickedImg.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
-                selectedImg=clickedImg;
-
-
-
-
-            }else{
-                clickedImg.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
-                selectedImg=null;
-            }
-        }else{
-            clickedImg.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
-            selectedImg=clickedImg;
-
-        }
-
-    }
 
 
     @Override
