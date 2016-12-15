@@ -4,6 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".view.main.fragment.mypage.MyPage_Fragment">
+    <include
+        layout="@layout/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
 
@@ -50,10 +54,12 @@
                 android:id="@+id/btn_sign"
                 android:layout_below="@id/tv_profile_my"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
                 android:background="@color/toolbar_background" />
         </RelativeLayout>
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -65,14 +71,16 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:textSize="18sp"
                 android:text="내가 쓴 리뷰" />
 
             <TextView
                 android:id="@+id/tv_my_favorites"
                 android:background="@drawable/xml_border"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
                 android:gravity="center"
                 android:text="즐겨찾기" />
         </LinearLayout>
@@ -86,8 +94,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/mylist"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="wrap_content" />
         <ProgressBar
             android:id="@+id/mp_progress"
             android:visibility="gone"

@@ -3,6 +3,7 @@ package com.yummyteam.fastcampus.forkit.view.main.fragment.eatery;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -226,6 +227,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
                 break;
             case R.id.map_layout:
                 Intent intent = new Intent(getContext(), MapsActivity.class);
+                intent.putParcelableArrayListExtra("restaurants", (ArrayList<? extends Parcelable>) elAdapter.getDatas());
                 startActivity(intent);
                 break;
             case R.id.tv_dialog_flilter_cancle:

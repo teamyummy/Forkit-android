@@ -179,6 +179,10 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> implem
         Log.e("button", "click able = " + clickable);
     }
 
+    public ArrayList<Results> getDatas() {
+        return datas;
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_restaurant;
