@@ -3,12 +3,13 @@ package com.yummyteam.fastcampus.forkit.networks;
 import android.content.Context;
 import android.util.Log;
 
+import com.darsh.multipleimageselect.models.Image;
 import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.RestaurantsData;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.ReviewLike;
 import com.yummyteam.fastcampus.forkit.model.Reviews;
-import com.yummyteam.fastcampus.forkit.model.reviewImagesResponse;
+import com.yummyteam.fastcampus.forkit.model.ReviewImagesResponse;
 import com.yummyteam.fastcampus.forkit.view.map.GetResultsInterface;
 
 import java.io.File;
@@ -178,7 +179,7 @@ public class ConnectFork2 {
 
 
 
-    public void postReview(final String token, String content, String score, ArrayList<String> filePaths) {
+    public void postReview(final String token, String content, String score, final ArrayList<Image> filePaths) {
 
 
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
@@ -188,6 +189,7 @@ public class ConnectFork2 {
         String like=0+"";
         String disLike=0+"";
         Map<String, String> fieldMap = new HashMap<>();
+
 
 
 
@@ -217,7 +219,13 @@ public class ConnectFork2 {
                     reviews= response.body();
                     String rvPk =reviews.getId();
                     Log.e("RES PK",rvPk);
-                    postPhotos(realToken,rvPk,filePath);
+                    for(int i=0;i<filePaths.size();i++){
+                        String filePath =filePaths.get(i).path;
+                        postPhotos(realToken,rvPk,filePath);
+
+                    }
+
+
                 }
             }
 
@@ -246,20 +254,6 @@ public class ConnectFork2 {
             MultipartBody.Part body =
                     MultipartBody.Part.createFormData("img", file.getName(), requestFile);
 
-
-//        for(int i=0; i<filePath.size(); i++){
-//            File file= new File(filePath.get(i));
-//            RequestBody requestFile =
-//                    RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//            MultipartBody.Part body =
-//                    MultipartBody.Part.createFormData("picture", file.getName(), requestFile);
-//
-//            bodies.add(body);
-//
-//
-//        }
-
-
         String altString = "Look so good";
         RequestBody alt =
                 RequestBody.create(
@@ -268,11 +262,11 @@ public class ConnectFork2 {
         String rtPk=1+"";
 
 
-        Call<reviewImagesResponse> call = service.postPhotos(token,alt,rtPk,rvPk, body);
-        call.enqueue(new Callback<reviewImagesResponse>() {
+        Call<ReviewImagesResponse> call = service.postPhotos(token,alt,rtPk,rvPk, body);
+        call.enqueue(new Callback<ReviewImagesResponse>() {
             @Override
-            public void onResponse(Call<reviewImagesResponse> call,
-                                   Response<reviewImagesResponse> response) {
+            public void onResponse(Call<ReviewImagesResponse> call,
+                                   Response<ReviewImagesResponse> response) {
                 Log.v("Upload", "success");
                 Log.v("Phtos",response.code()+"");
                 Log.e("URL", call.request().url().toString());
@@ -280,7 +274,7 @@ public class ConnectFork2 {
             }
 
             @Override
-            public void onFailure(Call<reviewImagesResponse> call, Throwable t) {
+            public void onFailure(Call<ReviewImagesResponse> call, Throwable t) {
                 Log.e("Upload error:", t.getMessage());
             }
         });
