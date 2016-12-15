@@ -3,7 +3,6 @@ package com.yummyteam.fastcampus.forkit.view.main.fragment.eatery;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +30,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.RestaurantsList;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
@@ -227,7 +227,8 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
                 break;
             case R.id.map_layout:
                 Intent intent = new Intent(getContext(), MapsActivity.class);
-                intent.putParcelableArrayListExtra("restaurants", (ArrayList<? extends Parcelable>) elAdapter.getDatas());
+                RestaurantsList restaurantsList = RestaurantsList.getInstance();
+                restaurantsList.setList(elAdapter.getDatas());
                 startActivity(intent);
                 break;
             case R.id.tv_dialog_flilter_cancle:
