@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,37 +34,34 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.yummyteam.fastcampus.forkit.R;
+import com.yummyteam.fastcampus.forkit.model.RestaurantsList;
 import com.yummyteam.fastcampus.forkit.model.Results;
-import com.yummyteam.fastcampus.forkit.networks.ConnectFork2;
 import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GetResultsInterface {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback{
 
     private GoogleMap mMap;
-    ViewPager pager;
+    private ViewPager pager;
 
-    Marker selectedMarker;
-    View marker_root_view;
-    ImageView ig_marker;
+    private Marker selectedMarker;
+    private View marker_root_view;
+    private ImageView ig_marker;
 
-    ArrayList<Marker> markers;
-    CameraUpdate center;
+    private ArrayList<Marker> markers;
+    private CameraUpdate center;
 
-    ConnectFork2 connectFork;
 
-    CustomAdapter adapter;
-    ItemReader itemReader;
+    private CustomAdapter adapter;
 
-    List<Item> items;
 
-    Toolbar toolbar;
-    ImageButton ib_back_toolbar;
-    int page;
+    private List<Item> items;
 
+    private ImageButton ib_back_toolbar;
+    private View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,29 +72,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         adapter= new CustomAdapter(getLayoutInflater());
         pager.setAdapter(adapter);
         setMap();
+        view = findViewById(R.id.tb_maps);
+        ib_back_toolbar = (ImageButton)view.findViewById(R.id.ib_back_toolbar);
 
+        ib_back_toolbar.setImageResource(R.mipmap.ic_arrow_back_white_24dp);
+        ib_back_toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
-
-
-
-//        toolbar=(Toolbar)findViewById(R.id.toolBar_sub);
-//        ib_back_toolbar=(ImageButton)findViewById(R.id.ib_back_toolbar);
-//        ib_back_toolbar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                MapsActivity.this.finish();
-//            }
-//        });
-
-
-        connectFork = new ConnectFork2(this);
-
-
-        for(int i=1;i<4;i++){
-
-            connectFork.getStoreList(i);
-        }
-
+        getList();
 
         setCustomMarkerView();
 
@@ -107,10 +92,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    @Override
-    public void getList(List<Results> data) {
-        adapter.addData((ArrayList)data);
-        items= new ItemReader((ArrayList<Results>)data).read();
+
+    public void getList() {
+        RestaurantsList restaurantsList = RestaurantsList.getInstance();
+        adapter.addData((ArrayList)restaurantsList.getList());
+        items= new ItemReader(restaurantsList.getList()).read();
         getMarkerItems();
         changeSelectedMarkerWithPager(0);
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -129,25 +115,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    @Override
-    public void getDetail(Results data) {
-
-    }
-
-    @Override
-    public void getLikeList(String f_id) {
-
-    }
-
-    @Override
-    public void setReviewLike(String myLike, String reviewId, Boolean existId, String lkId, Boolean changed) {
-
-    }
-
-    @Override
-    public void getPostReview(String s) {
-
-    }
 
 
     class CustomAdapter extends PagerAdapter {

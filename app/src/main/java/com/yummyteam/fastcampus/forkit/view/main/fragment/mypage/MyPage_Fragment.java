@@ -240,7 +240,7 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
             refresh_myReviews();
         }
         if (check) {
-            service.refresh_allFragment();
+            service.refresh_allFragment(true);
         }
 
     }

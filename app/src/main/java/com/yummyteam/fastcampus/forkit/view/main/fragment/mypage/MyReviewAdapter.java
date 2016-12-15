@@ -64,7 +64,7 @@ public class MyReviewAdapter extends RecyclerView.Adapter<MyReviewAdapter.ViewHo
     }
 
     public void removeallData() {
-        this.datas.removeAll(datas);
+        datas = new ArrayList<>();
         notifyDataSetChanged();
     }
 
