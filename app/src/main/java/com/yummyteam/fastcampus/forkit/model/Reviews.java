@@ -27,6 +27,8 @@ public class Reviews {
 
     private String restaurant;
 
+    private String rest_id;
+
     private String my_like;
 
     private String my_like_id;
@@ -146,6 +148,15 @@ public class Reviews {
     public void setRestaurant (String restaurant)
     {
         this.restaurant = restaurant;
+    }
+
+
+    public String getRest_id() {
+        return rest_id;
+    }
+
+    public void setRest_id(String rest_id) {
+        this.rest_id = rest_id;
     }
 
     @Override

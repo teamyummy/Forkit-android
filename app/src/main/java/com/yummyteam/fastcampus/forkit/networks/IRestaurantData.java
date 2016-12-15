@@ -4,6 +4,7 @@ import com.yummyteam.fastcampus.forkit.model.Auth;
 import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.RestaurantsData;
 import com.yummyteam.fastcampus.forkit.model.Results;
+import com.yummyteam.fastcampus.forkit.model.Reviews;
 
 import java.util.List;
 import java.util.Map;
@@ -49,4 +50,10 @@ public interface IRestaurantData {
 
     @GET("/api/v1/my/favor-rests/")
     Call<List<Results>> getMyFavorites(@Header("Authorization") String Authorization);
+
+    @GET("/api/v1/my/author-reviews/")
+    Call<List<Reviews>> getMyReviews(@Header("Authorization") String Authorization);
+
+    @DELETE("/api/v1/restaurants/{r_id}/reviews/{id}/")
+    Call<String> removeMyReviews(@Header("Authorization")String Authorization,@Path("r_id")String r_id,@Path("id") String id);
 }

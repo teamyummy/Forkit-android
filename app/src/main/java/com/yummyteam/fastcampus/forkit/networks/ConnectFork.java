@@ -6,6 +6,7 @@ import com.yummyteam.fastcampus.forkit.model.Auth;
 import com.yummyteam.fastcampus.forkit.model.Favors;
 import com.yummyteam.fastcampus.forkit.model.RestaurantsData;
 import com.yummyteam.fastcampus.forkit.model.Results;
+import com.yummyteam.fastcampus.forkit.model.Reviews;
 import com.yummyteam.fastcampus.forkit.view.login.LoginInterface;
 import com.yummyteam.fastcampus.forkit.view.main.ActivityConnectInterface;
 import com.yummyteam.fastcampus.forkit.view.main.fragment.eatery.EateryListInterface;
@@ -307,7 +308,7 @@ public class ConnectFork {
             @Override
             public void onResponse(Call<List<Results>> call, Response<List<Results>> response) {
                 if(response.isSuccessful()){
-                    mpInterface.setData(response.body());
+                    mpInterface.setData_favors(response.body());
                 }else{
 
                 }
@@ -315,6 +316,47 @@ public class ConnectFork {
 
             @Override
             public void onFailure(Call<List<Results>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    public void getMyReviews(String token) {
+        String token_complete = make_token(token);
+        Call<List<Reviews>> remoteData = createClient().getMyReviews(token_complete);
+        remoteData.enqueue(new Callback<List<Reviews>>() {
+            @Override
+            public void onResponse(Call<List<Reviews>> call, Response<List<Reviews>> response) {
+                if(response.isSuccessful()){
+                    mpInterface.setData_reviews(response.body());
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Reviews>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    public void removeMyReviews(String token,String r_id,String id){
+        String token_complete = make_token(token);
+        Call<String> remoteData = createClient().removeMyReviews(token_complete,r_id,id);
+        Log.e("url","url = "+remoteData.request().url());
+        remoteData.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful()){
+                    mpInterface.refresh(true);
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
                 t.printStackTrace();
             }
         });
