@@ -41,6 +41,9 @@ public class Results {
 
     private String review_score;
 
+    private String review_average;
+
+
     private List<Images> images;
 
     private String longitude;
@@ -274,5 +277,14 @@ public class Results {
     {
         return "ClassPojo [tags = "+tags+", created_date = "+created_date+", desc_delivery = "+desc_delivery+", menus = "+menus+", reviews = "+reviews+", phone = "+phone+", operation_hour = "+operation_hour+", review_count = "+review_count+", my_like = "+my_like+", id = "+id+", register = "+register+", address = "+address+", description = "+description+", total_like = "+total_like+", name = "+name+", review_score = "+review_score+", images = "+images+", longitude = "+longitude+", latitude = "+latitude+", can_parking = "+can_parking+", desc_parking = "+desc_parking+"]";
     }
+
+    public String getReview_average() {
+        return review_average;
+    }
+
+    public void setReview_average(String review_average) {
+        this.review_average = review_average;
+    }
+
 }
 

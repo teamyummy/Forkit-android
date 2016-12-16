@@ -144,6 +144,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
 
     public void setToken(int page) {
         if (token.equals("")) {
+            Log.e("token","token is null");
             connectFork.getStoreList(page + "", ordered, filter);
         } else {
             connectFork.getStoreList_withToken(token, page + "", ordered, filter);
@@ -262,7 +263,12 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         progressBar.setVisibility(View.VISIBLE);
         elAdapter.removeallData();
         page = 1;
-        connectFork.getStoreList_withToken(token, page + "", ordered, filter);
+        if(token.equals("")){
+            connectFork.getStoreList(page+"",ordered,filter);
+        }else{
+            connectFork.getStoreList_withToken(token, page + "", ordered, filter);
+        }
+
     }
 
     private void changeList() {

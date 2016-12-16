@@ -58,13 +58,15 @@ public class ConnectFork {
         this.mpInterface = mpInterface;
     }
 
-    private String mPage,mOrdered,mTags;
-    public void getStoreList(String page, final String ordered, String tags) {
+    private String mPage,mOrdered = "",mTags;
+    public void getStoreList(String page,String ordered, String tags) {
 
         mPage = page;
-        mOrdered = ordered;
+        if(!mOrdered.contains(",-pk")){
+            mOrdered = ordered+",-pk";
+        }
         mTags = tags;
-        HashMap<String,String> query = (HashMap)getFilter(page,ordered,tags);
+        HashMap<String,String> query = (HashMap)getFilter(mPage,mOrdered,mTags);
         Call<RestaurantsData> remoteData = createClient().getRestaurantsList(query);
         Log.e("connect", "url = " + remoteData.request().url().toString());
         // 4. 비동기 데이터를 받기 위한 리스너 세팅
@@ -170,9 +172,11 @@ public class ConnectFork {
         String token_complete = make_token(token);
         mToken = token_complete;
         mPage = page;
-        mOrdered = ordered;
+        if(!mOrdered.contains(",-pk")){
+            mOrdered = ordered+",-pk";
+        }
         mTags = tags;
-        HashMap<String,String> query = (HashMap)getFilter(page,ordered,tags);
+        HashMap<String,String> query = (HashMap)getFilter(mPage,mOrdered,mTags);
         Call<RestaurantsData> remoteData =createClient().getRestaurantsList(token_complete, query);
         Log.e("connect", "url = " + remoteData.request().url().toString());
         // 4. 비동기 데이터를 받기 위한 리스너 세팅
