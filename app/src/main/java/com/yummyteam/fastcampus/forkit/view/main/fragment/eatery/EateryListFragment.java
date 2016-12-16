@@ -85,9 +85,9 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         mDemoSlider = (SliderLayout) view.findViewById(slider);
         filter_layout = (LinearLayout) view.findViewById(R.id.filter_layout);
         map_layout = (LinearLayout) view.findViewById(R.id.map_layout);
-        progressBar = (ProgressBar)view.findViewById(R.id.eProgress);
+        progressBar = (ProgressBar) view.findViewById(R.id.eProgress);
         progressBar.setVisibility(View.VISIBLE);
-        tv_noContent = (TextView)view.findViewById(R.id.noSearch_content);
+        tv_noContent = (TextView) view.findViewById(R.id.noSearch_content);
         filter_layout.setOnClickListener(this);
         map_layout.setOnClickListener(this);
         try {
@@ -119,12 +119,19 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                 int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
-                if (totalItemCount == visibleItemCount + firstVisibleItem && totalItemCount > 4) {
+                if (totalItemCount == visibleItemCount + firstVisibleItem && totalItemCount > 9) {
                     if (scrolled_count == 0) {
                         page++;
                         scrolled_count++;
-                        setToken(page);
-                        progressBar.setVisibility(View.VISIBLE);
+                        if (filter.equals("")) {
+                            setToken(page);
+                            progressBar.setVisibility(View.VISIBLE);
+                        } else {
+                            setToken(page);
+                            progressBar.setVisibility(View.VISIBLE);
+                        }
+
+
                     }
 
                 }
@@ -183,7 +190,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         restaurant_list.setLayoutManager(manager);
 
         elAdapter = new ELAdapter();
-        elAdapter.setInterface((MainView)getActivity());
+        elAdapter.setInterface((MainView) getActivity());
 
         restaurant_list.setAdapter(elAdapter);
 
@@ -251,20 +258,22 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
 
     }
 
-    public void adapterRefresh(){
+    public void adapterRefresh() {
         progressBar.setVisibility(View.VISIBLE);
         elAdapter.removeallData();
         page = 1;
         connectFork.getStoreList_withToken(token, page + "", ordered, filter);
     }
+
     private void changeList() {
         progressBar.setVisibility(View.VISIBLE);
         elAdapter.removeallData();
         if (!ordered_temp.equals("")) {
             ordered = ordered_temp;
         }
-
         page = 1;
+
+
         if (checkList.size() > 0) {
             for (String tag : checkList) {
                 if (filter.equals("")) {
@@ -277,7 +286,6 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
             filter = "";
         }
         setToken(page);
-        filter = "";
     }
 
     private TextView tv_dialog_filter_cancle, tv_dialog_filter_ok;
@@ -346,9 +354,9 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
             elAdapter.addDatas((ArrayList) data);
             scrolled_count = 0;
         } else {
-            if(page ==1){
+            if (page == 1) {
                 tv_noContent.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 Toast.makeText(getContext(), "마지막 입니다.", Toast.LENGTH_SHORT).show();
             }
 
@@ -368,25 +376,31 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
 
 
         if (checkList.contains("한식")) {
-            Log.e("tag","1");
+            Log.e("tag", "1");
             ck_dialog_korea.setChecked(true);
-        } if (checkList.contains("일식")) {
-            Log.e("tag","2");
+        }
+        if (checkList.contains("일식")) {
+            Log.e("tag", "2");
             ck_dialog_japan.setChecked(true);
-        } if (checkList.contains("중식")) {
-            Log.e("tag","3");
+        }
+        if (checkList.contains("중식")) {
+            Log.e("tag", "3");
             ck_dialog_china.setChecked(true);
-        } if (checkList.contains("양식")) {
-            Log.e("tag","4");
+        }
+        if (checkList.contains("양식")) {
+            Log.e("tag", "4");
             ck_dialog_west.setChecked(true);
-        } if (checkList.contains("세계음식")) {
-            Log.e("tag","5");
+        }
+        if (checkList.contains("세계음식")) {
+            Log.e("tag", "5");
             ck_dialog_world.setChecked(true);
-        } if (checkList.contains("카페")) {
-            Log.e("tag","6");
+        }
+        if (checkList.contains("카페")) {
+            Log.e("tag", "6");
             ck_dialog_cafe.setChecked(true);
-        } if (checkList.contains("주점")) {
-            Log.e("tag","7");
+        }
+        if (checkList.contains("주점")) {
+            Log.e("tag", "7");
             ck_dialog_bar.setChecked(true);
         }
         ck_dialog_korea.setOnCheckedChangeListener(this);
@@ -430,22 +444,23 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
 
     private void checkListChange(String tag, boolean check) {
         if (check) {
-            if(!checkList.contains(tag)) {
+            if (!checkList.contains(tag)) {
                 checkList.add(tag);
             }
-            Log.e("tag add","tag = "+tag);
+            Log.e("tag add", "tag = " + tag);
         } else {
             checkList.remove(tag);
         }
     }
 
-    public void changeMylike(String r_id,String f_id, String like) {
-        elAdapter.changeMyLike(r_id,f_id,like);
+    public void changeMylike(String r_id, String f_id, String like) {
+        elAdapter.changeMyLike(r_id, f_id, like);
         service.refresh_allFragment(false);
     }
 
 
     private MainViewInterface service;
+
     public void setService(MainViewInterface service) {
         this.service = service;
     }
