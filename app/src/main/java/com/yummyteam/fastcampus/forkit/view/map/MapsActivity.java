@@ -67,14 +67,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        setMap();
+
+
         pager= (ViewPager)findViewById(R.id.pager);
-        pager.bringToFront();
         adapter= new CustomAdapter(getLayoutInflater());
         pager.setAdapter(adapter);
-        setMap();
+        pager.bringToFront();
+
+
         view = findViewById(R.id.tb_maps);
         ib_back_toolbar = (ImageButton)view.findViewById(R.id.ib_back_toolbar);
-
         ib_back_toolbar.setImageResource(R.mipmap.ic_arrow_back_white_24dp);
         ib_back_toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,9 +86,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        getList();
-
         setCustomMarkerView();
+
+
+
+
 
 
 
@@ -95,10 +100,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void getList() {
         RestaurantsList restaurantsList = RestaurantsList.getInstance();
-        adapter.addData((ArrayList)restaurantsList.getList());
+        adapter.addData(restaurantsList.getList());
         items= new ItemReader(restaurantsList.getList()).read();
         getMarkerItems();
         changeSelectedMarkerWithPager(0);
+
+
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -295,10 +302,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap = googleMap;
 
+        getList();
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.515364, 127.022796), 14));
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+
+
 
                 center = CameraUpdateFactory.newLatLng(marker.getPosition());
                 mMap.animateCamera(center);

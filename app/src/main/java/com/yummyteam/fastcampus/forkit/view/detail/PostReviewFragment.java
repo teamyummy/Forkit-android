@@ -2,7 +2,6 @@ package com.yummyteam.fastcampus.forkit.view.detail;
 
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -131,14 +130,14 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
             }
         });
 
-        Builder.setV
+
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
-        btnCancel.set
+
 
         igAddPhoto=(ImageView)view.findViewById(R.id.igAddPhoto);
         igAddPhoto.setOnClickListener(new View.OnClickListener() {

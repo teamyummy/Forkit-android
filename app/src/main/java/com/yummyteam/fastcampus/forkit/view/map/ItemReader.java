@@ -3,7 +3,6 @@ package com.yummyteam.fastcampus.forkit.view.map;
 import com.yummyteam.fastcampus.forkit.model.Results;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by user on 2016-11-11.
@@ -17,8 +16,8 @@ public class ItemReader {
         this.datas=datas;
     }
 
-    public List<Item> read()  {
-        List<Item> items = new ArrayList<Item>();
+    public ArrayList<Item> read()  {
+        ArrayList<Item> items = new ArrayList<>();
 
 
         for (int i = 0; i < datas.size(); i++) {
