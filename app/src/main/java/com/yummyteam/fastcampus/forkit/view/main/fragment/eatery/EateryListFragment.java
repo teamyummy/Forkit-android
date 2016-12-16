@@ -45,7 +45,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.yummyteam.fastcampus.forkit.R.id.slider;
-import static java.security.AccessController.getContext;
 
 
 /**
@@ -228,7 +227,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
                 break;
             case R.id.map_layout:
                 Intent intent = new Intent(getContext(), MapsActivity.class);
-                
+
                 RestaurantsList restaurantsList = RestaurantsList.getInstance();
                 restaurantsList.setList(elAdapter.getDatas());
 
