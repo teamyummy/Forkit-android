@@ -275,7 +275,7 @@ public class ConnectFork2 {
 
             @Override
             public void onFailure(Call<ReviewImagesResponse> call, Throwable t) {
-                Log.e("Upload error:", t.getMessage());
+                t.printStackTrace();
             }
         });
     }
