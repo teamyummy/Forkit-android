@@ -129,8 +129,9 @@
         <android.support.v7.widget.RecyclerView
             android:layout_gravity="center"
             android:layout_margin="5dp"
+            android:elevation="0dp"
             android:id="@+id/myReivew_img_list"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
     </LinearLayout>
 

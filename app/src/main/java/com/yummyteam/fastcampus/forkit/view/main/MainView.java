@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.TokenCache;
@@ -21,7 +22,7 @@ public class MainView extends AppCompatActivity implements ActivityConnectInterf
 
     private EateryListFragment eateryListFragment;
     private ViewPager pager;
-
+    private int init=0;
     private MyPage_Fragment myPage_fragment;
     private PagerAdapter pagerAdapter;
     private ConnectFork connectFork;
@@ -98,6 +99,24 @@ public class MainView extends AppCompatActivity implements ActivityConnectInterf
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("resume","init = " + init);
+        if(init>0){
+            eateryListFragment.adapterRefresh();
+            myPage_fragment.refresh(false);
+        }else{
+            init++;
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e("pause","init = " + init);
+    }
 
     class PagerAdapter extends FragmentStatePagerAdapter {
 

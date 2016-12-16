@@ -84,6 +84,8 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> implem
         }
         Glide.with(parent.getContext())
                 .load(img_src)
+                //.override(100, 56)
+                //.fitCenter()
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
