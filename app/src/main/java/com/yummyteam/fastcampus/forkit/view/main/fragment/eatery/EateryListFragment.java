@@ -228,7 +228,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
             case R.id.map_layout:
                 Intent intent = new Intent(getContext(), MapsActivity.class);
 
-                intent.putParcelableArrayListExtra("restaurants", (ArrayList<? extends Parcelable>) elAdapter.getDatas());
+                //intent.putParcelableArrayListExtra("restaurants", (ArrayList<? extends Parcelable>) elAdapter.getDatas());
 
                 RestaurantsList restaurantsList = RestaurantsList.getInstance();
                 restaurantsList.setList(elAdapter.getDatas());

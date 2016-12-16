@@ -179,7 +179,7 @@ public class ConnectFork2 {
 
 
 
-    public void postReview(final String token, String content, String score, final ArrayList<Image> filePaths) {
+    public void postReview(final String token,String title, String content, String score, final ArrayList<Image> filePaths) {
 
 
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
@@ -193,7 +193,7 @@ public class ConnectFork2 {
 
 
 
-        fieldMap.put("title", "title");
+        fieldMap.put("title", title);
         fieldMap.put("content", content);
         fieldMap.put("score",score);
         fieldMap.put("like",like);
