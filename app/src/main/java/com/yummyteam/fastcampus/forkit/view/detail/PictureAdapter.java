@@ -59,8 +59,9 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
                 images.add(images.get(0));
             }
             img_src = images.get(position).getImg();
+            Picasso.with(context).load(img_src).into(holder.image);
         }
-        Picasso.with(context).load(img_src).into(holder.image);
+
 
         Log.e("IMAGE TAG", img_src);
 
