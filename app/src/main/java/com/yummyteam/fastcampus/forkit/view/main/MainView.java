@@ -89,9 +89,13 @@ public class MainView extends AppCompatActivity implements ActivityConnectInterf
     }
 
     @Override
-    public void refresh_allFragment(){
-        eateryListFragment.adapterRefresh();
-        myPage_fragment.refresh(false);
+    public void refresh_allFragment(boolean check){
+        if(check){
+            eateryListFragment.adapterRefresh();
+        }else{
+            myPage_fragment.refresh(false);
+        }
+
     }
 
 

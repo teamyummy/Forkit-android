@@ -7,13 +7,15 @@
 
 
     <include
-        android:id="@+id/toolBar_sub"
-        layout="@layout/toolbar_sub"
+        android:id="@+id/tb_maps"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar_sub"
+        android:visibility="visible"
+        android:layout_alignParentEnd="true" />
 
     <fragment
-        android:layout_below="@id/toolBar_sub"
+        android:layout_below="@id/tb_maps"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
@@ -37,87 +39,6 @@
 
     </android.support.v4.view.ViewPager>
 
-    <!--<LinearLayout-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="50dp"-->
-        <!--android:layout_marginLeft="30dp"-->
-        <!--android:layout_marginRight="30dp"-->
-        <!--android:background="@drawable/xml_border_orange_thin">-->
 
-        <!--<LinearLayout-->
-            <!--android:orientation="horizontal"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1">-->
-
-            <!--<CheckBox-->
-                <!--android:text="중식"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/checkCh"-->
-                <!--android:layout_weight="1"-->
-                <!--android:textColor="@android:color/holo_orange_dark"/>-->
-
-            <!--<CheckBox-->
-                <!--android:text="일식"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/checkJp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:textColor="@android:color/holo_orange_dark"/>-->
-
-            <!--<CheckBox-->
-                <!--android:text="양식"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/checkWest"-->
-                <!--android:layout_weight="1"-->
-                <!--android:textColor="@android:color/holo_orange_dark"/>-->
-
-            <!--<CheckBox-->
-                <!--android:text="한식"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/checkKo"-->
-                <!--android:layout_weight="1"-->
-                <!--android:textColor="@android:color/holo_orange_dark" />-->
-
-        <!--</LinearLayout>-->
-
-        <!--<LinearLayout-->
-            <!--android:orientation="horizontal"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="center_horizontal|center">-->
-
-            <!--<CheckBox-->
-                <!--android:text="세계음식"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/checkWorld"-->
-                <!--android:layout_weight="1"-->
-                <!--android:textColor="@android:color/holo_orange_dark"/>-->
-
-            <!--<CheckBox-->
-                <!--android:text="까페"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/checkCafe"-->
-                <!--android:layout_weight="1"-->
-                <!--android:textColor="@android:color/holo_orange_dark"/>-->
-
-            <!--<CheckBox-->
-                <!--android:text="주점"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/checkHope"-->
-                <!--android:layout_weight="1"-->
-                <!--android:textColor="@android:color/holo_orange_dark"/>-->
-        <!--</LinearLayout>-->
-
-    <!--</LinearLayout>-->
 
 </RelativeLayout>

@@ -113,7 +113,7 @@ public class MyFavorsAdapter extends RecyclerView.Adapter<MyFavorsAdapter.ViewHo
     }
 
     public void removeallData() {
-        this.datas.removeAll(datas);
+        datas = new ArrayList<>();
         notifyDataSetChanged();
     }
 

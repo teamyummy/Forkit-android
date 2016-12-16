@@ -6,5 +6,5 @@ package com.yummyteam.fastcampus.forkit.view.main;
 
 public interface MainViewInterface {
 
-    public void refresh_allFragment();
+    public void refresh_allFragment(boolean check);
 }

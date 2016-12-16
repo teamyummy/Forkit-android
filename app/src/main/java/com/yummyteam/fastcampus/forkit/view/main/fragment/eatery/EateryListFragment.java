@@ -443,7 +443,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
 
     public void changeMylike(String r_id,String f_id, String like) {
         elAdapter.changeMyLike(r_id,f_id,like);
-        service.refresh_allFragment();
+        service.refresh_allFragment(false);
     }
 
 
