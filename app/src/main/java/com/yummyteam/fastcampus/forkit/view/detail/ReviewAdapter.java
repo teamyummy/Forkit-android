@@ -88,6 +88,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
 
         final String myLike=data.getMy_like();
+        Log.e("getMylIke",myLike);
 
         if(myLike==1+""){
             selectedImg=holder.btnLike;
@@ -100,11 +101,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
         }
 
-        if(myLike!=0+""){
-            existId=true;
-        }else{
+        if(myLike.equals(0+"")){
             existId=false;
+        }else{
+            existId=true;
         }
+
 
 
         dataLike= Integer.parseInt(data.getLike());
@@ -257,7 +259,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
             String img_src ="";
             if(review.getImages().size()==0){
-                img_src = "https://yt3.ggpht.com/-Xpap6ijaRfM/AAAAAAAAAAI/AAAAAAAAAAA/eyfS-T4Pqxc/s100-c-k-no-mo-rj-c0xffffff/photo.jpg";
+
             }else{
                 if(review.getImages().size()<3){
                     review.getImages().add(review.getImages().get(0));

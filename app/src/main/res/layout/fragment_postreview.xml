@@ -19,46 +19,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/ratingBar"
-            android:layout_marginStart="11dp"
-            android:layout_toEndOf="@+id/ratingBar"
-            android:text="0" />
-
-        <view
-            android:id="@+id/viewPager"
-            class="android.support.v4.view.ViewPager"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_below="@+id/etReview"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:paddingLeft="70dp" />
+            android:layout_toRightOf="@+id/ratingBar"
+            android:text="0"
+            android:paddingBottom="20dp"
+            android:paddingLeft="10dp" />
 
         <ImageView
             android:id="@+id/igAddPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/etReview"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_below="@+id/ratingBar"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="21dp"
             app:srcCompat="@drawable/btn_rdp_tab_photo_normal" />
-
-        <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
 
         <EditText
             android:id="@+id/etReview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="21dp"
             android:ems="10"
             android:hint="How was this restaurant?"
             android:inputType="textMultiLine"
             android:selectAllOnFocus="false"
-            android:layout_below="@+id/rb_tv"
+            android:layout_below="@+id/etTitle"
             android:layout_alignStart="@+id/ratingBar" />
 
         <LinearLayout
@@ -66,7 +49,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/igAddPhoto"
+            >
 
             <Button
                 android:text="ok"
@@ -82,6 +67,35 @@
                 android:id="@+id/btnCancel"
                 android:layout_weight="1" />
         </LinearLayout>
+
+        <EditText
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentStart="true"
+            android:inputType="textMultiLine"
+            android:selectAllOnFocus="false"
+            android:hint="title"
+            android:id="@+id/etTitle"
+            />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etReview"
+            android:layout_alignParentStart="true" />
+
+        <view
+            android:id="@+id/viewPager"
+            class="android.support.v4.view.ViewPager"
+            android:gravity="center"
+            android:layout_height="200dp"
+            android:layout_below="@+id/rb_tv"
+            android:layout_alignStart="@+id/igAddPhoto"
+            android:layout_alignParentEnd="true"
+            android:layout_width="384dp" />
 
     </RelativeLayout>
 

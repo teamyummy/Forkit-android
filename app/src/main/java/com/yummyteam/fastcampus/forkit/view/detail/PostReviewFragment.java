@@ -1,11 +1,13 @@
 package com.yummyteam.fastcampus.forkit.view.detail;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -50,6 +52,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
     RatingBar ratingBar;
     TextView rb_tv;
     EditText etReview;
+    EditText etTitle;
 
     Button btnOk;
     Button btnCancel;
@@ -57,6 +60,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
     String score;
     private String token;
     String content;
+    String title;
 
     private TokenCache cache;
     String imgPath;
@@ -72,6 +76,12 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
         images=new ArrayList<>();
     }
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return super.onCreateDialog(savedInstanceState);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,8 +98,6 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
 
 
 
-
-
         View view = inflater.inflate(R.layout.fragment_postreview, container, false);
 
         ratingBar = (RatingBar) view.findViewById(R.id.ratingBar);
@@ -102,6 +110,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
             }
         });
         etReview=(EditText)view.findViewById(R.id.etReview);
+        etTitle=(EditText)view.findViewById(R.id.etTitle);
 
 
         btnOk=(Button)view.findViewById(R.id.btnOk);
@@ -111,14 +120,24 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
             @Override
             public void onClick(View view) {
                 content=etReview.getText().toString();
+                title=etReview.getText().toString();
 
-                connectFork2.postReview(token,content,score,images);
+                connectFork2.postReview(token,title,content,score,images);
                 Log.e("Token", token);
                 Log.e("Content", content);
                 Log.e("score", score+"");
 
             }
         });
+
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
 
         igAddPhoto=(ImageView)view.findViewById(R.id.igAddPhoto);
         igAddPhoto.setOnClickListener(new View.OnClickListener() {

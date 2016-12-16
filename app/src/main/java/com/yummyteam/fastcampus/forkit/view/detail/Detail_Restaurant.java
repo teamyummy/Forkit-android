@@ -88,6 +88,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
 
         cache = TokenCache.getInstance();
         datas = new ArrayList<>();
+        data = new Results();
     }
 
 
@@ -203,14 +204,14 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
 
                 if(selectedLikeImage != null){
                     selectLike(false);
-                    data.setMy_like("true");
+                    data.setMy_like("false");
 
 
 
                 }else{
                     if(token!=null){
                         selectLike(true);
-                        data.setMy_like("false");
+                        data.setMy_like("true");
 
                     }else{
                         Toast.makeText(getApplicationContext(),"로그인을 해주세요",Toast.LENGTH_LONG).show();
@@ -223,6 +224,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
                     changedLike=true;
                 }
                 Log.e("changedLike",changedLike+"");
+
                 lk=data.getMy_like_id();
 
 
@@ -457,12 +459,13 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         super.onPause();
 
         if(changedLike){
-            if(data.getMy_like().equals(true)){
+            if(data.getMy_like().equals("true")){
                 connectFork.putLikeRestau(token,data.getId());
-            }else{
+            }else if(data.getMy_like().equals("false")){
                 connectFork.deleteLikeRestau(token,data.getId(),lk);
             }
         }
+
         try{
             if(likeItem.getChanged()){
                 if(likeItem.getExistId()){

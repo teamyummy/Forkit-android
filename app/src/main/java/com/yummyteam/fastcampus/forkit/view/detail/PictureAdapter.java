@@ -53,7 +53,6 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
 
         String img_src ="";
         if(images.size() == 0) {
-            img_src = "https://yt3.ggpht.com/-Xpap6ijaRfM/AAAAAAAAAAI/AAAAAAAAAAA/eyfS-T4Pqxc/s100-c-k-no-mo-rj-c0xffffff/photo.jpg";
         }else{
             if(images.size()<3){
                 images.add(images.get(0));
