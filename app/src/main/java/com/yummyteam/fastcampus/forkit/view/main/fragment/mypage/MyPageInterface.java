@@ -17,4 +17,6 @@ public interface MyPageInterface {
     void refresh(boolean check);
 
     void removeReview(String rest_id, String id);
+
+    void popDialog(String rest_id, String id,String title,String contents,String value);
 }

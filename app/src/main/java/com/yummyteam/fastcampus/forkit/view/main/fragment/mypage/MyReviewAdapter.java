@@ -56,6 +56,14 @@ public class MyReviewAdapter extends RecyclerView.Adapter<MyReviewAdapter.ViewHo
             }
         });
 
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mpInterface.popDialog(review.getRest_id(),review.getId(),review.getTitle(),review.getContent(),review.getScore());
+            }
+        });
+
     }
 
     public void addDatas(ArrayList<Reviews> sub_datas) {

@@ -8,13 +8,19 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.yummyteam.fastcampus.forkit.R;
@@ -161,6 +167,21 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
                 mylist.setAdapter(mfAdapter);
                 setMyFavorite();
                 break;
+            case R.id.tv_dialog_review_cancle:
+                infoDialog.cancel();
+                break;
+            case R.id.tv_dialog_review_ok:
+                if(et_dialog_content.getText().length()>0 && et_dialog_title.getText().length()>0){
+                    String cTitle = et_dialog_title.getText().toString();
+                    String cContents = et_dialog_content.getText().toString();
+                    String rate = dialog_ratingBar.getRating()+"";
+                    connectFork.modifiReview(token,res_id,review_id,cTitle,cContents,rate);
+                    infoDialog.dismiss();
+                }else{
+                    Toast.makeText(getContext(),"제목과 내용을 입력해 주세요",Toast.LENGTH_SHORT).show();
+                }
+
+                break;
         }
 
     }
@@ -268,6 +289,46 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
 
 
 
+    }
+    private TextView tv_dialog_review_cancle,tv_dialog_review_ok;
+    private AlertDialog infoDialog;
+    private EditText et_dialog_title,et_dialog_content;
+    private RatingBar dialog_ratingBar;
+    private String res_id,review_id;
+    @Override
+    public void popDialog(String rest_id, String id,String title,String contents,String value) {
+        res_id = rest_id;
+        review_id = id;
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_review_modified, null);
+        tv_dialog_review_cancle = (TextView) view.findViewById(R.id.tv_dialog_review_cancle);
+        tv_dialog_review_ok = (TextView) view.findViewById(R.id.tv_dialog_review_ok);
+        et_dialog_title = (EditText)view.findViewById(R.id.et_dialog_title);
+        et_dialog_content = (EditText)view.findViewById(R.id.et_dialog_content);
+
+        dialog_ratingBar = (RatingBar)view.findViewById(R.id.dialog_ratingBar);
+
+        et_dialog_title.setText(title);
+        et_dialog_content.setText(contents);
+        dialog_ratingBar.setMax(5);
+        dialog_ratingBar.setRating(Float.parseFloat(value));
+        dialog_ratingBar.setStepSize(0.5f);
+        tv_dialog_review_ok.setOnClickListener(this);
+        tv_dialog_review_cancle.setOnClickListener(this);
+
+
+
+
+        infoDialog = new AlertDialog.Builder(getContext())
+                .setView(view)
+                .create();
+
+        Window window = infoDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.CENTER_VERTICAL;
+        //wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+        infoDialog.show();
     }
 
     private void refresh_myReviews() {

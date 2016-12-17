@@ -395,5 +395,39 @@ public class ConnectFork {
             }
         });
     }
+
+    String mTitle,mContents,mRate;
+    public void modifiReview(String token,String r_id,String id, String title,String contents,String rate){
+        mToken = make_token(token);
+        mId = r_id;
+        mfId = id;
+        mTitle = title;
+        mContents = contents;
+        mRate = rate;
+        HashMap<String,String> keys = new HashMap<>();
+        keys.put("title",title);
+        keys.put("content",contents);
+        keys.put("score",rate);
+        Call<Reviews> remoteData = createClient().modifiReview(mToken,r_id,id,keys);
+        Log.e("tag",remoteData.request().url().toString());
+        remoteData.enqueue(new Callback<Reviews>() {
+            @Override
+            public void onResponse(Call<Reviews> call, Response<Reviews> response) {
+                if(response.code() == 200){
+                    mpInterface.refresh(true);
+                }else{
+                    Log.e("tag",response.code()+"");
+                    mpInterface.refresh(true);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Reviews> call, Throwable t) {
+                modifiReview(mToken,mId,mfId,mTitle,mContents,mRate);
+                t.printStackTrace();
+            }
+        });
+    }
 }
 
