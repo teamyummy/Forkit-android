@@ -31,7 +31,7 @@ public class MyFavorsAdapter extends RecyclerView.Adapter<MyFavorsAdapter.ViewHo
     private ArrayList<Results> datas;
     private TokenCache cache;
     private String token;
-    private static final int LIKED = R.mipmap.ic_favorite_pink_36dp;
+    private static final int LIKED = R.mipmap.like;
 
     private ImageButton temp_ib;
     private MyPageInterface mpInterface;

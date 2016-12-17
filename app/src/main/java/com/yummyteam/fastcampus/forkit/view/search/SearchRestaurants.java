@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
     private ConnectFork connect;
     private RecyclerView searchedList;
     private ELAdapter elAdapter;
+    private ProgressBar progressBar;
     private TokenCache cache;
     private String token;
     @Override
@@ -62,7 +64,7 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
         searchedList.setAdapter(elAdapter);
         cache = TokenCache.getInstance();
         token = cache.read();
-
+        progressBar = (ProgressBar)findViewById(R.id.search_progressbar);
     }
 
     @Override
@@ -77,6 +79,8 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
     public void getKeyWord(String keyWord) {
         this.keyWord = keyWord;
         Log.e("getKeyWord","keyword = " + this.keyWord);
+        progressBar.setVisibility(View.VISIBLE);
+        noSearch_content.setVisibility(View.GONE);
         if(token.equals("")) {
             connect.searchRestaurants(this.keyWord);
         }else{
@@ -87,6 +91,7 @@ public class SearchRestaurants extends AppCompatActivity implements View.OnClick
     @Override
     public void setResult(List<Results> results) {
         elAdapter.removeallData();
+        progressBar.setVisibility(View.GONE);
         if(results.size() ==0){
 
             Log.e("getKeyWord","result size = 0");

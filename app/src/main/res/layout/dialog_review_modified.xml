@@ -30,7 +30,7 @@
             android:layout_marginRight="10dp"
             android:textSize="18sp"
             android:text="수정"
-            android:textColor="@android:color/holo_orange_dark" />
+            android:textColor="@color/toolbar_background" />
     </RelativeLayout>
 
     <TextView

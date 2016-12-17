@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/toolbar_title"
     tools:context=".view.main.fragment.mypage.MyPage_Fragment">
     <include
         layout="@layout/toolbar_main"
@@ -16,16 +17,10 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="My Page"
-            android:textSize="20sp" />
 
         <RelativeLayout
-            android:background="@drawable/xml_border"
             android:layout_weight="1"
+            android:background="@mipmap/dish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -43,7 +38,8 @@
                 android:id="@+id/tv_profile_my"
                 android:layout_below="@id/iv_profile_my"
                 android:layout_centerHorizontal="true"
-                android:text="ID" />
+                android:text="ID"
+                android:textColor="@android:color/background_light" />
 
             <Button
                 android:text="로그인 하기"
@@ -54,38 +50,47 @@
                 android:id="@+id/btn_sign"
                 android:layout_below="@id/tv_profile_my"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="10dp"
                 android:background="@color/toolbar_background" />
         </RelativeLayout>
 
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
+                android:padding="5dp"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:id="@+id/tv_my_reviews"
                 android:background="@drawable/xml_border"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:textColor="@color/dark"
                 android:textSize="18sp"
-                android:text="내가 쓴 리뷰" />
-
+                android:text="내 리뷰" />
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/dark"></LinearLayout>
             <TextView
+                android:padding="5dp"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:id="@+id/tv_my_favorites"
                 android:background="@drawable/xml_border"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
+                android:textColor="@color/dark"
                 android:gravity="center"
                 android:text="즐겨찾기" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"

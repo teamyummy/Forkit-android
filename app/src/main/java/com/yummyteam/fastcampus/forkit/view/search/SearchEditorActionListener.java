@@ -13,7 +13,6 @@ public class SearchEditorActionListener implements TextView.OnEditorActionListen
     private SearchInterface mListner;
 
     SearchEditorActionListener(SearchInterface mListener){
-
         this.mListner = mListener;
     }
     @Override
