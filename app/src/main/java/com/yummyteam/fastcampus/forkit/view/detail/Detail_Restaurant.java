@@ -234,6 +234,13 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+     checkToken();
+
+    }
+
 
     public void checkToken(){
         if(token!=null){
@@ -443,7 +450,6 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         setDefaultLikeImg();
 
 
-
     }
 
     @Override
@@ -452,40 +458,27 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     }
 
 
-    LikeItem likeItem = new LikeItem();
+//    LikeItem likeItem = new LikeItem();
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        if(changedLike){
-            if(data.getMy_like().equals("true")){
-                connectFork.putLikeRestau(token,data.getId());
-            }else if(data.getMy_like().equals("false")){
-                connectFork.deleteLikeRestau(token,data.getId(),lk);
+
+        if (changedLike) {
+            if (data.getMy_like().equals("true")) {
+                connectFork.putLikeRestau(token, data.getId());
+            } else if (data.getMy_like().equals("false")) {
+                connectFork.deleteLikeRestau(token, data.getId(), lk);
             }
         }
 
-        try{
-            if(likeItem.getChanged()){
-                if(likeItem.getExistId()){
-                    connectFork.putLike(token,data.getId(),likeItem.getReviewId(),likeItem.getMyLike(),likeItem.getLkId());
-                }else{
-                    connectFork.postLike(token,data.getId(),likeItem.getReviewId(),likeItem.getMyLike());
-                }
-            }else{
-                return;
-            }
-
-
-        }catch (Exception e){
-        }
 
     }
 
 
     @Override
-    public void setReviewLike(String myLike,String reviewId,Boolean existId,String lkId,Boolean changed) {
+    public void setReviewLike(String myLike, String reviewId, Boolean existId, String lkId, Boolean changed) {
 
 //        if(existId){
 //
@@ -494,25 +487,58 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
 //        }else {
 //            connectFork.postLike(token, data.getId(), reviewId, myLike);
 //        }
-        likeItem.setExistId(existId);
-        likeItem.setLkId(lkId);
-        likeItem.setMyLike(myLike);
-        likeItem.setReviewId(reviewId);
-        likeItem.setChanged(changed);
+//        likeItem.setExistId(existId);
+//        likeItem.setLkId(lkId);
+//        likeItem.setMyLike(myLike);
+//        likeItem.setReviewId(reviewId);
+//        likeItem.setChanged(changed);
+//        likeItem.setCheckExist(checkExist);
+
+//
+//        if (existId) {
+//            connectFork.deleteLike(token, data.getId(), reviewId, lkId, myLike);
+//            connectFork.postLike(token, data.getId(), reviewId, myLike);
+//
+//        } else {
+//            connectFork.postLike(token, data.getId(), reviewId, myLike);
+//        }
+
+        connectFork.deleteLike(token, data.getId(), reviewId, lkId, myLike);
+        connectFork.postLike(token, data.getId(), reviewId, myLike);
+
+
+        reviewAdapter.removeData();
+
+        connectFork.refreshMyLikeReview(id,token);
+
+
+
 
     }
 
     @Override
-    public void getPostReview(String s) {
-        likeItem.setLkId(s);
-        likeItem.setExistId(true);
-        likeItem.setChanged(true);
+    public void getMyLikeReview(Results data) {
+
+        reviewAdapter.addReviewData((ArrayList<Reviews>) data.getReviews());
     }
+
+
+
 
 
     class LikeItem{
         String myLike;
         String reviewId;
+
+        public ArrayList<Boolean> getCheckExist() {
+            return checkExist;
+        }
+
+        public void setCheckExist(ArrayList<Boolean> checkExist) {
+            this.checkExist = checkExist;
+        }
+
+        ArrayList<Boolean> checkExist;
 
         public Boolean getChanged() {
             return changed;

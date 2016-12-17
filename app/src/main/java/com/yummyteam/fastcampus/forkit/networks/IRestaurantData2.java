@@ -68,11 +68,20 @@ public interface IRestaurantData2 {
     Call<ReviewLike> postLikeReview(@Header("Authorization")String token, @Path("pk")String pk, @Path("pk2")String pk2,
                                     @Field("up_and_down")String like);
 
+    @DELETE("api/v1/restaurants/{pk}/reviews/{pk2}/likes/{pk3}/")
+    Call<ReviewLike> deleteLikeReview(@Header("Authorization")String token, @Path("pk")String pk, @Path("pk2")String pk2,
+
+                                      @Path("pk3")String pk3);
+
     @FormUrlEncoded
     @PUT("api/v1/restaurants/{pk}/reviews/{pk2}/likes/{pk3}/")
     Call<ReviewLike> putLikeReview(@Header("Authorization")String token, @Path("pk")String pk, @Path("pk2")String pk2,
 
                                 @Path("pk3")String pk3,@Field("up_and_down")String like);
+    @GET("api/v1/restaurants/{pk}/reviews/{pk2}/likes/{pk3}/")
+    Call <ReviewLike> getLikeReview(@Header("Authorization")String token, @Path("pk")String pk, @Path("pk2")String pk2,
+
+                                    @Path("pk3")String pk3,@Field("up_and_down")String like);
 
 
 

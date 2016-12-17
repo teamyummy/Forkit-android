@@ -176,6 +176,44 @@ public class ConnectFork2 {
 
         });
     }
+    public void refreshMyLikeReview(String id,String token) {
+
+        String pk = id;
+        String value = "restaurants";
+        final String realToken = "token " + token;
+
+        Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        //2. Retrofit client에서 사용할 interface
+        IRestaurantData2 service = client.create(IRestaurantData2.class);
+        Call<Results> remoteData = service.getRestaurantsDetailwithToken(realToken, pk);
+        // 4. 비동기 데이터를 받기 위한 리스너 세팅
+        Log.e("tag", "connect start");
+        remoteData.enqueue(new Callback<Results>() {
+            @Override
+            public void onResponse(Call<Results> call, Response<Results> response) {
+                if (response.isSuccessful()) {
+                    Log.e("tag1", "size = " + response.body());
+                    detailData = response.body();
+                    Log.e("Tag3", "detailData=" + detailData);
+                    mListener.getMyLikeReview(detailData);
+                } else {
+                    Log.e("tag2", response.message() + call.request().body());
+                    detailData = null;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Results> call, Throwable t) {
+                Log.e("onFailure", "request body =" + call.request().body());
+                t.printStackTrace();
+                data = null;
+            }
+
+
+        });
+    }
 
 
 
@@ -344,18 +382,21 @@ public class ConnectFork2 {
 
 
         final String realToken = "token " + token;
-
+        Log.e("PostLIke LIKE",like);
+        Log.e("PostLIke TOKEN",realToken);
+        Log.e("PostLIke rtId,rvId",rtId+" "+rvId);
         Call<ReviewLike> call = service.postLikeReview(realToken,rtId,rvId,like);
         call.enqueue(new Callback<ReviewLike>() {
             @Override
             public void onResponse(Call<ReviewLike> call,
                                    Response<ReviewLike> response) {
                 Log.e("PostLikeReview_http",response.code()+"");
+                Log.e("URL1", call.request().url().toString());
 
-                ReviewLike reviewLike=response.body();
-                mListener.getPostReview(reviewLike.getId().toString());
+                //ReviewLike reviewLike=response.body();
+                //mListener.getPostReview(reviewLike.getId().toString());
 
-                Log.e("URL", call.request().url().toString());
+                Log.e("URL2", call.request().url().toString());
 
 
 
@@ -384,6 +425,34 @@ public class ConnectFork2 {
                                    Response<ReviewLike> response) {
                 Log.e("putLikeReview_http",response.code()+"");
                 Log.e("URL", call.request().url().toString());
+
+            }
+            @Override
+            public void onFailure(Call<ReviewLike> call, Throwable t) {
+                Log.e("Upload error:", t.getMessage());
+            }
+        });
+    }
+
+    public void deleteLike(final String token, final String rtId, final String rvId, final String lkId, final String like){
+        Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        IRestaurantData2 service = client.create(IRestaurantData2.class);
+
+        final String realToken = "token " + token;
+        Log.e("-------lkID",lkId);
+
+
+        Call<ReviewLike> call = service.deleteLikeReview(realToken,rtId,rvId,lkId);
+        call.enqueue(new Callback<ReviewLike>() {
+            @Override
+            public void onResponse(Call<ReviewLike> call,
+                                   Response<ReviewLike> response) {
+                Log.e("deleteLikeReview_http",response.code()+"");
+                Log.e("URL", call.request().url().toString());
+                postLike(token,rtId,rvId,like);
 
             }
             @Override

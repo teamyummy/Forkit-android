@@ -31,12 +31,14 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     RecyclerAdapter recyclerAdapter;
     ImageView selectedImg;
     GetResultsInterface adapterInterFace;
+    ArrayList<Boolean> checkExist;
 
     Boolean existId;
     Boolean changed;
     int dataLike;
     int dataDisLike;
 
+    ImageView tempImg;
 
 
 
@@ -46,6 +48,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         reviews=new ArrayList<>();
         this.itemLayout = itemLayout;
         this.context = context;
+        checkExist=new ArrayList<>();
     }
     public void setLikeInterface(GetResultsInterface adapterInterFace){
         this.adapterInterFace=adapterInterFace;
@@ -53,6 +56,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
     public void addReviewData(ArrayList<Reviews> reviews){
         this.reviews=reviews;
+        notifyDataSetChanged();
+    }
+    public void removeData(){
+        reviews=new ArrayList<>();
         notifyDataSetChanged();
     }
     @Override
@@ -67,7 +74,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(final ReviewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final ReviewAdapter.ViewHolder holder, final int position) {
         final Reviews data = reviews.get(position);
 
         RecyclerAdapter recyclerAdapter = new RecyclerAdapter(data,R.layout.item_picture_maptodetails,context);
@@ -87,25 +94,31 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
 
 
-        final String myLike=data.getMy_like();
+        String myLike=data.getMy_like();
         Log.e("getMylIke",myLike);
 
-        if(myLike==1+""){
+        if(myLike.equals(1+"")){
             selectedImg=holder.btnLike;
             holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
-
-        }else if(myLike!=0+""){
-
-        }else if(myLike==(-1)+"") {
+        }else if(myLike.equals(-1+"")) {
             holder.btnDisLike.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
+        }else{
 
         }
+
+//        if(selectedImg!=null){
+//            tempImg=selectedImg;
+//        }else{
+//            tempImg=null;
+//
+//        }
 
         if(myLike.equals(0+"")){
             existId=false;
         }else{
             existId=true;
         }
+        checkExist.add(existId);
 
 
 
@@ -124,6 +137,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
 
 
+
                     } else {
                         holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
                         selectedImg = null;
@@ -138,17 +152,28 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
 
                 }
-                if(data.getMy_like().equals(myLike)){
-                    changed=false;
-                }else{
-                    changed=true;
-                }
+//                if(tempImg!= null){
+//                    if(tempImg==selectedImg){
+//                        changed=false;
+//                    }else{
+//                        changed=true;
+//                    }
+//                }else{
+//                    if(selectedImg==null){
+//                        changed=false;
+//                    }else{
+//                        changed=true;
+//                    }
+//                }
                 ;
                 //selectLike(holder.btnLike, holder.btnDisLike, data, existId, finalMyLikeId);
 
+                //192.168.0.115
+
+                existId=checkExist.get(position);
 
                 Log.e("changed",changed+"");
-                Log.e("exist",existId+"");
+                Log.e("exist",checkExist.get(position)+"");
                 adapterInterFace.setReviewLike(data.getMy_like(),data.getId(),existId,data.getMy_like_id(),changed);
 
             }
@@ -164,7 +189,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
                         holder.btnDisLike.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
                         holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
                         selectedImg=holder.btnDisLike;
-                        data.setMy_like((-1)+"");
+                        data.setMy_like(-1+"");
 
                     }else{
                         holder.btnDisLike.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
@@ -174,17 +199,28 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
                 }else{
                     holder.btnDisLike.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
                     selectedImg=holder.btnDisLike;
-                    data.setMy_like((-1)+"");
+                    data.setMy_like(-1+"");
                 }
-                if(data.getMy_like().equals(myLike)){
-                    changed=false;
-                }else{
-                    changed=true;
-                }
+//                if(tempImg!= null){
+//                    if(tempImg==selectedImg){
+//                        changed=false;
+//                    }else{
+//                        changed=true;
+//                    }
+//                }else{
+//                    if(selectedImg==null){
+//                        changed=false;
+//                    }else{
+//                        changed=true;
+//                    }
+//                }
 
 
                 Log.e("changed",changed+"");
-                Log.e("exist",existId+"");
+                Log.e("exist",checkExist.get(position)+"");
+
+                existId=checkExist.get(position);
+
                 adapterInterFace.setReviewLike(data.getMy_like(),data.getId(),existId, data.getMy_like_id(),changed);
             }
         });
@@ -279,11 +315,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         public int getItemCount() {
 
             if(review.getImages().size() <3){
-                return 3;
+
+                if(review.getImages().size() ==0) {
+                    return 0;
+                }else{
+
+                }
             }else{
 
                 return review.getImages().size() ;
             }
+            return 3;
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

@@ -14,7 +14,7 @@ public interface GetResultsInterface {
         void getDetail(Results data);
         void getLikeList(String f_id);
         void setReviewLike(String myLike,String reviewId,Boolean existId,String lkId,Boolean changed);
-        void getPostReview(String s);
+        void getMyLikeReview(Results data);
 
 
 }

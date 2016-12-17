@@ -79,9 +79,12 @@ public class Detail_Review extends AppCompatActivity implements GetResultsInterf
     }
 
     @Override
-    public void getPostReview(String s) {
+    public void getMyLikeReview(Results data) {
 
     }
+
+
+
 
 
 }

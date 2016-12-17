@@ -264,7 +264,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
     }
 
     @Override
-    public void getPostReview(String s) {
+    public void getMyLikeReview(Results data) {
 
     }
 
