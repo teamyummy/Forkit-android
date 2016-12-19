@@ -8,6 +8,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.Results;
@@ -27,10 +28,15 @@ public class Detail_Review extends AppCompatActivity implements GetResultsInterf
     private String token;
     private String id;
     ConnectFork2 connectFork;
+
+    ProgressBar pb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail__review);
+
+        pb=(ProgressBar)findViewById(R.id.progressBar2);
+        pb.setVisibility(View.VISIBLE);
 
         Intent intent =getIntent();
         Bundle bundle = intent.getExtras();
@@ -76,6 +82,7 @@ public class Detail_Review extends AppCompatActivity implements GetResultsInterf
 
     @Override
     public void getDetail(Results data) {
+        pb.setVisibility(View.GONE);
         this.data=data;
         reviewAdapter.addReviewData((ArrayList<Reviews>) data.getReviews());
     }
