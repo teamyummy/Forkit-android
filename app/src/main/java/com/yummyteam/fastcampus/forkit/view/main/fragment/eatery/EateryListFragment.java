@@ -149,6 +149,7 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
             connectFork.getStoreList(page + "", ordered, filter);
         } else {
             connectFork.getStoreList_withToken(token, page + "", ordered, filter);
+
         }
         tv_noContent.setVisibility(View.GONE);
     }
@@ -281,7 +282,9 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         progressBar.setVisibility(View.VISIBLE);
         elAdapter.removeallData();
         if (!ordered_temp.equals("")) {
+            Log.e("tag","order = " + ordered_temp);
             ordered = ordered_temp;
+            Log.e("tag","order = " + ordered);
         }
         page = 1;
 

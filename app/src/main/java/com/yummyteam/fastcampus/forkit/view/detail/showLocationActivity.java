@@ -1,5 +1,7 @@
 package com.yummyteam.fastcampus.forkit.view.detail;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -27,7 +29,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.yummyteam.fastcampus.forkit.R;
 
-class ShowLocationActivity extends AppCompatActivity
+import static com.darsh.multipleimageselect.helpers.Constants.REQUEST_CODE;
+
+public class ShowLocationActivity extends AppCompatActivity
         implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -54,21 +58,46 @@ class ShowLocationActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_location);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            init();
+        } else {
+            checkPermission();
+        }
+    }
 
-        smPb=(ProgressBar)findViewById(R.id.mapProgressBar2);
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkPermission() {
+        // 런타임 권한 체크 (디스크읽기권한)
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // 요청할 권한 배열생성
+            String permissionArray[] = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+            // 런타임 권한요청을 위한 팝업창 출력
+            requestPermissions(permissionArray, REQUEST_CODE);
+        } else {
+            // 런타임 권한이 이미 있으면 데이터를 세팅한다
+            init();
+        }
+
+    }
+
+    private void init() {
+
+
+        smPb = (ProgressBar) findViewById(R.id.mapProgressBar2);
         smPb.setVisibility(View.VISIBLE);
 
-        Intent intent= getIntent();
-        Bundle bundle=intent.getExtras();
-        lat=bundle.getDouble("Res_lat");
-        lon=bundle.getDouble("Res_lon");
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        lat = bundle.getDouble("Res_lat");
+        lon = bundle.getDouble("Res_lon");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        toolbar = (Toolbar)findViewById(R.id.toolBar_sub);
-        ib_back_toolbar=(ImageButton)findViewById(R.id.ib_back_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolBar_sub);
+        ib_back_toolbar = (ImageButton) findViewById(R.id.ib_back_toolbar);
         ib_back_toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,7 +111,7 @@ class ShowLocationActivity extends AppCompatActivity
             @Override
             public void onLocationChanged(Location location) {
 
-                showCurrentLocation(location.getLatitude(),location.getLongitude());
+                showCurrentLocation(location.getLatitude(), location.getLongitude());
             }
 
             @Override
@@ -101,33 +130,32 @@ class ShowLocationActivity extends AppCompatActivity
             }
         };
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
-                    PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                            PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+        locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER,
+                MIN_TIME_BW_UPDATES,
+                MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            }else {
-                locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER,
-                        MIN_TIME_BW_UPDATES,
-                        MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);
-                locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER,
-                        MIN_TIME_BW_UPDATES,
-                        MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);
-
-            }
         }
+        locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER,
+                MIN_TIME_BW_UPDATES,
+                MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);
+
     }
 
 
-    public void showCurrentLocation(double latitude, double longitude){
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode) {
+            case REQUEST_CODE: // 요청코드가 위의 팝업창에 넘겨준 코드와 같으면
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) { // 권한을 체크하고
+                    // 권한이 있으면 데이터를 생성한다
+                    init();
+                }
+                break;
+        }
+    }
+
+    public void showCurrentLocation(double latitude, double longitude) {
 
         googleMap.clear();
 
@@ -135,13 +163,12 @@ class ShowLocationActivity extends AppCompatActivity
         googleMap.addMarker(new MarkerOptions().
                 position(myLocation).title("Marker in me")
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_filter_price_pressed)));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation,14));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 14));
 
 
-        LatLng restaurantLocation= new LatLng(lat,lon);
+        LatLng restaurantLocation = new LatLng(lat, lon);
         googleMap.addMarker(new MarkerOptions().position(restaurantLocation)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_like_select)));
-
 
 
     }
@@ -150,10 +177,10 @@ class ShowLocationActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
 
         this.googleMap = googleMap;
-        LatLng restaurantLocation= new LatLng(lat,lon);
+        LatLng restaurantLocation = new LatLng(lat, lon);
         smPb.setVisibility(View.GONE);
         googleMap.addMarker(new MarkerOptions().position(restaurantLocation));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurantLocation,14));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurantLocation, 14));
 
     }
 

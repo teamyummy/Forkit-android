@@ -58,15 +58,14 @@ public class ConnectFork {
         this.mpInterface = mpInterface;
     }
 
-    private String mPage,mOrdered = "",mTags;
-    public void getStoreList(String page,String ordered, String tags) {
+    private String mPage, mOrdered = "", mTags;
+
+    public void getStoreList(String page, String ordered, String tags) {
 
         mPage = page;
-        if(!mOrdered.contains(",-pk")){
-            mOrdered = ordered+",-pk";
-        }
+        mOrdered = ordered + ",-pk";
         mTags = tags;
-        HashMap<String,String> query = (HashMap)getFilter(mPage,mOrdered,mTags);
+        HashMap<String, String> query = (HashMap) getFilter(mPage, mOrdered, mTags);
         Call<RestaurantsData> remoteData = createClient().getRestaurantsList(query);
         Log.e("connect", "url = " + remoteData.request().url().toString());
         // 4. 비동기 데이터를 받기 위한 리스너 세팅
@@ -89,8 +88,8 @@ public class ConnectFork {
             public void onFailure(Call<RestaurantsData> call, Throwable t) {
                 Log.e("onFailure", "request body =" + call.request().body());
                 t.printStackTrace();
-
-                getStoreList(mPage,mOrdered,mTags);
+                mOrdered = "";
+                getStoreList(mPage, mOrdered, mTags);
                 data = null;
             }
 
@@ -129,7 +128,7 @@ public class ConnectFork {
 
     public void login(String name, String passwd) {
 
-        final Call<Auth> remoteData =createClient().login(name, passwd);
+        final Call<Auth> remoteData = createClient().login(name, passwd);
         Log.e("tag", remoteData.request().url().toString());
         remoteData.enqueue(new Callback<Auth>() {
             @Override
@@ -157,7 +156,7 @@ public class ConnectFork {
 
     }
 
-    private Map getFilter(String page,String ordered,String tags){
+    private Map getFilter(String page, String ordered, String tags) {
         Map<String, String> query = new HashMap<>();
         query.put("page", page);
         query.put("ordering", ordered);
@@ -166,18 +165,19 @@ public class ConnectFork {
         }
         return query;
     }
+
     private String mToken;
+
     public void getStoreList_withToken(String token, String page, String ordered, String tags) {
 
         String token_complete = make_token(token);
         mToken = token_complete;
         mPage = page;
-        if(!mOrdered.contains(",-pk")){
-            mOrdered = ordered+",-pk";
-        }
+        mOrdered = ordered + ",-pk";
+
         mTags = tags;
-        HashMap<String,String> query = (HashMap)getFilter(mPage,mOrdered,mTags);
-        Call<RestaurantsData> remoteData =createClient().getRestaurantsList(token_complete, query);
+        HashMap<String, String> query = (HashMap) getFilter(mPage, mOrdered, mTags);
+        Call<RestaurantsData> remoteData = createClient().getRestaurantsList(token_complete, query);
         Log.e("connect", "url = " + remoteData.request().url().toString());
         // 4. 비동기 데이터를 받기 위한 리스너 세팅
         Log.e("tag", "connect start");
@@ -199,7 +199,8 @@ public class ConnectFork {
             public void onFailure(Call<RestaurantsData> call, Throwable t) {
                 Log.e("onFailure", "request body =" + call.request().body());
                 t.printStackTrace();
-                getStoreList_withToken(mToken,mPage,mOrdered,mTags);
+                mOrdered = "";
+                getStoreList_withToken(mToken, mPage, mOrdered, mTags);
                 data = null;
             }
 
@@ -208,6 +209,7 @@ public class ConnectFork {
     }
 
     private String mId;
+
     public void setRestaurantsLike(String token, String id) {
         String token_complete = make_token(token);
         mToken = token_complete;
@@ -232,7 +234,7 @@ public class ConnectFork {
             @Override
             public void onFailure(Call<Favors> call, Throwable t) {
                 t.printStackTrace();
-                setRestaurantsLike(mToken,mId);
+                setRestaurantsLike(mToken, mId);
             }
         });
     }
@@ -244,7 +246,7 @@ public class ConnectFork {
     public void searchRestaurants_withToken(String keyWord, String token) {
 
         String token_complete = make_token(token);
-        Call<RestaurantsData> remoteData = createClient().getSearchRestaurantsList_withToken(token_complete,keyWord);
+        Call<RestaurantsData> remoteData = createClient().getSearchRestaurantsList_withToken(token_complete, keyWord);
         mSearch = keyWord;
         mToken = token_complete;
         remoteData.enqueue(new Callback<RestaurantsData>() {
@@ -264,30 +266,31 @@ public class ConnectFork {
             public void onFailure(Call<RestaurantsData> call, Throwable t) {
                 Log.e("onFailure", "request body =" + call.request().body());
                 t.printStackTrace();
-                searchRestaurants_withToken(mSearch,mToken);
+                searchRestaurants_withToken(mSearch, mToken);
                 data = null;
             }
         });
 
     }
 
-    private IRestaurantData createClient(){
+    private IRestaurantData createClient() {
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return getService(client);
     }
 
-    private String make_token(String token){
+    private String make_token(String token) {
         String token_complete = "token " + token;
         return token_complete;
     }
 
-    private IRestaurantData getService(Retrofit client){
+    private IRestaurantData getService(Retrofit client) {
         return client.create(IRestaurantData.class);
     }
 
     private String mfId;
+
     public void setRestaurantsDislike(String token, final String r_id, String f_id) {
 
 
@@ -305,10 +308,10 @@ public class ConnectFork {
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
                     Log.e("tag", "code = " + response.code());
-                    if(anInterface !=null){
+                    if (anInterface != null) {
                         anInterface.getFavorite(id, "0", "false");
                     }
-                    if(mpInterface !=null){
+                    if (mpInterface != null) {
                         mpInterface.refresh(true);
                     }
                 } else {
@@ -319,14 +322,14 @@ public class ConnectFork {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 t.printStackTrace();
-                setRestaurantsDislike(mToken,mId,mfId);
+                setRestaurantsDislike(mToken, mId, mfId);
             }
         });
 
     }
 
 
-    public void getMyFavorites(String token){
+    public void getMyFavorites(String token) {
 
         String token_complete = make_token(token);
         mToken = token_complete;
@@ -334,9 +337,9 @@ public class ConnectFork {
         remoteData.enqueue(new Callback<List<Results>>() {
             @Override
             public void onResponse(Call<List<Results>> call, Response<List<Results>> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     mpInterface.setData_favors(response.body());
-                }else{
+                } else {
 
                 }
             }
@@ -356,9 +359,9 @@ public class ConnectFork {
         remoteData.enqueue(new Callback<List<Reviews>>() {
             @Override
             public void onResponse(Call<List<Reviews>> call, Response<List<Reviews>> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     mpInterface.setData_reviews(response.body());
-                }else{
+                } else {
 
                 }
             }
@@ -371,19 +374,19 @@ public class ConnectFork {
         });
     }
 
-    public void removeMyReviews(String token,String r_id,String id){
+    public void removeMyReviews(String token, String r_id, String id) {
         String token_complete = make_token(token);
         mToken = token_complete;
         mId = r_id;
         mfId = id;
-        Call<String> remoteData = createClient().removeMyReviews(token_complete,r_id,id);
-        Log.e("url","url = "+remoteData.request().url());
+        Call<String> remoteData = createClient().removeMyReviews(token_complete, r_id, id);
+        Log.e("url", "url = " + remoteData.request().url());
         remoteData.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     mpInterface.refresh(true);
-                }else{
+                } else {
 
                 }
             }
@@ -391,32 +394,33 @@ public class ConnectFork {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 t.printStackTrace();
-                removeMyReviews(mToken,mId,mfId);
+                removeMyReviews(mToken, mId, mfId);
             }
         });
     }
 
-    String mTitle,mContents,mRate;
-    public void modifiReview(String token,String r_id,String id, String title,String contents,String rate){
+    String mTitle, mContents, mRate;
+
+    public void modifiReview(String token, String r_id, String id, String title, String contents, String rate) {
         mToken = make_token(token);
         mId = r_id;
         mfId = id;
         mTitle = title;
         mContents = contents;
         mRate = rate;
-        HashMap<String,String> keys = new HashMap<>();
-        keys.put("title",title);
-        keys.put("content",contents);
-        keys.put("score",rate);
-        Call<Reviews> remoteData = createClient().modifiReview(mToken,r_id,id,keys);
-        Log.e("tag",remoteData.request().url().toString());
+        HashMap<String, String> keys = new HashMap<>();
+        keys.put("title", title);
+        keys.put("content", contents);
+        keys.put("score", rate);
+        Call<Reviews> remoteData = createClient().modifiReview(mToken, r_id, id, keys);
+        Log.e("tag", remoteData.request().url().toString());
         remoteData.enqueue(new Callback<Reviews>() {
             @Override
             public void onResponse(Call<Reviews> call, Response<Reviews> response) {
-                if(response.code() == 200){
+                if (response.code() == 200) {
                     mpInterface.refresh(true);
-                }else{
-                    Log.e("tag",response.code()+"");
+                } else {
+                    Log.e("tag", response.code() + "");
                     mpInterface.refresh(true);
 
                 }
@@ -424,7 +428,7 @@ public class ConnectFork {
 
             @Override
             public void onFailure(Call<Reviews> call, Throwable t) {
-                modifiReview(mToken,mId,mfId,mTitle,mContents,mRate);
+                modifiReview(mToken, mId, mfId, mTitle, mContents, mRate);
                 t.printStackTrace();
             }
         });
