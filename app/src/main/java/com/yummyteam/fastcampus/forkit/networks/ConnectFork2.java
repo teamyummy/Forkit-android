@@ -217,7 +217,7 @@ public class ConnectFork2 {
 
 
 
-    public void postReview(final String token,String title, String content, String score, final ArrayList<Image> filePaths) {
+    public void postReview(final String token,String id,String title, String content, String score, final ArrayList<Image> filePaths) {
 
 
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
@@ -237,10 +237,10 @@ public class ConnectFork2 {
         fieldMap.put("like",like);
         fieldMap.put("disLike",disLike);
 
-        String pk=1+"";
+
 
         IRestaurantData2 service = client.create(IRestaurantData2.class);
-        Call<Reviews> call = service.postReviews(realToken,pk,fieldMap );
+        Call<Reviews> call = service.postReviews(realToken,id,fieldMap );
         Log.e("tag",call.request().url().toString());
 
         call.enqueue(new Callback<Reviews>() {
@@ -253,6 +253,7 @@ public class ConnectFork2 {
                     Log.e("error",response.errorBody().byteStream().toString());
                 }else{
                     Log.e("responseSuccess",response.body().toString());
+                    Log.v("Post Review",response.code()+"");
                     Reviews reviews;
                     reviews= response.body();
                     String rvPk =reviews.getId();

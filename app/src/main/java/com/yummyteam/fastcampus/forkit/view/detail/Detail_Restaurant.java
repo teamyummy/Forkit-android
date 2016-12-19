@@ -13,10 +13,11 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,64 +32,71 @@ import com.yummyteam.fastcampus.forkit.view.map.GetResultsInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Detail_Restaurant extends AppCompatActivity implements GetResultsInterface {
+public class Detail_Restaurant extends AppCompatActivity implements GetResultsInterface,PostReviewFragment.PostListner {
 
 
-    ListView listView_menu;
-    RecyclerView recyclerView1;
-    RecyclerView recyclerView_Review;
+    private ListView listView_menu;
+    private RecyclerView recyclerView1;
+    private RecyclerView recyclerView_Review;
 
-    ImageView igCall;
-    ImageView igNavi;
-    ImageView igPostReview;
-    ImageView imageLike;
-    ImageView selectedLikeImage;
+    private ImageView igCall;
+    private ImageView igNavi;
+    private ImageView igPostReview;
+    private ImageView imageLike;
+    private ImageView selectedLikeImage;
 
-    Boolean isSelected;
+    private Boolean isSelected;
 
-    TextView tvDetailMenu;
-    TextView tvDetailReview;
-    TextView tvStoreName;
-    TextView tvRating;
-    TextView tvBookMark;
-    TextView tvReview;
-    TextView tvAddress;
-    TextView tvPhone;
-    TextView tvParking;
-    TextView tvHours;
+    private TextView tvDetailMenu;
+    private TextView tvDetailReview;
+    private TextView tvStoreName;
+    private TextView tvRating;
+    private TextView tvBookMark;
+    private TextView tvReview;
+    private TextView tvAddress;
+    private TextView tvPhone;
+    private TextView tvParking;
+    private TextView tvHours;
 
-    String lk;
-    Results data;
-    ArrayList<String> datas;
+    private String lk;
+    private Results data;
+    private ArrayList<Map<String,String>> datas;
+    private ArrayList<String> menuData;
+    private ArrayList<String> priceData;
 
-    ArrayAdapter arrayAdapter;
-    ImageButton ib_back_toolbar;
+
+    private SimpleAdapter simpleAdapter;
+    private ImageButton ib_back_toolbar;
     Toolbar toolbar;
 
-    PictureAdapter pictureAdapter;
-    ReviewAdapter reviewAdapter;
+    private PictureAdapter pictureAdapter;
+    private ReviewAdapter reviewAdapter;
 
-    String id;
-    String phoneN;
+    private String id;
+    private String phoneN;
 
-    TokenCache cache;
-    String token;
+    private TokenCache cache;
+    private String token;
 
-    ConnectFork2 connectFork;
+    private ConnectFork2 connectFork;
     Favors favors;
 
-    Boolean changedLike;
+    private Boolean changedLike;
 
-    int count;
+    private int count;
 
+    private ProgressBar pb;
 
     public Detail_Restaurant(){
 
         cache = TokenCache.getInstance();
-        datas = new ArrayList<>();
         data = new Results();
+        menuData=new ArrayList<>();
+        priceData=new ArrayList<>();
     }
 
 
@@ -98,6 +106,8 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         setContentView(R.layout.activity_detail_restaurant);
 
         phoneN="";
+        pb=(ProgressBar)findViewById(R.id.progressBar);
+        //pb.setVisibility(View.VISIBLE);
 
 
         Intent intent =getIntent();
@@ -187,9 +197,19 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         igPostReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fm = getSupportFragmentManager();
-                PostReviewFragment postReviewFragment = new PostReviewFragment();
-                postReviewFragment.show(fm, "PostReviewFragment");
+
+                if(token.equals("")){
+
+                    Toast.makeText(Detail_Restaurant.this,"로그인이 필요합니다",Toast.LENGTH_LONG).show();
+
+                }else{
+                    FragmentManager fm = getSupportFragmentManager();
+                    PostReviewFragment postReviewFragment = new PostReviewFragment(id);
+
+                    postReviewFragment.show(fm, "PostReviewFragment");
+
+                }
+
             }
         });
 
@@ -232,6 +252,8 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
             }
         });
 
+        likeItem.setChanged(false);
+
     }
 
     @Override
@@ -243,12 +265,14 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
 
 
     public void checkToken(){
-        if(token!=null){
-            connectFork.getStoreDetailwithToken(id,token);
+        if(token.equals("")){
+
+            connectFork.getStoreDetail(id);
 
         }else{
 
-            connectFork.getStoreDetail(id);
+            connectFork.getStoreDetailwithToken(id,token);
+
         }
     }
     public void setDefaultLikeImg(){
@@ -270,9 +294,9 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
 
         tvStoreName.setText(data.getName());
 
-        tvRating.setText("평점  ㅣ  "+data.getReview_score());
-        tvBookMark.setText("즐겨찾기  ㅣ  "+data.getTotal_like());
-        tvReview.setText("Review  ㅣ  "+data.getReview_count());
+        tvRating.setText("평점  "+data.getReview_score());
+        tvBookMark.setText("즐겨찾기  "+data.getTotal_like());
+        tvReview.setText("Review  "+data.getReview_count());
         tvAddress.setText(data.getAddress());
         tvPhone.setText(data.getPhone());
         tvHours.setText(data.getOperation_hour());
@@ -281,7 +305,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     }
 
     public void topPictureList(){
-        pictureAdapter =new PictureAdapter(R.layout.item_picture_maptodetails,this);
+        pictureAdapter =new PictureAdapter(R.layout.item_picture_drestautop,this);
         recyclerView1=(RecyclerView)findViewById(R.id.recyclerview1);
         recyclerView1.setAdapter(pictureAdapter);
         RecyclerView.LayoutManager manager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
@@ -295,8 +319,8 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         RecyclerView.LayoutManager manager2 = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerView_Review.setLayoutManager(manager2);
     }
-    float scale_x=1;
-    float scale_y=1;
+    private float scale_x=1;
+    private float scale_y=1;
     public void biggerButton(){
         scale_x=scale_x*1.25f;
         scale_y=scale_y*1.25f;
@@ -396,14 +420,17 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     public void goDetailReview(){
         Intent intent = new Intent(this,Detail_Review.class);
         intent.putExtra("restaurant_id",id);
+        intent.putExtra("token",token);
         startActivity(intent);
     }
     public void goDetailMenu(){
         Intent intent =new Intent(this,Detail_menu.class);
-        intent.putExtra("menu",datas);
+        intent.putExtra("menu",menuData);
+        intent.putExtra("price",priceData);
         startActivity(intent);
     }
     public void goShowLocation (){
+        pb.setVisibility(View.VISIBLE);
         Intent intent = new Intent(Detail_Restaurant.this,ShowLocationActivity.class);
         intent.putExtra("Res_lat", Double.parseDouble(data.getLatitude()));
         intent.putExtra("Res_lon", Double.parseDouble(data.getLongitude()));
@@ -411,26 +438,42 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     }
 
     public void setList_Menu(){
-        arrayAdapter = new ArrayAdapter(
+
+        datas = new ArrayList<>();
+        simpleAdapter = new SimpleAdapter(
                 this,
-                android.R.layout.simple_list_item_1,
-                datas
+                datas,
+                R.layout.item_menu,
+            new String[]{"menu","price"},
+                new int[]{R.id.tvMenu, R.id.tvPrice}
         );
         listView_menu = (ListView) findViewById(R.id.listView_menu);
-        listView_menu.setAdapter(arrayAdapter);
+        listView_menu.setAdapter(simpleAdapter);
 
     }
-    public void addMenuData(Results data){
-        int size=data.getMenus().size();
+    public void addMenuData(Results data) {
+        int size = data.getMenus().size();
+
 
         for (int i = 0; i < size; i++) {
-            String menu = data.getMenus().get(i).getName();
 
-            datas.add(menu);
+            Map<String, String> map = new HashMap();
+            String menu = data.getMenus().get(i).getName();
+            String price = data.getMenus().get(i).getPrice();
+
+            map.put("menu", menu);
+            map.put("price", price);
+
+            datas.add(map);
+
+            menuData.add(menu);
+            priceData.add(price);
+
         }
-        arrayAdapter.notifyDataSetChanged();
+        simpleAdapter.notifyDataSetChanged();
 
     }
+
 
     @Override
     public void getList(List<Results> data) {
@@ -441,6 +484,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     @Override
     public void getDetail(Results data) {
 
+
         this.data=data;
         Log.e("DataTag",this.data.getName());
         setDatas();
@@ -448,6 +492,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         pictureAdapter.addImageData((ArrayList<Images>) data.getImages());
         reviewAdapter.addReviewData((ArrayList<Reviews>) data.getReviews());
         setDefaultLikeImg();
+        pb.setVisibility(View.GONE);
 
 
     }
@@ -458,11 +503,12 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     }
 
 
-//    LikeItem likeItem = new LikeItem();
+    LikeItem likeItem = new LikeItem();
 
     @Override
     protected void onPause() {
         super.onPause();
+        pb.setVisibility(View.GONE);
 
 
         if (changedLike) {
@@ -473,6 +519,11 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
             }
         }
 
+        if(likeItem.getChanged()){
+            connectFork.deleteLike(token, data.getId(), likeItem.getReviewId(), likeItem.getLkId(), likeItem.getMyLike());
+            //connectFork.postLike(token, data.getId(), likeItem.getReviewId(), likeItem.getMyLike());
+        }
+
 
     }
 
@@ -480,37 +531,11 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     @Override
     public void setReviewLike(String myLike, String reviewId, Boolean existId, String lkId, Boolean changed) {
 
-//        if(existId){
-//
-//            connectFork.putLike(token,data.getId(),reviewId,myLike,lkId);
-//
-//        }else {
-//            connectFork.postLike(token, data.getId(), reviewId, myLike);
-//        }
-//        likeItem.setExistId(existId);
-//        likeItem.setLkId(lkId);
-//        likeItem.setMyLike(myLike);
-//        likeItem.setReviewId(reviewId);
-//        likeItem.setChanged(changed);
-//        likeItem.setCheckExist(checkExist);
-
-//
-//        if (existId) {
-//            connectFork.deleteLike(token, data.getId(), reviewId, lkId, myLike);
-//            connectFork.postLike(token, data.getId(), reviewId, myLike);
-//
-//        } else {
-//            connectFork.postLike(token, data.getId(), reviewId, myLike);
-//        }
-
-        connectFork.deleteLike(token, data.getId(), reviewId, lkId, myLike);
-        connectFork.postLike(token, data.getId(), reviewId, myLike);
-
-
-        reviewAdapter.removeData();
-
-        connectFork.refreshMyLikeReview(id,token);
-
+        likeItem.setExistId(existId);
+        likeItem.setLkId(lkId);
+        likeItem.setMyLike(myLike);
+        likeItem.setReviewId(reviewId);
+        likeItem.setChanged(changed);
 
 
 
@@ -522,70 +547,73 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         reviewAdapter.addReviewData((ArrayList<Reviews>) data.getReviews());
     }
 
-
-
-
-
-    class LikeItem{
-        String myLike;
-        String reviewId;
-
-        public ArrayList<Boolean> getCheckExist() {
-            return checkExist;
-        }
-
-        public void setCheckExist(ArrayList<Boolean> checkExist) {
-            this.checkExist = checkExist;
-        }
-
-        ArrayList<Boolean> checkExist;
-
-        public Boolean getChanged() {
-            return changed;
-        }
-
-        public void setChanged(Boolean changed) {
-            this.changed = changed;
-        }
-
-        Boolean changed;
-
-        public String getLkId() {
-            return lkId;
-        }
-
-        public void setLkId(String lkId) {
-            this.lkId = lkId;
-        }
-
-        public String getMyLike() {
-            return myLike;
-        }
-
-        public void setMyLike(String myLike) {
-            this.myLike = myLike;
-        }
-
-        public String getReviewId() {
-            return reviewId;
-        }
-
-        public void setReviewId(String reviewId) {
-            this.reviewId = reviewId;
-        }
-
-        public Boolean getExistId() {
-            return existId;
-        }
-
-        public void setExistId(Boolean existId) {
-            this.existId = existId;
-        }
-
-        Boolean existId;
-        String lkId;
+    @Override
+    public void refresh() {
 
     }
 
+
+
+
+
+}
+class LikeItem{
+    String myLike;
+    String reviewId;
+
+    public ArrayList<Boolean> getCheckExist() {
+        return checkExist;
+    }
+
+    public void setCheckExist(ArrayList<Boolean> checkExist) {
+        this.checkExist = checkExist;
+    }
+
+    ArrayList<Boolean> checkExist;
+
+    public Boolean getChanged() {
+        return changed;
+    }
+
+    public void setChanged(Boolean changed) {
+        this.changed = changed;
+    }
+
+    Boolean changed;
+
+    public String getLkId() {
+        return lkId;
+    }
+
+    public void setLkId(String lkId) {
+        this.lkId = lkId;
+    }
+
+    public String getMyLike() {
+        return myLike;
+    }
+
+    public void setMyLike(String myLike) {
+        this.myLike = myLike;
+    }
+
+    public String getReviewId() {
+        return reviewId;
+    }
+
+    public void setReviewId(String reviewId) {
+        this.reviewId = reviewId;
+    }
+
+    public Boolean getExistId() {
+        return existId;
+    }
+
+    public void setExistId(Boolean existId) {
+        this.existId = existId;
+    }
+
+    Boolean existId;
+    String lkId;
 
 }

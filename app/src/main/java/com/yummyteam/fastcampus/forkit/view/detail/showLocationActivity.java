@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -43,15 +44,19 @@ class ShowLocationActivity extends AppCompatActivity
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
     // 최소 GPS 정보 업데이트 시간 밀리세컨
     private static final long MIN_TIME_BW_UPDATES = 6000;
-    LocationListener locationListener;
-    LocationManager locationManager;
+    private LocationListener locationListener;
+    private LocationManager locationManager;
     private GoogleMap googleMap;
+    private ProgressBar smPb;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_location);
+
+        smPb=(ProgressBar)findViewById(R.id.mapProgressBar2);
+        smPb.setVisibility(View.VISIBLE);
 
         Intent intent= getIntent();
         Bundle bundle=intent.getExtras();
@@ -146,8 +151,9 @@ class ShowLocationActivity extends AppCompatActivity
 
         this.googleMap = googleMap;
         LatLng restaurantLocation= new LatLng(lat,lon);
+        smPb.setVisibility(View.GONE);
         googleMap.addMarker(new MarkerOptions().position(restaurantLocation));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurantLocation,18));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurantLocation,14));
 
     }
 

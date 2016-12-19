@@ -2,6 +2,8 @@ package com.yummyteam.fastcampus.forkit.view.detail;
 
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +14,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
 import com.darsh.multipleimageselect.helpers.Constants;
@@ -43,37 +47,43 @@ import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotate
  */
 public class PostReviewFragment extends DialogFragment implements GetResultsInterface {
 
-    ImageView igAddPhoto;
-    ViewPager viewPager;
+    private ImageView igAddPhoto;
+    private ViewPager viewPager;
 
-    ArrayList<Bitmap> fileBtimaps;
+    private ArrayList<Bitmap> fileBtimaps;
     ArrayList<String> filePath;
-    ArrayList<Image> images;
-    RatingBar ratingBar;
-    TextView rb_tv;
-    EditText etReview;
-    EditText etTitle;
+    private ArrayList<Image> images;
+    private RatingBar ratingBar;
+    private TextView rb_tv;
+    private EditText etReview;
+    private EditText etTitle;
 
-    Button btnOk;
-    Button btnCancel;
+    private Button btnOk;
+    private Button btnCancel;
 
-    String score;
+    private String score;
     private String token;
-    String content;
-    String title;
+    private String content;
+    private String title;
 
+    private String id;
     private TokenCache cache;
-    String imgPath;
 
     private final static int REQ_CODE_CAMERA = 10;
     private final static int REQ_CODE_GALLERY = 20;
 
+    private AlertDialog infoDialog;
+
+    PostListner mListener;
 
 
 
-    public PostReviewFragment() {
+
+
+    public PostReviewFragment(String id) {
         cache = TokenCache.getInstance();
         images=new ArrayList<>();
+        this.id=id;
     }
 
     @NonNull
@@ -96,6 +106,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
             e.printStackTrace();
         }
 
+        score=0+"";
 
 
         View view = inflater.inflate(R.layout.fragment_postreview, container, false);
@@ -106,15 +117,16 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 rb_tv.setText(rating+"/5");
-                score=((int)rating)+"";
+                score=rating+"";
             }
         });
+
         etReview=(EditText)view.findViewById(R.id.etReview);
         etTitle=(EditText)view.findViewById(R.id.etTitle);
 
 
-        btnOk=(Button)view.findViewById(R.id.btnOk);
-        btnCancel=(Button)view.findViewById(R.id.btnCancel);
+        btnOk = (Button) view.findViewById(R.id.btnOk);
+        btnCancel = (Button) view.findViewById(R.id.btnCancel);
 
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,18 +134,74 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
                 content=etReview.getText().toString();
                 title=etReview.getText().toString();
 
-                connectFork2.postReview(token,title,content,score,images);
-                Log.e("Token", token);
-                Log.e("Content", content);
-                Log.e("score", score+"");
+
+
+                if (content.getBytes().length <= 0 || title.getBytes().length <= 0) {
+
+                    Toast.makeText(getContext(), "제목,내용을 모두 입력해주세요", Toast.LENGTH_LONG).show();
+
+                } else {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setTitle("등록");
+                    dialog.setMessage("리뷰를 등록 하시겠습니까?");
+                    dialog.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                        }
+                    });
+                    dialog.setPositiveButton("네", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            connectFork2.postReview(token,id, title, content, score, images);
+                            Log.e("Token", token);
+                            Log.e("Content", content);
+                            Log.e("score", score + "");
+                            mListener.refresh();
+                            dismiss();
+                        }
+                    });
+                    dialog.show();
+
+                }
 
             }
         });
 
 
+
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                content=etReview.getText().toString();
+                title=etReview.getText().toString();
+
+                if(content.getBytes().length>0||title.getBytes().length>0){
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setTitle("종료");
+
+                    dialog.setMessage("작성중인 게시물이 있습니다. 창을 종료 하시겠습니까?");
+                    dialog.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                        }
+                    });
+                    dialog.setPositiveButton("네", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dismiss();
+                        }
+                    });
+                    dialog.show();
+
+                }else{
+                    dismiss();
+                }
+
 
             }
         });
@@ -164,6 +232,23 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
 
         return view;
     }
+
+    public interface PostListner{
+
+        void refresh();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            mListener = (PostListner)getActivity();
+        } catch (ClassCastException e) {
+
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODE && resultCode == RESULT_OK && data != null) {

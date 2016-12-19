@@ -75,8 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.04"
             android:text="이 평가가 도움이 되었나요?"
-            android:textSize="20dp"
-            android:paddingTop="10dp" />
+            android:textSize="20dp" />
 
         <ImageView
             android:id="@+id/btnLike"

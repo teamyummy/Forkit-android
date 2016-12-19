@@ -12,7 +12,6 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="386dp"
-            android:weightSum="1"
             android:gravity="center_vertical"
             android:layout_height="56dp">
 
@@ -28,14 +27,16 @@
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:weightSum="1">
 
                 <TextView
                     android:text="TextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tvStoreName"
-                    android:layout_weight="1"
+                    android:layout_weight="0.3"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:paddingTop="5dp"
                     android:paddingLeft="5dp"
@@ -43,19 +44,18 @@
 
                 <TextView
                     android:text="TextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tvRating"
-                    android:layout_weight="1"
+                    android:layout_weight="0.3"
                     android:paddingLeft="5dp"
                     />
 
                 <TextView
                     android:text="TextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tvAddress"
-                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:maxEms="20"
                     android:textSize="10sp" />
