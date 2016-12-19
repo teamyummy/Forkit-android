@@ -13,8 +13,8 @@
     <ImageView
         android:scaleType="fitXY"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/restaurants" />
+        android:layout_height="250dp"
+        android:background="@color/toolbar_background"/>
 
     <LinearLayout
         android:layout_gravity="center"
