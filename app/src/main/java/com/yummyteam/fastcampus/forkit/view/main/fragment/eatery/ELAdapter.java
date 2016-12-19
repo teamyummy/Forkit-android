@@ -34,7 +34,7 @@ public class ELAdapter extends RecyclerView.Adapter<ELAdapter.ViewHolder> implem
     private ArrayList<Results> datas;
     private TokenCache cache;
     private String token;
-    private static final int LIKED = R.mipmap.ic_favorite_pink_36dp;
+    private static final int LIKED = R.mipmap.like;
     private static final int DISLIKED = R.mipmap.ic_favorite_border_black_36dp;
 
     private ActivityConnectInterface acInterface;

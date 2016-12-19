@@ -23,17 +23,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
-                android:text="취소" />
+                android:text="취소"
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/tv_dialog_flilter_ok"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="필터 적용"
+                android:textSize="18sp"
                 android:layout_marginRight="10dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:textColor="@android:color/holo_orange_dark" />
+                android:textColor="@color/toolbar_background" />
         </RelativeLayout>
 
         <TextView

@@ -2,7 +2,9 @@ package com.yummyteam.fastcampus.forkit.view.main.fragment.mypage;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,7 +68,7 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
     }
 
     private ImageView iv_profile_myPage;
-    private TextView tv_profile_myPage,tv_my_reviews,tv_my_favorites;
+    private TextView tv_profile_myPage;
     private Button btn_sign;
     private RecyclerView mylist;
     private ConnectFork connectFork;
@@ -76,12 +78,11 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
     private MainViewInterface service;
     private MyFavorsAdapter mfAdapter;
     private MyReviewAdapter mrAdapter;
+    private TabLayout mypage_tab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
 
         View view = inflater.inflate(R.layout.fragment_my_page, container, false);
         progressBar = (ProgressBar) view.findViewById(R.id.mp_progress);
@@ -91,11 +92,8 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
         mylist = (RecyclerView) view.findViewById(R.id.mylist);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mylist.setLayoutManager(manager);
+        mypage_tab =(TabLayout)view.findViewById(R.id.mypage_tab);
 
-        tv_my_reviews = (TextView)view.findViewById(R.id.tv_my_reviews);
-        tv_my_favorites = (TextView)view.findViewById(R.id.tv_my_favorites);
-        tv_my_favorites.setOnClickListener(this);
-        tv_my_reviews.setOnClickListener(this);
         connectFork = new ConnectFork(this);
         try {
             initAdapters();
@@ -108,6 +106,7 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
             tv_profile_myPage.setText("로그인 해주세요");
         } else {
             try {
+                initTab();
                 tv_profile_myPage.setText("ID : " + cache.readID());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -122,6 +121,41 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
         btn_sign.setOnClickListener(this);
 
         return view;
+    }
+
+    private TabLayout.Tab myReview_tab,myFavors_tab;
+    private void initTab() {
+        myReview_tab = mypage_tab.newTab().setText("내가 쓴 리뷰");
+        myFavors_tab = mypage_tab.newTab().setText("내 즐겨찾기");
+        mypage_tab.addTab(myReview_tab,true);
+        mypage_tab.addTab(myFavors_tab);
+        mypage_tab.setTabTextColors(Color.GRAY,-1354668);
+
+        mypage_tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition() == 0)
+                {
+                    mylist.setAdapter(mrAdapter);
+                    setMyReviews();
+                }else if(tab.getPosition() ==1){
+                    mylist.setAdapter(mfAdapter);
+                    setMyFavorite();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
     }
 
 
@@ -158,14 +192,6 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
         switch (view.getId()) {
             case R.id.btn_sign:
                 setSignButton(view);
-                break;
-            case R.id.tv_my_reviews:
-                mylist.setAdapter(mrAdapter);
-                setMyReviews();
-                break;
-            case R.id.tv_my_favorites:
-                mylist.setAdapter(mfAdapter);
-                setMyFavorite();
                 break;
             case R.id.tv_dialog_review_cancle:
                 infoDialog.cancel();

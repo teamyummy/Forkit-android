@@ -34,6 +34,7 @@ import com.yummyteam.fastcampus.forkit.model.RestaurantsList;
 import com.yummyteam.fastcampus.forkit.model.Results;
 import com.yummyteam.fastcampus.forkit.model.TokenCache;
 import com.yummyteam.fastcampus.forkit.networks.ConnectFork;
+import com.yummyteam.fastcampus.forkit.view.detail.Detail_Restaurant;
 import com.yummyteam.fastcampus.forkit.view.main.MainView;
 import com.yummyteam.fastcampus.forkit.view.main.MainViewInterface;
 import com.yummyteam.fastcampus.forkit.view.map.MapsActivity;
@@ -151,14 +152,18 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
         }
         tv_noContent.setVisibility(View.GONE);
     }
-
+    private HashMap<String, String> store_id;
     private void initSlider() {
         HashMap<String, String> url_maps = new HashMap<String, String>();
-        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
-        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
-        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
-        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
-
+        store_id = new HashMap<>();
+        url_maps.put("emoi 베트남 쌀국수집", "https://yummy_s3.s3.amazonaws.com/media/restaurant_imgs/food-photo-001.jpeg");
+        url_maps.put("황금식당", "https://yummy_s3.s3.amazonaws.com/media/restaurant_imgs/food-photo-004.jpeg");
+        url_maps.put("순두부와 삼겹살", "https://yummy_s3.s3.amazonaws.com/media/restaurant_imgs/food-photo-007.jpeg");
+        url_maps.put("쮸쯔", "https://yummy_s3.s3.amazonaws.com/media/restaurant_imgs/5401e9ca89a7475fb3e476322ca3c82e.jpeg");
+        store_id.put("emoi 베트남 쌀국수집","1");
+        store_id.put("황금식당","3");
+        store_id.put("순두부와 삼겹살","4");
+        store_id.put("쮸즈","6");
 
         for (String name : url_maps.keySet()) {
             TextSliderView textSliderView = new TextSliderView(getContext());
@@ -201,8 +206,9 @@ public class EateryListFragment extends Fragment implements BaseSliderView.OnSli
     @Override
     public void onSliderClick(BaseSliderView slider) {
         Toast.makeText(getContext(), slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(getContext(), Detail_Restaurant.class);
-//        startActivity(intent);
+        Intent intent = new Intent(getContext(), Detail_Restaurant.class);
+        intent.putExtra("restaurant_id",store_id.get(slider.getBundle().get("extra")));
+        startActivity(intent);
     }
 
     @Override

@@ -10,24 +10,29 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ImageButton
             android:id="@+id/ib_back_toolbar"
-            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:background="@color/toolbar_background"
             app:srcCompat="@mipmap/ic_arrow_back_white_24dp" />
+
         <EditText
             android:id="@+id/et_search"
-            android:layout_toRightOf="@id/ib_back_toolbar"
-            android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/toolbar_title"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/ib_back_toolbar"
             android:imeOptions="actionSearch"
             android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/cardview_light_background"
+            android:background="@null"
+            android:textCursorDrawable="@null"
             android:textSize="25sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
 
     </RelativeLayout>

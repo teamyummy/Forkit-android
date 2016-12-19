@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/cast_expanded_controller_ad_container_white_stripe_color">
 
     <include
         android:id="@+id/eatery_bar"
@@ -15,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/eatery_bar"
-        android:layout_margin="5dp"
+
         android:orientation="horizontal">
 
         <LinearLayout
@@ -29,16 +30,20 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_mapmode" />
+                app:srcCompat="@mipmap/ic_filter_list_black_36dp" />
 
             <TextView
+                android:layout_marginLeft="3dp"
                 android:id="@+id/tv_filter_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/filter" />
         </LinearLayout>
-
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/multiple_image_select_imageSelectBackground"></LinearLayout>
         <LinearLayout
             android:id="@+id/map_layout"
             android:layout_width="match_parent"
@@ -50,9 +55,10 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_mapmode" />
+                app:srcCompat="@mipmap/ic_map_black_36dp" />
 
             <TextView
+                android:layout_marginLeft="3dp"
                 android:id="@+id/tv_map_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

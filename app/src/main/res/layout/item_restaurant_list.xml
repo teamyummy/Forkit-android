@@ -110,8 +110,8 @@
         <ImageButton
             android:layout_marginRight="3dp"
             android:id="@+id/ib_isLike"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true" />
 

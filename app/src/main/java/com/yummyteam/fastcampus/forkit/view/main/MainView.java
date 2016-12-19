@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.yummyteam.fastcampus.forkit.R;
 import com.yummyteam.fastcampus.forkit.model.TokenCache;
@@ -28,14 +29,16 @@ public class MainView extends AppCompatActivity implements ActivityConnectInterf
     private ConnectFork connectFork;
     private TokenCache cache;
     private String token;
+    //백버튼 클릭 시간
+    long backKeyPressedTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view);
         TabLayout tab = (TabLayout)findViewById(R.id.tab);
-        tab.setBackgroundResource(R.drawable.xml_border);
-        tab.addTab(tab.newTab().setText("Home"));
-        tab.addTab(tab.newTab().setText("MyPage"));
+        tab.addTab(tab.newTab().setIcon(R.mipmap.ic_home_white_36dp));
+        tab.addTab(tab.newTab().setIcon(R.mipmap.ic_person_white_36dp));
         pager = (ViewPager)findViewById(R.id.pager);
         eateryListFragment = new EateryListFragment();
         eateryListFragment.setService(this);
@@ -109,7 +112,8 @@ public class MainView extends AppCompatActivity implements ActivityConnectInterf
         }else{
             init++;
         }
-
+        //초기화
+        backKeyPressedTime = System.currentTimeMillis();
     }
 
     @Override
@@ -143,6 +147,22 @@ public class MainView extends AppCompatActivity implements ActivityConnectInterf
         @Override
         public int getCount() {
             return 2;
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        //1번째 백버튼 클릭
+        if(System.currentTimeMillis()>backKeyPressedTime+2000){
+            backKeyPressedTime = System.currentTimeMillis();
+            Toast.makeText(this, "뒤로버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
+        }
+        //2번째 백버튼 클릭 (종료)
+        else{
+            finish();
+            System.exit(0);
+            android.os.Process.killProcess(android.os.Process.myPid());
         }
     }
 
