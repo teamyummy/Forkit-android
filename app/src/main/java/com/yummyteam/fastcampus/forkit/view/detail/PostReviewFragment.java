@@ -262,10 +262,7 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
                 for (int i = 0, l = images.size(); i < l; i++) {
                     fileBtimaps.add(getThumbnailImage(images.get(i).path));
 
-
-
                 }
-
 
             }
             igAddPhoto.setVisibility(View.INVISIBLE);

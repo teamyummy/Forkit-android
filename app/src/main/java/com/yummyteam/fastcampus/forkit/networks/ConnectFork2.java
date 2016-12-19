@@ -294,6 +294,7 @@ public class ConnectFork2 {
                     MultipartBody.Part.createFormData("img", file.getName(), requestFile);
 
         String altString = "Look so good";
+
         RequestBody alt =
                 RequestBody.create(
                         MediaType.parse("multipart/form-data"), altString);
