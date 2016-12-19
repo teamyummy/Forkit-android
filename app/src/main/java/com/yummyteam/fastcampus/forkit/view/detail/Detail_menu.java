@@ -58,7 +58,7 @@ public class Detail_menu extends AppCompatActivity {
             Map<String,String> menuMap=new HashMap<>();
 
             menuMap.put("menu",menus.get(i));
-            menuMap.put("price",price.get(i));
+            menuMap.put("price",price.get(i)+"원");
             Log.e("price",price.get(i));
 
             datas.add(menuMap);

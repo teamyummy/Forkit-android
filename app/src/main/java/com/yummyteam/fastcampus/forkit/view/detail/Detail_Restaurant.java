@@ -294,7 +294,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
 
         tvStoreName.setText(data.getName());
 
-        tvRating.setText("평점  "+data.getReview_score());
+        tvRating.setText("평점 "+data.getReview_score());
         tvBookMark.setText("즐겨찾기  "+data.getTotal_like());
         tvReview.setText("Review  "+data.getReview_count());
         tvAddress.setText(data.getAddress());
@@ -462,7 +462,7 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
             String price = data.getMenus().get(i).getPrice();
 
             map.put("menu", menu);
-            map.put("price", price);
+            map.put("price", price+"원");
 
             datas.add(map);
 
