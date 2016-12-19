@@ -83,7 +83,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         RecyclerView.LayoutManager manager =new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
         holder.recyclerView.setLayoutManager(manager);
         holder.tvName.setText("글쓴이 : "+data.getAuthor());
-        holder.tvDate.setText(data.getCreated_date());
+        holder.tvDate.setText(data.getCreated_date().substring(0,10));
         holder.content.setText(data.getContent());
         int intDisLike= (Integer.parseInt(data.getDislike()));
         int realDisLike=Math.abs(intDisLike);
