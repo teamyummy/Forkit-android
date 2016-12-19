@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -63,17 +64,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ImageButton ib_back_toolbar;
     private View view;
 
+    private ProgressBar mPb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setMap();
+        mPb=(ProgressBar)findViewById(R.id.mapProgressBar);
+        mPb.setVisibility(View.VISIBLE);
 
 
         pager= (ViewPager)findViewById(R.id.pager);
         adapter= new CustomAdapter(getLayoutInflater());
         pager.setAdapter(adapter);
         pager.bringToFront();
+
 
 
         view = findViewById(R.id.tb_maps);
@@ -88,17 +94,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         setCustomMarkerView();
 
-
-
-
-
-
-
     }
 
 
 
     public void getList() {
+        mPb.setVisibility(View.GONE);
         RestaurantsList restaurantsList = RestaurantsList.getInstance();
         adapter.addData(restaurantsList.getList());
         items= new ItemReader(restaurantsList.getList()).read();
@@ -109,6 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
             }
             @Override
             public void onPageSelected(int position) {
@@ -116,6 +118,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             @Override
             public void onPageScrollStateChanged(int state) {
+
+                if(state==markers.size()-1){
+                    pager.setCurrentItem(0,true);
+                }
 
             }
         });
@@ -144,10 +150,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             notifyDataSetChanged();
         }
 
+
+
         @Override
         public int getCount() {
             // TODO Auto-generated method stub
-            return datas.size();
+            return datas.size()/2;
         }
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
@@ -174,6 +182,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             });
 
+            Log.e("pager size---",datas.size()+"");
 
             String img_src ="";
             if(data.getImages().size() == 0) {
@@ -331,11 +340,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             addMarker(selectedMarker,false);
             selectedMarker.remove();
         }
+        try{
+            Marker marker = markers.get(position);
+            selectedMarker=addMarker(marker,true);
+            center = CameraUpdateFactory.newLatLng(selectedMarker.getPosition());
+            mMap.animateCamera(center);
 
-        Marker marker = markers.get(position);
-        selectedMarker=addMarker(marker,true);
-        center = CameraUpdateFactory.newLatLng(selectedMarker.getPosition());
-        mMap.animateCamera(center);
+        }catch (Exception e){
+
+        }
+
 
 
     }

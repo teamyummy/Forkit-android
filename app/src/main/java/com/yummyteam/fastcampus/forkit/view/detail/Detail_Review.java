@@ -19,11 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Detail_Review extends AppCompatActivity implements GetResultsInterface {
-    RecyclerView recyclerView_Review;
-    Toolbar toolbar;
-    ImageButton ib_back_toolbar;
-    ReviewAdapter reviewAdapter;
-    Results data;
+    private RecyclerView recyclerView_Review;
+    private Toolbar toolbar;
+    private ImageButton ib_back_toolbar;
+    private ReviewDetailAdapter reviewAdapter;
+    private Results data;
+    private String token;
+    private String id;
+    ConnectFork2 connectFork;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,12 +34,14 @@ public class Detail_Review extends AppCompatActivity implements GetResultsInterf
 
         Intent intent =getIntent();
         Bundle bundle = intent.getExtras();
-        String id= bundle.getString("restaurant_id");
+        id= bundle.getString("restaurant_id");
+        token=bundle.getString("token");
 
-        ConnectFork2 connectFork = new ConnectFork2(this);
-        connectFork.getStoreDetail(id);
+        connectFork = new ConnectFork2(this);
+        checkToken();
 
-        reviewAdapter= new ReviewAdapter(R.layout.item_review,this);
+        reviewAdapter= new ReviewDetailAdapter(R.layout.item_review,this);
+        reviewAdapter.setLikeInterface(this);
         recyclerView_Review=(RecyclerView)findViewById(R.id.recyclerview_review);
         recyclerView_Review.setAdapter(reviewAdapter);
         RecyclerView.LayoutManager manager2 = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
@@ -52,10 +57,18 @@ public class Detail_Review extends AppCompatActivity implements GetResultsInterf
 
         });
 
-
     }
+    public void checkToken(){
+        if(token.equals("")){
 
+            connectFork.getStoreDetail(id);
 
+        }else{
+
+            connectFork.getStoreDetailwithToken(id,token);
+
+        }
+    }
     @Override
     public void getList(List<Results> data) {
 
@@ -63,26 +76,20 @@ public class Detail_Review extends AppCompatActivity implements GetResultsInterf
 
     @Override
     public void getDetail(Results data) {
-
         this.data=data;
         reviewAdapter.addReviewData((ArrayList<Reviews>) data.getReviews());
     }
-
     @Override
     public void getLikeList(String f_id) {
 
     }
-
     @Override
     public void setReviewLike(String myLike, String reviewId, Boolean existId, String lkId, Boolean changed) {
 
     }
-
     @Override
-    public void getPostReview(String s) {
-
+    public void getMyLikeReview(Results data) {
     }
-
 
 }
 

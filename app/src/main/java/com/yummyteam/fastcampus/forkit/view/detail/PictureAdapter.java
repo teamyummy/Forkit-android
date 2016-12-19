@@ -22,9 +22,9 @@ import java.util.ArrayList;
 public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHolder> {
 
 
-    int itemLayout;
-    ArrayList<Images> images;
-    Context context;
+    private int itemLayout;
+    private ArrayList<Images> images;
+    private Context context;
 
 
     public PictureAdapter(int itemLayout, Context context) {

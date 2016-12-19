@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="55dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:gravity="center_vertical">
 
     <TextView
         android:text="TextView"
@@ -9,7 +12,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvMenu"
         android:layout_weight="1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+        android:textAppearance="@android:style/TextAppearance.Material.Small" />
 
     <TextView
         android:text="TextView"
@@ -17,5 +20,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvPrice"
         android:layout_weight="1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+        android:textAppearance="@android:style/TextAppearance.Material.Small"
+        android:gravity="right" />
 </LinearLayout>

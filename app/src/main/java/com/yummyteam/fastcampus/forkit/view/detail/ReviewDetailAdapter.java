@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * Created by user on 2016-11-02.
  */
 
-public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
+public class ReviewDetailAdapter extends RecyclerView.Adapter<ReviewDetailAdapter.ViewHolder> {
 
     private ArrayList<Reviews> reviews;
     private int itemLayout;
@@ -43,7 +43,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
 
 
-    public ReviewAdapter(int itemLayout, Context context){
+    public ReviewDetailAdapter(int itemLayout, Context context){
         reviews=new ArrayList<>();
         this.itemLayout = itemLayout;
         this.context = context;
@@ -62,7 +62,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         notifyDataSetChanged();
     }
     @Override
-    public ReviewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ReviewDetailAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
 
@@ -73,10 +73,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(final ReviewAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ReviewDetailAdapter.ViewHolder holder, final int position) {
         final Reviews data = reviews.get(position);
 
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(data,R.layout.item_picture_maptodetails,context);
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(data, R.layout.item_picture_maptodetails,context);
         holder.recyclerView.setAdapter(recyclerAdapter);
 
 
@@ -248,11 +248,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     @Override
     public int getItemCount() {
 
-                if(reviews.size()>1){
-                    return 1;
-                }else{
-
-                }return reviews.size();
+        return reviews.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

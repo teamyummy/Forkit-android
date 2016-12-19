@@ -39,6 +39,13 @@
 
     </android.support.v4.view.ViewPager>
 
+    <ProgressBar
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/mapProgressBar"
+        android:layout_weight="1" />
 
 
 </RelativeLayout>

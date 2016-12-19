@@ -23,4 +23,12 @@
         android:layout_below="@+id/toolBar_sub"
         tools:context="com.dongjin.android.googlemap_clustering.MapsActivity" />
 
+    <ProgressBar
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/mapProgressBar2"
+        android:layout_weight="1" />
+
 </RelativeLayout>

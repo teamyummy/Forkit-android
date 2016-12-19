@@ -66,7 +66,8 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/xml_border_orange_thin"
         android:orientation="horizontal"
-        android:paddingTop="20dp">
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp">
 
         <TextView
             android:id="@+id/textView4"
@@ -74,8 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.04"
             android:text="이 평가가 도움이 되었나요?"
-            android:textSize="20dp"
-            android:paddingTop="10dp" />
+            android:textSize="20dp" />
 
         <ImageView
             android:id="@+id/btnLike"
@@ -97,11 +97,11 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@id/expand_text_view"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -119,7 +119,8 @@
             android:text="TextView"
 
             android:layout_toEndOf="@+id/expand_text_view"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:paddingLeft="10dp" />
 
         TextView
             android:text="TextView"
