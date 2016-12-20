@@ -341,12 +341,18 @@ public class PostReviewFragment extends DialogFragment implements GetResultsInte
     }
 
     @Override
-    public void setReviewLike(String myLike, String reviewId, Boolean existId, String lkId, Boolean changed) {
+    public void setReviewLike(String myLike, String reviewId, Boolean existId, String lkId, Boolean changed, int position) {
+
+    }
+
+
+    @Override
+    public void getMyLikeReview(Results data) {
 
     }
 
     @Override
-    public void getMyLikeReview(Results data) {
+    public void refresh(String lkId, int position) {
 
     }
 

@@ -520,7 +520,8 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
         }
 
         if(likeItem.getChanged()){
-            connectFork.deleteLike(token, data.getId(), likeItem.getReviewId(), likeItem.getLkId(), likeItem.getMyLike());
+            connectFork.deleteLike(token, data.getId(), likeItem.getReviewId(), likeItem.getLkId(), likeItem.getMyLike(),
+                    likeItem.getPosition());
             //connectFork.postLike(token, data.getId(), likeItem.getReviewId(), likeItem.getMyLike());
         }
 
@@ -529,13 +530,15 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
 
 
     @Override
-    public void setReviewLike(String myLike, String reviewId, Boolean existId, String lkId, Boolean changed) {
+    public void setReviewLike(String myLike, String reviewId, Boolean existId, String lkId, Boolean changed,int position) {
 
         likeItem.setExistId(existId);
         likeItem.setLkId(lkId);
         likeItem.setMyLike(myLike);
         likeItem.setReviewId(reviewId);
         likeItem.setChanged(changed);
+        likeItem.setPosition(position);
+
 
 
 
@@ -545,6 +548,11 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
     public void getMyLikeReview(Results data) {
 
         reviewAdapter.addReviewData((ArrayList<Reviews>) data.getReviews());
+    }
+
+    @Override
+    public void refresh(String lkId, int position) {
+
     }
 
     @Override
@@ -560,6 +568,16 @@ public class Detail_Restaurant extends AppCompatActivity implements GetResultsIn
 class LikeItem{
     String myLike;
     String reviewId;
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    int position;
 
     public ArrayList<Boolean> getCheckExist() {
         return checkExist;

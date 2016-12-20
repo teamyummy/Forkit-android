@@ -178,7 +178,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
                 Log.e("changed",changed+"");
                 Log.e("exist",checkExist.get(position)+"");
-                adapterInterFace.setReviewLike(data.getMy_like(),data.getId(),existId,data.getMy_like_id(),changed);
+                adapterInterFace.setReviewLike(data.getMy_like(),data.getId(),existId,data.getMy_like_id(),changed,position);
 
             }
         });
@@ -236,7 +236,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
                 existId=checkExist.get(position);
 
-                adapterInterFace.setReviewLike(data.getMy_like(),data.getId(),existId, data.getMy_like_id(),changed);
+                adapterInterFace.setReviewLike(data.getMy_like(),data.getId(),existId, data.getMy_like_id(),changed,position);
             }
         });
 

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.squareup.picasso.Picasso;
@@ -37,6 +38,8 @@ public class ReviewDetailAdapter extends RecyclerView.Adapter<ReviewDetailAdapte
     private Boolean changed;
     private int dataLike;
     private int dataDisLike;
+    private ViewGroup viewGroup;
+    boolean clickable;
 
 
 
@@ -61,9 +64,13 @@ public class ReviewDetailAdapter extends RecyclerView.Adapter<ReviewDetailAdapte
         reviews=new ArrayList<>();
         notifyDataSetChanged();
     }
+    public void makeClickable(){
+        clickable=true;
+    }
     @Override
     public ReviewDetailAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
+        viewGroup=parent;
         View view = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
 
 
@@ -97,6 +104,7 @@ public class ReviewDetailAdapter extends RecyclerView.Adapter<ReviewDetailAdapte
         Log.e("My_like",data.getMy_like());
 
 
+        clickable=true;
 
         final String myLike=data.getMy_like();
         Log.e("getMylIke",myLike);
@@ -126,117 +134,126 @@ public class ReviewDetailAdapter extends RecyclerView.Adapter<ReviewDetailAdapte
         holder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(clickable){
+                    if (selectedImg != null) {
+                        if (selectedImg != holder.btnLike) {
+                            holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
+                            holder.btnDisLike.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
+                            selectedImg = holder.btnLike;
+                            data.setMy_like(1+"");
+                            ++dataLike;
+                            --dataDisLike;
+                            data.setLike(dataLike+"");
+                            data.setDislike(dataDisLike+"");
 
-                if (selectedImg != null) {
-                    if (selectedImg != holder.btnLike) {
+                            holder.tvLike.setText("공감 "+data.getLike()+"개 "+"  비공감 "+data.getDislike()+"개");
+
+
+
+                        } else {
+                            holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
+                            selectedImg = null;
+                            data.setMy_like(0+"");
+                            --dataLike;
+                            data.setLike(dataLike+"");
+                            data.setDislike(dataDisLike+"");
+
+                            holder.tvLike.setText("공감 "+data.getLike()+"개 "+"  비공감 "+data.getDislike()+"개");
+
+
+
+                        }
+                    } else if (selectedImg == null) {
                         holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
                         holder.btnDisLike.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
                         selectedImg = holder.btnLike;
                         data.setMy_like(1+"");
                         ++dataLike;
-                        --dataDisLike;
                         data.setLike(dataLike+"");
                         data.setDislike(dataDisLike+"");
 
                         holder.tvLike.setText("공감 "+data.getLike()+"개 "+"  비공감 "+data.getDislike()+"개");
-
-
-
-                    } else {
-                        holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
-                        selectedImg = null;
-                        data.setMy_like(0+"");
-                        --dataLike;
-                        data.setLike(dataLike+"");
-                        data.setDislike(dataDisLike+"");
-
-                        holder.tvLike.setText("공감 "+data.getLike()+"개 "+"  비공감 "+data.getDislike()+"개");
-
 
 
                     }
-                } else if (selectedImg == null) {
-                    holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_pressed);
-                    holder.btnDisLike.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
-                    selectedImg = holder.btnLike;
-                    data.setMy_like(1+"");
-                    ++dataLike;
-                    data.setLike(dataLike+"");
-                    data.setDislike(dataDisLike+"");
 
-                    holder.tvLike.setText("공감 "+data.getLike()+"개 "+"  비공감 "+data.getDislike()+"개");
+                    existId = checkExist.get(position);
+                    if (myLike.equals(data.getMy_like())) {
+                        changed = false;
+                    } else {
+                        changed = true;
+                    }
 
+                    Log.e("changed", changed + "");
+                    Log.e("exist", checkExist.get(position) + "");
+                    clickable=false;
+                    adapterInterFace.setReviewLike(data.getMy_like(), data.getId(), existId, data.getMy_like_id(), changed, position);
 
+                } else {
+                    Toast.makeText(viewGroup.getContext(), "잠시만 기다려주세요", Toast.LENGTH_LONG).show();
                 }
 
-                existId=checkExist.get(position);
-                if(myLike.equals(data.getMy_like())){
-                    changed=false;
-                }else{
-                    changed = true;
-                }
-
-                Log.e("changed",changed+"");
-                Log.e("exist",checkExist.get(position)+"");
-                adapterInterFace.setReviewLike(data.getMy_like(),data.getId(),existId,data.getMy_like_id(),changed);
 
             }
         });
         holder.btnDisLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (clickable) {
+                    if (selectedImg != null) {
+                        if (selectedImg != holder.btnDisLike) {
+                            holder.btnDisLike.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
+                            holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
+                            selectedImg = holder.btnDisLike;
+                            data.setMy_like(-1 + "");
+                            --dataLike;
+                            ++dataDisLike;
+                            data.setLike(dataLike + "");
+                            data.setDislike(dataDisLike + "");
 
+                            holder.tvLike.setText("공감 " + data.getLike() + "개 " + "  비공감 " + data.getDislike() + "개");
 
+                        } else {
+                            holder.btnDisLike.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
+                            selectedImg = null;
+                            data.setMy_like(0 + "");
+                            --dataDisLike;
+                            data.setLike(dataLike + "");
+                            data.setDislike(dataDisLike + "");
 
-                if(selectedImg !=null){
-                    if(selectedImg != holder.btnDisLike){
+                            holder.tvLike.setText("공감 " + data.getLike() + "개 " + "  비공감 " + data.getDislike() + "개");
+                        }
+                    } else {
                         holder.btnDisLike.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
                         holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
-                        selectedImg=holder.btnDisLike;
-                        data.setMy_like(-1+"");
-                        --dataLike;
+                        selectedImg = holder.btnDisLike;
+                        data.setMy_like(-1 + "");
                         ++dataDisLike;
-                        data.setLike(dataLike+"");
-                        data.setDislike(dataDisLike+"");
+                        data.setLike(dataLike + "");
+                        data.setDislike(dataDisLike + "");
 
-                        holder.tvLike.setText("공감 "+data.getLike()+"개 "+"  비공감 "+data.getDislike()+"개");
-
-                    }else{
-                        holder.btnDisLike.setImageResource(R.mipmap.ic_egmt_review_rating_3_normal);
-                        selectedImg=null;
-                        data.setMy_like(0+"");
-                        --dataDisLike;
-                        data.setLike(dataLike+"");
-                        data.setDislike(dataDisLike+"");
-
-                        holder.tvLike.setText("공감 "+data.getLike()+"개 "+"  비공감 "+data.getDislike()+"개");
+                        holder.tvLike.setText("공감 " + data.getLike() + "개 " + "  비공감 " + data.getDislike() + "개");
                     }
-                }else{
-                    holder.btnDisLike.setImageResource(R.drawable.ic_egmt_review_rating_3_pressed);
-                    holder.btnLike.setImageResource(R.drawable.ic_egmt_review_rating_2_normal);
-                    selectedImg=holder.btnDisLike;
-                    data.setMy_like(-1+"");
-                    ++dataDisLike;
-                    data.setLike(dataLike+"");
-                    data.setDislike(dataDisLike+"");
 
-                    holder.tvLike.setText("공감 "+data.getLike()+"개 "+"  비공감 "+data.getDislike()+"개");
+                    existId = checkExist.get(position);
+                    if (myLike.equals(data.getMy_like())) {
+                        changed = false;
+                    } else {
+                        changed = true;
+                    }
+
+                    Log.e("changed", changed + "");
+                    Log.e("exist", checkExist.get(position) + "");
+
+                    clickable=false;
+                    existId = checkExist.get(position);
+                    adapterInterFace.setReviewLike(data.getMy_like(), data.getId(), existId, data.getMy_like_id(), changed, position);
+                } else
+
+                {
+                    Toast.makeText(viewGroup.getContext(), "잠시만 기다려주세요", Toast.LENGTH_LONG).show();
                 }
 
-                existId=checkExist.get(position);
-                if(myLike.equals(data.getMy_like())){
-                    changed=false;
-                }else{
-                    changed = true;
-                }
-
-                Log.e("changed",changed+"");
-                Log.e("exist",checkExist.get(position)+"");
-
-
-                existId=checkExist.get(position);
-
-                adapterInterFace.setReviewLike(data.getMy_like(),data.getId(),existId, data.getMy_like_id(),changed);
             }
         });
 

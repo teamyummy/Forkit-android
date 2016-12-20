@@ -7,49 +7,45 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/cardView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="56dp">
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="386dp"
+            android:layout_width="match_parent"
             android:gravity="center_vertical"
             android:layout_height="56dp">
 
             <ImageView
-                app:srcCompat="@drawable/btn_unpress_like"
+                app:srcCompat="@android:drawable/sym_def_app_icon"
                 android:id="@+id/imageView4"
-                android:layout_weight="0.4"
                 android:elevation="0dp"
                 android:layout_width="100dp"
                 android:layout_height="56dp" />
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:weightSum="1">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:text="TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tvStoreName"
-                    android:layout_weight="0.3"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:paddingTop="5dp"
                     android:paddingLeft="5dp"
-                    android:maxEms="10" />
+                    android:maxEms="10"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:text="TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tvRating"
-                    android:layout_weight="0.3"
                     android:paddingLeft="5dp"
-                    />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:text="TextView"
