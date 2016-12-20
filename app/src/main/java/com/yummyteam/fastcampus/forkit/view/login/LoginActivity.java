@@ -166,7 +166,7 @@ public class LoginActivity extends AppCompatActivity implements LoginInterface {
     @Override
     public void setToken(String token) {
         if(token.equals("")){
-            Toast.makeText(this,"유효하지 않은 이메일과 비밀번호 입니다.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"유효하지 않은 아이디와 비밀번호 입니다.",Toast.LENGTH_SHORT).show();
         }else{
             TokenCache cache = TokenCache.getInstance();
             try {

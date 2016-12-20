@@ -2,8 +2,11 @@ package com.yummyteam.fastcampus.forkit.view.main.fragment.mypage;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -46,6 +49,7 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
 
     private TokenCache cache;
     private String token;
+    private String myProfile_img_url;
     private ActivityConnectInterface anInterface;
 
     public MyPage_Fragment() {
@@ -53,6 +57,7 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
         cache = TokenCache.getInstance();
         try {
             token = cache.read();
+            myProfile_img_url = cache.readURL();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,6 +72,7 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
         super.onCreate(savedInstanceState);
     }
 
+    public static final int REQ_CODE_GALLERY= 30;
     private ImageView iv_profile_myPage;
     private TextView tv_profile_myPage;
     private Button btn_sign;
@@ -92,7 +98,7 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
         mylist = (RecyclerView) view.findViewById(R.id.mylist);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mylist.setLayoutManager(manager);
-        mypage_tab =(TabLayout)view.findViewById(R.id.mypage_tab);
+        mypage_tab = (TabLayout) view.findViewById(R.id.mypage_tab);
 
         connectFork = new ConnectFork(this);
         try {
@@ -104,41 +110,41 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
         if (token.equals("")) {
             btn_sign.setText(LOGIN);
             tv_profile_myPage.setText("로그인 해주세요");
+
         } else {
             try {
                 initTab();
                 tv_profile_myPage.setText("ID : " + cache.readID());
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
             btn_sign.setText(LOGOUT);
         }
-        Glide.with(getContext())
-                .load(R.mipmap.com_forkit_profile_picture_blank_portrait)
-                .bitmapTransform(new CropCircleTransformation(getContext()))
-                .into(iv_profile_myPage);
+
+        showMyProfileImg(myProfile_img_url);
 
         btn_sign.setOnClickListener(this);
-
+        iv_profile_myPage.setOnClickListener(this);
         return view;
     }
 
-    private TabLayout.Tab myReview_tab,myFavors_tab;
+    private TabLayout.Tab myReview_tab, myFavors_tab;
+
     private void initTab() {
         myReview_tab = mypage_tab.newTab().setText("내가 쓴 리뷰");
         myFavors_tab = mypage_tab.newTab().setText("내 즐겨찾기");
-        mypage_tab.addTab(myReview_tab,true);
+        mypage_tab.addTab(myReview_tab, true);
         mypage_tab.addTab(myFavors_tab);
-        mypage_tab.setTabTextColors(Color.GRAY,-1354668);
+        mypage_tab.setTabTextColors(Color.GRAY, -1354668);
 
         mypage_tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if(tab.getPosition() == 0)
-                {
+                if (tab.getPosition() == 0) {
                     mylist.setAdapter(mrAdapter);
                     setMyReviews();
-                }else if(tab.getPosition() ==1){
+                } else if (tab.getPosition() == 1) {
                     mylist.setAdapter(mfAdapter);
                     setMyFavorite();
                 }
@@ -197,14 +203,25 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
                 infoDialog.cancel();
                 break;
             case R.id.tv_dialog_review_ok:
-                if(et_dialog_content.getText().length()>0 && et_dialog_title.getText().length()>0){
+                if (et_dialog_content.getText().length() > 0 && et_dialog_title.getText().length() > 0) {
                     String cTitle = et_dialog_title.getText().toString();
                     String cContents = et_dialog_content.getText().toString();
-                    String rate = dialog_ratingBar.getRating()+"";
-                    connectFork.modifiReview(token,res_id,review_id,cTitle,cContents,rate);
+                    String rate = dialog_ratingBar.getRating() + "";
+                    connectFork.modifiReview(token, res_id, review_id, cTitle, cContents, rate);
                     infoDialog.dismiss();
+                } else {
+                    Toast.makeText(getContext(), "제목과 내용을 입력해 주세요", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+            case R.id.iv_profile_my:
+                if(token.length()>0){
+                    Intent intent = new Intent(Intent.ACTION_PICK
+                            , MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*"); // 이미지만 필터링
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQ_CODE_GALLERY);
                 }else{
-                    Toast.makeText(getContext(),"제목과 내용을 입력해 주세요",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"로그인해 주세요",Toast.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -292,6 +309,22 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
 
     }
 
+    private void showMyProfileImg(String url){
+
+        if(url.length()>0) {
+            Glide.with(getContext())
+                    .load(url)
+                    .bitmapTransform(new CropCircleTransformation(getContext()))
+                    .into(iv_profile_myPage);
+        }else{
+            Glide.with(getContext())
+                    .load(R.mipmap.com_forkit_profile_picture_blank_portrait)
+                    .bitmapTransform(new CropCircleTransformation(getContext()))
+                    .into(iv_profile_myPage);
+        }
+
+    }
+
     @Override
     public void removeReview(final String rest_id, final String id) {
         final String rid = rest_id;
@@ -308,30 +341,31 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
         dialog.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                connectFork.removeMyReviews(token,rid,rvid);
+                connectFork.removeMyReviews(token, rid, rvid);
             }
         });
         dialog.show();
 
 
-
     }
-    private TextView tv_dialog_review_cancle,tv_dialog_review_ok;
+
+    private TextView tv_dialog_review_cancle, tv_dialog_review_ok;
     private AlertDialog infoDialog;
-    private EditText et_dialog_title,et_dialog_content;
+    private EditText et_dialog_title, et_dialog_content;
     private RatingBar dialog_ratingBar;
-    private String res_id,review_id;
+    private String res_id, review_id;
+
     @Override
-    public void popDialog(String rest_id, String id,String title,String contents,String value) {
+    public void popDialog(String rest_id, String id, String title, String contents, String value) {
         res_id = rest_id;
         review_id = id;
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_review_modified, null);
         tv_dialog_review_cancle = (TextView) view.findViewById(R.id.tv_dialog_review_cancle);
         tv_dialog_review_ok = (TextView) view.findViewById(R.id.tv_dialog_review_ok);
-        et_dialog_title = (EditText)view.findViewById(R.id.et_dialog_title);
-        et_dialog_content = (EditText)view.findViewById(R.id.et_dialog_content);
+        et_dialog_title = (EditText) view.findViewById(R.id.et_dialog_title);
+        et_dialog_content = (EditText) view.findViewById(R.id.et_dialog_content);
 
-        dialog_ratingBar = (RatingBar)view.findViewById(R.id.dialog_ratingBar);
+        dialog_ratingBar = (RatingBar) view.findViewById(R.id.dialog_ratingBar);
 
         et_dialog_title.setText(title);
         et_dialog_content.setText(contents);
@@ -340,8 +374,6 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
         dialog_ratingBar.setStepSize(0.5f);
         tv_dialog_review_ok.setOnClickListener(this);
         tv_dialog_review_cancle.setOnClickListener(this);
-
-
 
 
         infoDialog = new AlertDialog.Builder(getContext())
@@ -360,6 +392,41 @@ public class MyPage_Fragment extends Fragment implements View.OnClickListener, M
     private void refresh_myReviews() {
         setMyReviews();
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQ_CODE_GALLERY:
+                Uri uri;
+
+                if(data != null && data.getData() != null ) {
+                    uri = data.getData();
+                    myProfile_img_url = getRealPathFromURI(uri);
+                    try {
+                        cache.writeULR(myProfile_img_url);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    showMyProfileImg(myProfile_img_url);
+                }
+                break;
+        }
+    }
+
+    public String getRealPathFromURI(Uri contentUri) {
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return contentUri.getPath();
+        }
+    }
+
 
 
 }
