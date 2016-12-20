@@ -40,20 +40,16 @@ public interface IRestaurantData2 {
     Call<Results> getRestaurantsDetailwithToken(@Header("Authorization")String token,
                                                 @Path("pk") String pk);
 
-
     @FormUrlEncoded
     @POST("api/v1/restaurants/{pk}/reviews/")
     Call<Reviews> postReviews(@Header("Authorization")String token,
                               @Path("pk")String pk,
                                     @FieldMap Map<String, String> fieldMap);
-
-
     @Multipart
     @POST("api/v1/restaurants/{pk}/reviews/{pk2}/images/")
     Call<ReviewImagesResponse> postPhotos(@Header("Authorization")String token,
                                           @Part("alt") RequestBody alt, @Path("pk")String pk, @Path("pk2")String pk2,
                                           @Part MultipartBody.Part img);
-
 
     @POST("api/v1/restaurants/{pk}/favors/")
     Call<Favors> putLikeRestaurant(@Header("Authorization")String token,
