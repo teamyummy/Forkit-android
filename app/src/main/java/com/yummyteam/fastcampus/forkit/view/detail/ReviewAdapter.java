@@ -312,17 +312,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         public void onBindViewHolder(RecyclerAdapter.ViewHolder holder, final int position) {
 
             String img_src ="";
-            if(review.getImages().size()==0){
 
-                holder.reviewImg.setVisibility(View.INVISIBLE);
-            }else{
-                if(review.getImages().size()<3){
-                    review.getImages().add(review.getImages().get(0));
-                    review.getImages().add(review.getImages().get(0));
-                }
-                img_src = review.getImages().get(position).getImg();
-                Picasso.with(context).load(img_src).into(holder.reviewImg);
-            }
+            img_src = review.getImages().get(position).getImg();
+            Picasso.with(context).load(img_src).into(holder.reviewImg);
+
 
 
             Log.e("IMAGE TAG123", img_src);

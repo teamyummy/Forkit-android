@@ -324,18 +324,11 @@ public class ReviewDetailAdapter extends RecyclerView.Adapter<ReviewDetailAdapte
         @Override
         public void onBindViewHolder(RecyclerAdapter.ViewHolder holder, final int position) {
 
-            String img_src ="";
-            if(review.getImages().size()==0){
 
-                holder.reviewImg.setVisibility(View.INVISIBLE);
-            }else{
-                if(review.getImages().size()<3){
-                    review.getImages().add(review.getImages().get(0));
-                    review.getImages().add(review.getImages().get(0));
-                }
-                img_src = review.getImages().get(position).getImg();
-                Picasso.with(context).load(img_src).into(holder.reviewImg);
-            }
+            String img_src="";
+            img_src = review.getImages().get(position).getImg();
+            Picasso.with(context).load(img_src).into(holder.reviewImg);
+
 
 
             Log.e("IMAGE TAG123", img_src);
@@ -345,18 +338,7 @@ public class ReviewDetailAdapter extends RecyclerView.Adapter<ReviewDetailAdapte
         @Override
         public int getItemCount() {
 
-            if(review.getImages().size() <3){
-
-                if(review.getImages().size() ==0) {
-                    return 0;
-                }else{
-
-                }
-            }else{
-
-                return review.getImages().size() ;
-            }
-            return 3;
+            return review.getImages().size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
