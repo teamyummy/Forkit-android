@@ -90,12 +90,25 @@ public class Detail_Review extends AppCompatActivity implements GetResultsInterf
     public void getLikeList(String f_id) {
 
     }
+
     @Override
-    public void setReviewLike(String myLike, String reviewId, Boolean existId, String lkId, Boolean changed) {
+    public void setReviewLike(String myLike, String reviewId, Boolean existId, String lkId, Boolean changed,int position) {
+        connectFork.deleteLike(token,id,reviewId,lkId,myLike,position);
+
 
     }
     @Override
     public void getMyLikeReview(Results data) {
+    }
+
+    @Override
+    public void refresh(String lkId,int position) {
+
+        reviewAdapter.removeData();
+        data.getReviews().get(position).setMy_like_id(lkId);
+        reviewAdapter.addReviewData((ArrayList<Reviews>) data.getReviews());
+        reviewAdapter.makeClickable();
+
     }
 
 }

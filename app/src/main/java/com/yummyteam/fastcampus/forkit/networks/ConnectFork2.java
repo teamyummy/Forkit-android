@@ -375,7 +375,7 @@ public class ConnectFork2 {
         });
     }
 
-    public void postLike(String token, String rtId, final String rvId, final String like){
+    public void postLike(String token, String rtId, final String rvId, final String like, final int position){
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -394,6 +394,7 @@ public class ConnectFork2 {
                                    Response<ReviewLike> response) {
                 Log.e("PostLikeReview_http",response.code()+"");
                 Log.e("URL1", call.request().url().toString());
+                mListener.refresh(response.body().getId(),position);
 
                 //ReviewLike reviewLike=response.body();
                 //mListener.getPostReview(reviewLike.getId().toString());
@@ -436,7 +437,7 @@ public class ConnectFork2 {
         });
     }
 
-    public void deleteLike(final String token, final String rtId, final String rvId, final String lkId, final String like){
+    public void deleteLike(final String token, final String rtId, final String rvId, final String lkId, final String like, final int position){
         Retrofit client = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -454,7 +455,7 @@ public class ConnectFork2 {
                                    Response<ReviewLike> response) {
                 Log.e("deleteLikeReview_http",response.code()+"");
                 Log.e("URL", call.request().url().toString());
-                postLike(token,rtId,rvId,like);
+                postLike(token,rtId,rvId,like,position);
 
             }
             @Override

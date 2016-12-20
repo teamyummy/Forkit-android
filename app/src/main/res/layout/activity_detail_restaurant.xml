@@ -366,7 +366,7 @@
                     <ImageView
                         android:id="@+id/imageLike"
                         app:srcCompat="@drawable/btn_unpress_like"
-                        android:layout_height="60dp"
+                        android:layout_height="40dp"
                         android:layout_width="60dp"
                         android:layout_weight="0.5" />
 
