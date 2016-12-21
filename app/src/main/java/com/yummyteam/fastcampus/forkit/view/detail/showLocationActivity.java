@@ -31,7 +31,7 @@ import com.yummyteam.fastcampus.forkit.R;
 
 import static com.darsh.multipleimageselect.helpers.Constants.REQUEST_CODE;
 
-class ShowLocationActivity extends AppCompatActivity
+public class ShowLocationActivity extends AppCompatActivity
         implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,

@@ -1,13 +1,9 @@
 package com.yummyteam.fastcampus.forkit.model;
 
 import android.content.Context;
-import android.os.Environment;
+import android.content.SharedPreferences;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  * Created by Dabin on 2016-12-08.
@@ -16,6 +12,7 @@ import java.util.Scanner;
 public class TokenCache {
     static private Context context;
     static private TokenCache tokenCache;
+    private SharedPreferences pref;
 
     private TokenCache() {
 
@@ -29,83 +26,57 @@ public class TokenCache {
         return tokenCache;
     }
 
-    public File getCacheDir(Context context) {
+    public void getCacheDir(Context context) {
         this.context = context;
-        File cacheDir = null;
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            cacheDir = new File(Environment.getExternalStorageDirectory(), "tokenfolder");
-            if (!cacheDir.isDirectory()) {
-                cacheDir.mkdirs();
-            }
-        }
-        if (!cacheDir.isDirectory()) {
-            cacheDir = context.getCacheDir();
-        }
-        return cacheDir;
+        pref = context.getSharedPreferences("Token", Context.MODE_PRIVATE);
     }
 
     public void write(String obj) throws IOException {
-        File cacheDir = getCacheDir(context);
-        File cacheFile = new File(cacheDir, "Token.txt");
-        if (!cacheFile.exists()) cacheFile.createNewFile();
-        FileWriter fileWriter = new FileWriter(cacheFile);
-        fileWriter.write(obj);
-        fileWriter.flush();
-        fileWriter.close();
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("Token", obj);
+        editor.commit();
     }
 
     public String read() throws IOException {
-        File cacheDir = getCacheDir(context);
-        File cacheFile = new File(cacheDir, "Token.txt");
-        String text = "";
-        if (cacheFile.exists()) {
-            FileInputStream inputStream = new FileInputStream(cacheFile);
-            Scanner s = new Scanner(inputStream);
-            while (s.hasNext()) {
-                text += s.nextLine();
-            }
-            inputStream.close();
-        }
-
+        String text = pref.getString("Token", "");
         return text;
     }
 
-    public String readID() throws  IOException{
-        File cacheDir = getCacheDir(context);
-        File cacheFile = new File(cacheDir, "ID.txt");
-        String text = "";
-        if (cacheFile.exists()) {
-            FileInputStream inputStream = new FileInputStream(cacheFile);
-            Scanner s = new Scanner(inputStream);
-            while (s.hasNext()) {
-                text += s.nextLine();
-            }
-            inputStream.close();
-        }
-
+    public String readID() throws IOException {
+        String text = pref.getString("Id", "");
         return text;
     }
 
     public void delete() throws IOException {
-        File cacheDir = getCacheDir(context);
-        File cacheFile = new File(cacheDir, "Token.txt");
-        File cacheIdFile = new File(cacheDir,"ID.txt");
-        if (cacheFile.exists()) {
-            cacheFile.delete();
-        }
-        if(cacheIdFile.exists()){
-            cacheIdFile.delete();
-        }
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("Token");
+        editor.commit();
     }
 
 
     public void writeId(String obj) throws IOException {
-        File cacheDir = getCacheDir(context);
-        File cacheFile = new File(cacheDir, "ID.txt");
-        if (!cacheFile.exists()) cacheFile.createNewFile();
-        FileWriter fileWriter = new FileWriter(cacheFile);
-        fileWriter.write(obj);
-        fileWriter.flush();
-        fileWriter.close();
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("Id", obj);
+        editor.commit();
+    }
+
+    public String readURL() throws IOException {
+        String url = "";
+        String token = read();
+        if(token.length()>0){
+            url =  pref.getString(token,"");
+        }
+
+
+
+        return url;
+    }
+    public void writeULR(String url) throws IOException {
+        SharedPreferences.Editor editor = pref.edit();
+        String token = read();
+        if(token.length()>0){
+            editor.putString(token,url);
+            editor.commit();
+        }
     }
 }
