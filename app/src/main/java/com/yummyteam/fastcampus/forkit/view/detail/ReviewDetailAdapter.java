@@ -327,6 +327,7 @@ public class ReviewDetailAdapter extends RecyclerView.Adapter<ReviewDetailAdapte
 
             String img_src="";
             img_src = review.getImages().get(position).getImg();
+            
             Picasso.with(context).load(img_src).into(holder.reviewImg);
 
 
@@ -338,7 +339,9 @@ public class ReviewDetailAdapter extends RecyclerView.Adapter<ReviewDetailAdapte
         @Override
         public int getItemCount() {
 
+
             return review.getImages().size();
+
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

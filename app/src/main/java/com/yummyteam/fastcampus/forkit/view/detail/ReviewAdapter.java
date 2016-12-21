@@ -325,18 +325,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         @Override
         public int getItemCount() {
 
-            if(review.getImages().size() <3){
-
-                if(review.getImages().size() ==0) {
-                    return 0;
-                }else{
-
-                }
-            }else{
-
-                return review.getImages().size() ;
-            }
-            return 3;
+            return review.getImages().size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
